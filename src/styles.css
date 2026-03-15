@@ -32,56 +32,45 @@ a {
 }
 
 .glow-button {
+  --glow-rgb: 8, 208, 112;
   transition:
-    transform 0.28s ease,
-    box-shadow 0.28s ease,
-    filter 0.28s ease;
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.32s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform, box-shadow, filter;
+  transform-origin: center;
 }
 
 .glow-button:active {
   transform: scale(0.98);
 }
 
-.glow-button--green:hover,
-.glow-button--green:focus-visible,
-.cta-btn-wrapper:hover .glow-button--green {
-  transform: translateY(-2px) scale(1.03);
+.glow-button--green {
+  --glow-rgb: 8, 208, 112;
+}
+
+.glow-button--yellow {
+  --glow-rgb: 255, 212, 9;
+}
+
+.glow-button--orange {
+  --glow-rgb: 254, 138, 4;
+}
+
+.glow-button--blue {
+  --glow-rgb: 3, 133, 255;
+}
+
+.glow-button:hover,
+.glow-button:focus-visible,
+.cta-btn-wrapper:hover .glow-button,
+.cta-frame:hover .glow-button {
+  transform: translateY(-2px) scale(1.035);
   filter: brightness(1.12);
   box-shadow:
-    0px 6px 34px rgba(8, 208, 112, 0.58),
-    0px 0px 68px rgba(8, 208, 112, 0.32),
-    inset 0px 8px 12px rgba(255, 255, 255, 0.34);
-}
-
-.glow-button--yellow:hover,
-.glow-button--yellow:focus-visible {
-  transform: translateY(-2px) scale(1.03);
-  filter: brightness(1.1);
-  box-shadow:
-    0px 6px 34px rgba(255, 212, 9, 0.55),
-    0px 0px 68px rgba(255, 212, 9, 0.28),
-    inset 0px 8px 12px rgba(255, 255, 255, 0.34);
-}
-
-.glow-button--orange:hover,
-.glow-button--orange:focus-visible {
-  transform: translateY(-2px) scale(1.03);
-  filter: brightness(1.1);
-  box-shadow:
-    0px 6px 34px rgba(254, 138, 4, 0.55),
-    0px 0px 68px rgba(254, 138, 4, 0.28),
-    inset 0px 8px 12px rgba(255, 255, 255, 0.34);
-}
-
-.glow-button--blue:hover,
-.glow-button--blue:focus-visible {
-  transform: translateY(-2px) scale(1.03);
-  filter: brightness(1.12);
-  box-shadow:
-    0px 6px 34px rgba(3, 133, 255, 0.58),
-    0px 0px 68px rgba(3, 133, 255, 0.32),
-    inset 0px 8px 12px rgba(255, 255, 255, 0.34);
+    0px 8px 34px rgba(var(--glow-rgb), 0.58),
+    0px 0px 72px rgba(var(--glow-rgb), 0.34),
+    inset 0px 8px 12px rgba(255, 255, 255, 0.36);
 }
 
 .hero-nav-link {
@@ -218,30 +207,16 @@ a {
   height: 117px;
 }
 
-.cta-btn-inner {
-  transition: box-shadow 0.4s ease, filter 0.4s ease;
-}
-
-.cta-btn-wrapper:hover .cta-btn-inner {
-  box-shadow:
-    0px 2px 40px #08d07099,
-    0px 0px 60px #08d07055,
-    inset 0px 8px 12px #ffffff66 !important;
-  filter: brightness(1.18);
+.cta-frame {
+  position: relative;
+  width: 100%;
+  max-width: 330px;
+  height: 117px;
 }
 
 /* === Responsive CTA button (mobile / tablet / laptop) === */
 .cta-btn-responsive {
   position: relative;
-  transition: box-shadow 0.4s ease, filter 0.4s ease;
-}
-
-.cta-btn-responsive:hover {
-  box-shadow:
-    0px 2px 40px #08d07099,
-    0px 0px 60px #08d07055,
-    inset 0px 8px 12px #ffffff66;
-  filter: brightness(1.18);
 }
 
 @keyframes logo-glow-pulse {
@@ -511,33 +486,6 @@ a {
 
 .btn-demo {
   position: relative;
-  transition: box-shadow 0.3s ease;
-}
-
-.btn-demo:hover {
-  box-shadow: 0px 4px 40px #ffd409cc, inset 0px 8px 16px #ffffff66 !important;
-  filter: brightness(1.1);
-}
-
-.btn-demo::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: 600px;
-  padding: 2px;
-  background: linear-gradient(90deg, #ffd409, #ff8c00, #fff176, #ffd409, #ff8c00, #ffd409);
-  background-size: 300% 100%;
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  animation: border-spin 2s linear infinite paused;
-}
-
-.btn-demo:hover::before {
-  opacity: 1;
-  animation-play-state: running;
 }
 
 .card-yellow {

@@ -361,11 +361,11 @@ export const Home = (): JSX.Element => {
 
         {/* Download button */}
         <div className="flex justify-center mt-8 sm:mt-10">
-          <div className="relative">
-            <button type="button" className="glow-button glow-button--orange relative z-10 flex items-center justify-center gap-2.5 px-10 py-5 bg-j-0jl3o rounded-[600px] shadow-[0px_2px_20px_#fe8a0466,inset_0px_8px_12px_#ffffff4c] cursor-pointer transition-all duration-300 active:scale-[0.98] font-semibold text-black-100 text-base text-center leading-[17.6px] whitespace-nowrap [font-family:'Geologica',Helvetica]">
+          <div className="cta-frame">
+            <button type="button" className="glow-button glow-button--orange absolute left-5 right-5 top-5 z-10 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-j-0jl3o px-10 py-5 shadow-[0px_2px_20px_#fe8a0466,inset_0px_8px_12px_#ffffff4c] cursor-pointer transition-all duration-300 active:scale-[0.98] font-semibold text-black-100 text-base text-center leading-[17.6px] whitespace-nowrap [font-family:'Geologica',Helvetica]">
               Скачать все кейсы
             </button>
-            <img className="absolute -top-5 -left-5 w-[330px] h-[117px] pointer-events-none hidden min-[1200px]:block" alt="Rectangle" src="https://c.animaapp.com/Raa0F4h8/img/rectangle-12.svg" />
+            <img className="absolute left-0 top-0 h-full w-full pointer-events-none hidden min-[1200px]:block" alt="Rectangle" src="https://c.animaapp.com/Raa0F4h8/img/rectangle-12.svg" />
           </div>
         </div>
       </div>
