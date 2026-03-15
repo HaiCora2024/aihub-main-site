@@ -48,11 +48,6 @@ export const Home = (): JSX.Element => {
         >
           <div className="relative h-[800px] w-[1920px]">
         <div
-          className={getRevealClassName("absolute top-[172px] left-[344px] w-[456px] h-[456px] bg-x-2l-jg-IF rounded-[228px] blur-[200px] opacity-10")}
-          style={getRevealStyle(0.02)}
-        />
-
-        <div
           className={getRevealClassName("animate-egg-float absolute top-[31px] left-[94px] w-[529px] h-[709px] flex opacity-40 bg-[url(https://c.animaapp.com/M0Twn3KI/img/egg-2.png)] bg-cover bg-[50%_50%]")}
           style={getRevealStyle(0.08)}
         >
