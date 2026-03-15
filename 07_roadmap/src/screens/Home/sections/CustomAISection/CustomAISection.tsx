@@ -1,4 +1,16 @@
-export const CustomAISection = ({ mobile }: { mobile?: boolean }): JSX.Element => {
+import type { CSSProperties } from "react";
+
+type CustomAISectionProps = {
+  mobile?: boolean;
+  className?: string;
+  style?: CSSProperties;
+};
+
+export const CustomAISection = ({
+  mobile,
+  className = "",
+  style,
+}: CustomAISectionProps): JSX.Element => {
   const bulletItems = [
     "Память контекста чата для лучшей связности",
     "Настройка характера ассистента",
@@ -9,7 +21,10 @@ export const CustomAISection = ({ mobile }: { mobile?: boolean }): JSX.Element =
 
   if (mobile) {
     return (
-      <div className="roadmap-card flex flex-col w-full items-start gap-5 sm:gap-7 pt-7 sm:pt-9 pb-6 sm:pb-8 px-4 sm:px-5 rounded-2xl bg-[linear-gradient(180deg,rgba(8,208,112,0.15)_0%,rgba(8,208,112,0)_100%)] transition-all duration-300 hover:bg-[linear-gradient(180deg,rgba(8,208,112,0.3)_0%,rgba(8,208,112,0.05)_100%)] hover:shadow-[0_0_30px_rgba(8,208,112,0.15)]">
+      <div
+        className={`roadmap-card flex flex-col w-full items-start gap-5 sm:gap-7 pt-7 sm:pt-9 pb-6 sm:pb-8 px-4 sm:px-5 rounded-2xl bg-[linear-gradient(180deg,rgba(8,208,112,0.15)_0%,rgba(8,208,112,0)_100%)] transition-all duration-300 hover:bg-[linear-gradient(180deg,rgba(8,208,112,0.3)_0%,rgba(8,208,112,0.05)_100%)] hover:shadow-[0_0_30px_rgba(8,208,112,0.15)] ${className}`.trim()}
+        style={style}
+      >
         <div className="flex flex-col items-start gap-2.5 w-full">
           <div className="[font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base sm:text-lg leading-snug">
             Разработка AI-агента
@@ -38,7 +53,10 @@ export const CustomAISection = ({ mobile }: { mobile?: boolean }): JSX.Element =
   }
 
   return (
-    <div className="flex flex-col w-[204px] items-start gap-[29px] pt-[35px] pb-[30px] px-[15px] absolute top-[270px] left-[638px] rounded-[20px] bg-[linear-gradient(180deg,rgba(8,208,112,0.15)_0%,rgba(8,208,112,0)_100%)]">
+    <div
+      className={`flex flex-col w-[204px] items-start gap-[29px] pt-[35px] pb-[30px] px-[15px] absolute top-[270px] left-[638px] rounded-[20px] bg-[linear-gradient(180deg,rgba(8,208,112,0.15)_0%,rgba(8,208,112,0)_100%)] ${className}`.trim()}
+      style={style}
+    >
       <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
         <div className="relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base tracking-[0] leading-[19.2px]">
           Разработка AI-агента

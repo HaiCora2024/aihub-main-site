@@ -330,6 +330,42 @@ a {
   }
 }
 
+.reveal-sequence-item {
+  opacity: 0;
+  transform: translateY(28px) scale(0.985);
+  filter: blur(10px);
+  will-change: opacity, transform, filter;
+}
+
+.reveal-sequence-item--visible {
+  animation: reveal-sequence-item 0.72s cubic-bezier(0.2, 0.75, 0.25, 1) forwards;
+  animation-delay: var(--reveal-delay, 0s);
+}
+
+@keyframes reveal-sequence-item {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.985);
+    filter: blur(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-sequence-item,
+  .reveal-sequence-item--visible {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    animation: none;
+  }
+}
+
 /* 02_instant_business_results */
 :root {
   --: 0px 4px 20px 0px rgba(3, 133, 255, 0.12);
