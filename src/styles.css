@@ -125,6 +125,35 @@ a {
   outline: none;
 }
 
+.landing-shell {
+  box-sizing: border-box;
+  width: min(100%, calc(100vw - 32px));
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+
+.landing-shell--base {
+  max-width: 1500px;
+}
+
+.landing-shell--wide {
+  max-width: 1680px;
+}
+
+@media (min-width: 640px) {
+  .landing-shell {
+    width: min(100%, calc(100vw - 48px));
+    padding-inline: 24px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .landing-shell {
+    width: min(100%, calc(100vw - 24px));
+    padding-inline: clamp(12px, 2vw, 32px);
+  }
+}
+
 
 /* 01_hero_custom_ai_assistant */
 :root {
