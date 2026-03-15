@@ -29,7 +29,7 @@ export const Home = (): JSX.Element => {
           className="flex flex-col w-full max-w-sm gap-6 order-2 min-[1200px]:order-1 shrink-0"
         >
           {/* Name input */}
-          <div className="flex h-[4.5rem] items-center px-6 bg-[#060c2499] rounded-[1.875rem] backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-[1.875rem] before:[background:linear-gradient(112deg,rgba(3,133,255,1)_0%,rgba(3,133,255,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:pointer-events-none">
+          <div className="form-field-shell flex h-[4.5rem] items-center px-6 bg-[#060c2499] rounded-[1.875rem] backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-[1.875rem] before:[background:linear-gradient(112deg,rgba(3,133,255,1)_0%,rgba(3,133,255,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:pointer-events-none">
             <input
               type="text"
               value={name}
@@ -40,7 +40,7 @@ export const Home = (): JSX.Element => {
           </div>
 
           {/* Phone input */}
-          <div className="flex h-[4.5rem] items-center px-6 bg-[#060c2499] rounded-[1.875rem] backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-[1.875rem] before:[background:linear-gradient(112deg,rgba(3,133,255,1)_0%,rgba(3,133,255,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:pointer-events-none">
+          <div className="form-field-shell flex h-[4.5rem] items-center px-6 bg-[#060c2499] rounded-[1.875rem] backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-[1.875rem] before:[background:linear-gradient(112deg,rgba(3,133,255,1)_0%,rgba(3,133,255,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:pointer-events-none">
             <input
               type="tel"
               value={phone}
