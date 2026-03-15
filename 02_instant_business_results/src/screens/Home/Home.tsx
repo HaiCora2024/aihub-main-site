@@ -77,11 +77,11 @@ export const Home = (): JSX.Element => {
             }`}
           >
             <img
-              className="absolute left-[20px] top-1/2 -translate-y-1/2 w-[140px] h-[140px] object-contain"
+              className="absolute left-[24px] top-1/2 -translate-y-1/2 w-[70px] h-[70px] object-contain"
               alt={card.title}
               src={card.image}
             />
-            <div className="flex flex-col w-[321px] items-start gap-5 absolute top-1/2 -translate-y-1/2 left-[180px]">
+            <div className="flex flex-col w-[321px] items-start gap-5 absolute top-1/2 -translate-y-1/2 left-[118px]">
               <div className="w-[321px] mt-[-1.00px] font-medium text-jo2i-fe text-[26px] leading-[31.2px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
                 {card.title}
               </div>
@@ -148,7 +148,7 @@ export const Home = (): JSX.Element => {
                 }`}
               >
                 <img
-                  className="h-20 w-20 object-contain"
+                  className="h-10 w-10 object-contain"
                   alt={card.title}
                   src={card.image}
                 />
