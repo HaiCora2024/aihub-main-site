@@ -1,7 +1,3 @@
-const fs = require("node:fs");
-const path = require("node:path");
-const vm = require("node:vm");
-
 const sectionDirs = [
   "01_hero_custom_ai_assistant",
   "02_instant_business_results",
@@ -17,40 +13,6 @@ const sectionDirs = [
   "13_footer_contacts",
 ];
 
-function loadSectionConfig(dir) {
-  const configPath = path.join(__dirname, dir, "tailwind.config.js");
-  const source = fs.readFileSync(configPath, "utf8");
-  const module = { exports: {} };
-
-  vm.runInNewContext(source, { module, exports: module.exports }, { filename: configPath });
-
-  return module.exports;
-}
-
-const mergedExtend = {};
-const mergedPlugins = [];
-
-for (const dir of sectionDirs) {
-  const config = loadSectionConfig(dir);
-  const extend = config.theme?.extend ?? {};
-
-  for (const [key, value] of Object.entries(extend)) {
-    if (value && typeof value === "object" && !Array.isArray(value)) {
-      mergedExtend[key] = {
-        ...(mergedExtend[key] ?? {}),
-        ...value,
-      };
-      continue;
-    }
-
-    mergedExtend[key] = value;
-  }
-
-  if (Array.isArray(config.plugins)) {
-    mergedPlugins.push(...config.plugins);
-  }
-}
-
 module.exports = {
   content: [
     "./index.html",
@@ -58,7 +20,109 @@ module.exports = {
     ...sectionDirs.map((dir) => `./${dir}/src/**/*.{html,js,ts,jsx,tsx}`),
   ],
   theme: {
-    extend: mergedExtend,
+    extend: {
+      colors: {
+        "black-10": "var(--black-10)",
+        "black-100": "var(--black-100)",
+        "black-20": "var(--black-20)",
+        "black-3": "var(--black-3)",
+        "black-30": "var(--black-30)",
+        "black-40": "var(--black-40)",
+        "black-5": "var(--black-5)",
+        "black-50": "var(--black-50)",
+        "black-60": "var(--black-60)",
+        "black-70": "var(--black-70)",
+        "black-80": "var(--black-80)",
+        "black-90": "var(--black-90)",
+        cream: "var(--cream)",
+        "CURV-3l": "var(--CURV-3l)",
+        green: "var(--green)",
+        "LZ-cyid": "var(--LZ-cyid)",
+        "q-vu-2d7": "var(--q-vu-2d7)",
+        "qzd1-xf": "var(--qzd1-xf)",
+        "sq-5b-8v": "var(--sq-5b-8v)",
+        white: "var(--white)",
+        "x-4jpsrj": "var(--x-4jpsrj)",
+        "x-8-br-7w0": "var(--x-8-br-7w0)",
+        "b-xr-a-vo": "var(--b-xr-a-vo)",
+        "EM-8y-gi": "var(--EM-8y-gi)",
+        "jo2i-fe": "var(--jo2i-fe)",
+        "PTH-tj-l": "var(--PTH-tj-l)",
+        "shy-GDT": "var(--shy-GDT)",
+        "x-ws-58i": "var(--x-ws-58i)",
+        "ya-e-nop": "var(--ya-e-nop)",
+        "j-3v-8no": "var(--j-3v-8no)",
+        "wp-q-sxc": "var(--wp-q-sxc)",
+        "x-1-7p-g-ei": "var(--x-1-7p-g-ei)",
+        "x-5-hzb-cx": "var(--x-5-hzb-cx)",
+        "x-6-ln-6na": "var(--x-6-ln-6na)",
+        "xc3-gg-b": "var(--xc3-gg-b)",
+        "xi-ft-NH": "var(--xi-ft-NH)",
+        "fd-6-4sq": "var(--fd-6-4sq)",
+        "m-g4x-yd": "var(--m-g4x-yd)",
+        "n2-9f-9n": "var(--n2-9f-9n)",
+        "x-1ap-r0e": "var(--x-1ap-r0e)",
+        "x-2l-jg-IF": "var(--x-2l-jg-IF)",
+        "x-3q-vmy-r": "var(--x-3q-vmy-r)",
+        "x-5y-zxcu": "var(--x-5y-zxcu)",
+        "j-0jl3o": "var(--j-0jl3o)",
+        "l-bj3nv": "var(--l-bj3nv)",
+        "s-h6i-0m": "var(--s-h6i-0m)",
+        "ul-g-ng-v": "var(--ul-g-ng-v)",
+        "vh-5dx-4": "var(--vh-5dx-4)",
+        "x-2-0x-r-8x": "var(--x-2-0x-r-8x)",
+        "y-yce-4p": "var(--y-yce-4p)",
+        "m-jj-eeh": "var(--m-jj-eeh)",
+        "nj-y73f": "var(--nj-y73f)",
+        "x-2pq6-uv": "var(--x-2pq6-uv)",
+        "x-7y-ef-7l": "var(--x-7y-ef-7l)",
+        "x-9qhb-f5": "var(--x-9qhb-f5)",
+        "xd-b-jov": "var(--xd-b-jov)",
+        "y-c9z-sz": "var(--y-c9z-sz)",
+        "h-0-mrp-8": "var(--h-0-mrp-8)",
+        "k1j-lq-l": "var(--k1j-lq-l)",
+        "kfxv-al": "var(--kfxv-al)",
+        "wqw-a-mg": "var(--wqw-a-mg)",
+        "x-9bvwqb": "var(--x-9bvwqb)",
+        "z-oz-8-qo": "var(--z-oz-8-qo)",
+        "zl-7jk-b": "var(--zl-7jk-b)",
+        "a-l-tq-4p": "var(--a-l-tq-4p)",
+        "JMR-sn-8": "var(--JMR-sn-8)",
+        "OFTT-xa": "var(--OFTT-xa)",
+        "x-42m6-id": "var(--x-42m6-id)",
+        "y95-bpg": "var(--y95-bpg)",
+        "yj-4i-CS": "var(--yj-4i-CS)",
+        "z-ccm-0e": "var(--z-ccm-0e)",
+        "j-fvz-ag": "var(--j-fvz-ag)",
+        "l-XA-2vw": "var(--l-XA-2vw)",
+        "m-j-cb-wj": "var(--m-j-cb-wj)",
+        "ptd-d-av": "var(--ptd-d-av)",
+        "tncal-k": "var(--tncal-k)",
+        "x-19-7of-c": "var(--x-19-7of-c)",
+        "ze-0r-06": "var(--ze-0r-06)",
+        "bkb-va5": "var(--bkb-va5)",
+        "fp-664u": "var(--fp-664u)",
+        jj6bar: "var(--jj6bar)",
+        "r-snce-k": "var(--r-snce-k)",
+        "tqp2-hy": "var(--tqp2-hy)",
+        "x-1k-2dej": "var(--x-1k-2dej)",
+        "x-9ukd-of": "var(--x-9ukd-of)",
+        "a-ij-ny-7": "var(--a-ij-ny-7)",
+        "bm-ck-ce": "var(--bm-ck-ce)",
+        "d-rs-4a-2": "var(--d-rs-4a-2)",
+        "f-ge-j74": "var(--f-ge-j74)",
+        "tr-vi-56": "var(--tr-vi-56)",
+        "u-ub-nxc": "var(--u-ub-nxc)",
+        "x-5ndbyf": "var(--x-5ndbyf)",
+        "fly-ir-s": "var(--fly-ir-s)",
+        "IZV-vgc": "var(--IZV-vgc)",
+        "j-nji92": "var(--j-nji92)",
+        "m-5-aae-u": "var(--m-5-aae-u)",
+        p91umx: "var(--p91umx)",
+        "x-146-vk-3": "var(--x-146-vk-3)",
+        "x-6m-fe-l1": "var(--x-6m-fe-l1)",
+      },
+    },
   },
-  plugins: mergedPlugins,
+  plugins: [],
 };

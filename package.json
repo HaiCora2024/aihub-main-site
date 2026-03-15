@@ -6,24 +6,16 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "generate:styles": "python3 scripts/generate_landing_styles.py"
+    "preview": "vite preview"
   },
   "dependencies": {
-    "clsx": "2.1.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.30.0",
-    "tailwind-merge": "2.5.4",
-    "tailwindcss-animate": "1.0.7"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "18.3.28",
     "@types/react-dom": "18.3.7",
     "@vitejs/plugin-react": "5.1.4",
-    "esbuild": "0.27.3",
-    "globals": "15.15.0",
-    "playwright": "^1.58.2",
     "tailwindcss": "3.4.16",
     "typescript": "5.9.3",
     "vite": "7.3.1"
