@@ -140,7 +140,7 @@ export const Home = (): JSX.Element => {
       />
 
       {/* Content */}
-      <div className="landing-shell landing-shell--wide relative z-10 py-8 sm:py-12 md:py-14">
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-10 min-[1200px]:px-16 min-[1200px]:px-20 py-8 sm:py-12 md:py-14">
         {/* Heading */}
         <h1 className="font-geologica font-bold text-lg sm:text-xl md:text-2xl min-[1200px]:text-[32px] leading-snug min-[1200px]:leading-[38.4px] mb-8 sm:mb-10 md:mb-14 max-w-4xl">
           <span className="text-white">

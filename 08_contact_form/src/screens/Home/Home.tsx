@@ -21,12 +21,12 @@ export const Home = (): JSX.Element => {
       />
 
       {/* Main content wrapper */}
-      <div className="landing-shell landing-shell--wide relative z-10 flex w-full flex-col items-center justify-center gap-10 py-12 sm:py-16 md:py-20 min-[1200px]:flex-row min-[1200px]:items-center min-[1200px]:justify-between min-[1200px]:gap-[clamp(24px,4vw,64px)]">
+      <div className="flex flex-col min-[1200px]:flex-row items-center min-[1200px]:items-start justify-center gap-10 min-[1200px]:gap-20 w-full max-w-7xl px-6 sm:px-10 min-[1200px]:pl-28 min-[1200px]:pr-10 py-12 md:py-20 relative z-10">
 
         {/* ── Left column: Form ── */}
         <form
           onSubmit={handleSubmit}
-          className="order-2 flex w-full max-w-sm shrink-0 flex-col gap-6 min-[1200px]:order-1 min-[1200px]:w-[36%] min-[1200px]:max-w-[420px]"
+          className="flex flex-col w-full max-w-sm gap-6 order-2 min-[1200px]:order-1 shrink-0"
         >
           {/* Name input */}
           <div className="flex h-[4.5rem] items-center px-6 bg-[#060c2499] rounded-[1.875rem] backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-[1.875rem] before:[background:linear-gradient(112deg,rgba(3,133,255,1)_0%,rgba(3,133,255,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:pointer-events-none">
@@ -69,7 +69,7 @@ export const Home = (): JSX.Element => {
         </form>
 
         {/* ── Right column: Text + Egg image ── */}
-        <div className="order-1 relative flex w-full flex-col gap-6 min-[1200px]:order-2 min-[1200px]:min-w-0 min-[1200px]:flex-1 min-[1200px]:max-w-none">
+        <div className="relative flex flex-col gap-6 w-full min-[1200px]:max-w-[36rem] order-1 min-[1200px]:order-2">
           {/* Egg background images */}
           <div className="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none overflow-visible">
             <div className="w-full max-w-[33rem] aspect-[529/709] bg-[url(https://c.animaapp.com/6QJxRgNq/img/egg-2.png)] bg-cover bg-center">

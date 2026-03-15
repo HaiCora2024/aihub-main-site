@@ -14,15 +14,11 @@ function getScale(baseWidth: number, minWidth: number) {
 
   const viewportWidth = document.documentElement.clientWidth;
 
-  if (viewportWidth >= baseWidth) {
-    return 1;
-  }
-
   if (viewportWidth <= minWidth) {
-    return minWidth / baseWidth;
+    return viewportWidth / baseWidth;
   }
 
-  return viewportWidth / baseWidth;
+  return minWidth / baseWidth;
 }
 
 export function DesktopScaleFrame({

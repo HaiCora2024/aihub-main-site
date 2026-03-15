@@ -1,7 +1,7 @@
 export const Home = (): JSX.Element => {
   return (
     <div className="w-full" data-model-id="316:6850">
-      <div className="landing-shell landing-shell--wide flex min-h-[20vh] flex-col items-center gap-8 py-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-12 md:gap-16 min-[1200px]:justify-between min-[1200px]:py-16">
+      <div className="mx-auto flex w-full max-w-[1200px] min-h-[20vh] flex-col items-center gap-8 px-4 py-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-12 sm:px-6 md:gap-16 min-[1200px]:justify-between min-[1200px]:px-8 min-[1200px]:py-16">
         <img
           className="h-auto w-[60vw] max-w-[360px]"
           alt="Group"

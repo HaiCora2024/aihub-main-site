@@ -169,84 +169,85 @@ export const Home = (): JSX.Element => {
       className="w-full relative overflow-visible"
       data-model-id="316:7175"
     >
-      <div className="landing-shell landing-shell--wide pt-[30px] pb-12">
-        {/* Logo */}
-        <div className="flex justify-center">
-          <img
-            className="h-auto w-full max-w-[902px]"
-            alt="Union"
-            src="https://c.animaapp.com/pz5xnCNR/img/union.svg"
-          />
-        </div>
+      {/* Logo */}
+      <div className="flex justify-center pt-[30px] px-4">
+        <img
+          className="w-full max-w-[902px] h-auto"
+          alt="Union"
+          src="https://c.animaapp.com/pz5xnCNR/img/union.svg"
+        />
+      </div>
 
-        {/* Title */}
-        <p className="mt-4 text-center [font-family:'Geologica',Helvetica] font-bold text-transparent text-3xl leading-tight sm:mt-6 sm:text-4xl md:mt-8 md:text-5xl md:leading-[76.8px] min-[1200px]:text-[64px]">
-          <span className="text-[#ffffff]">НАША </span>
-          <span className="text-[#08d070]">КОМАНДА</span>
-        </p>
+      {/* Title */}
+      <p className="mt-4 sm:mt-6 md:mt-8 px-4 [font-family:'Geologica',Helvetica] font-bold text-transparent text-3xl sm:text-4xl md:text-5xl min-[1200px]:text-[64px] text-center tracking-[0] leading-tight md:leading-[76.8px]">
+        <span className="text-[#ffffff]">НАША </span>
+        <span className="text-[#08d070]">КОМАНДА</span>
+      </p>
 
-        {/* Team Grid */}
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:mt-10 md:mt-12 md:grid-cols-2 md:gap-6">
-          {teamMembers.map((member) => (
+      {/* Team Grid */}
+      <div className="mt-8 sm:mt-10 md:mt-12 px-4 sm:px-6 md:px-8 pb-12 max-w-[1200px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+        {teamMembers.map((member) => (
+          <div
+            key={member.id}
+            className="relative flex gap-5 sm:gap-[30px] bg-[#060c2499] rounded-[30px] p-5 sm:p-6 transition-all duration-500 ease-out cursor-pointer"
+            style={{
+              boxShadow:
+                hoveredId === member.id
+                  ? `inset 0 0 40px 8px rgba(${member.glowColor}, 0.25), inset 0 0 80px 2px rgba(${member.glowColor}, 0.1)`
+                  : `inset 0 0 20px 2px rgba(${member.glowColor}, 0.1), inset 0 0 40px 0px rgba(${member.glowColor}, 0.05)`,
+            }}
+            onMouseEnter={() => setHoveredId(member.id)}
+            onMouseLeave={() => setHoveredId(null)}
+          >
+            {/* Gradient border */}
             <div
-              key={member.id}
-              className="relative flex gap-5 rounded-[30px] bg-[#060c2499] p-5 transition-all duration-500 ease-out cursor-pointer sm:gap-[30px] sm:p-6"
+              className="absolute inset-0 rounded-[30px] pointer-events-none z-[1]"
               style={{
-                boxShadow:
-                  hoveredId === member.id
-                    ? `inset 0 0 40px 8px rgba(${member.glowColor}, 0.25), inset 0 0 80px 2px rgba(${member.glowColor}, 0.1)`
-                    : `inset 0 0 20px 2px rgba(${member.glowColor}, 0.1), inset 0 0 40px 0px rgba(${member.glowColor}, 0.05)`,
+                padding: "1px",
+                background: member.borderGradient,
+                WebkitMask:
+                  "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                WebkitMaskComposite: "xor",
+                maskComposite: "exclude",
               }}
-              onMouseEnter={() => setHoveredId(member.id)}
-              onMouseLeave={() => setHoveredId(null)}
-            >
-              <div
-                className="absolute inset-0 rounded-[30px] pointer-events-none z-[1]"
-                style={{
-                  padding: "1px",
-                  background: member.borderGradient,
-                  WebkitMask:
-                    "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-                  WebkitMaskComposite: "xor",
-                  maskComposite: "exclude",
-                }}
-              />
+            />
 
-              <div className={member.imageWrapperClass}>
-                {member.useImgTag ? (
-                  <>
-                    <img
-                      className={member.imgClass}
-                      alt={member.imgAlt || ""}
-                      src={member.imgSrc || ""}
-                    />
-                    <div
-                      className={member.imageOverlayClass}
-                      style={member.imageOverlayStyle || {}}
-                    />
-                  </>
-                ) : (
+            {/* Avatar */}
+            <div className={member.imageWrapperClass}>
+              {member.useImgTag ? (
+                <>
+                  <img
+                    className={member.imgClass}
+                    alt={member.imgAlt || ""}
+                    src={member.imgSrc || ""}
+                  />
                   <div
                     className={member.imageOverlayClass}
                     style={member.imageOverlayStyle || {}}
                   />
-                )}
-              </div>
-
-              <div className="flex min-w-0 flex-1 flex-col items-start justify-center gap-[10px] sm:gap-[15px]">
-                <div className={member.roleClass}>{member.role}</div>
-
-                <div className="relative self-stretch [font-family:'Geologica',Helvetica] font-medium text-white text-base tracking-[0] leading-[19.2px]">
-                  {member.name}
-                </div>
-
-                <p className="relative self-stretch [font-family:'Geologica',Helvetica] font-light text-white text-xs tracking-[0] leading-[16.8px] sm:text-sm">
-                  {member.description}
-                </p>
-              </div>
+                </>
+              ) : (
+                <div
+                  className={member.imageOverlayClass}
+                  style={member.imageOverlayStyle || {}}
+                />
+              )}
             </div>
-          ))}
-        </div>
+
+            {/* Info */}
+            <div className="flex flex-1 min-w-0 flex-col items-start gap-[10px] sm:gap-[15px] justify-center">
+              <div className={member.roleClass}>{member.role}</div>
+
+              <div className="relative self-stretch [font-family:'Geologica',Helvetica] font-medium text-white text-base tracking-[0] leading-[19.2px]">
+                {member.name}
+              </div>
+
+              <p className="relative self-stretch [font-family:'Geologica',Helvetica] font-light text-white text-xs sm:text-sm tracking-[0] leading-[16.8px]">
+                {member.description}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -8,9 +8,9 @@ export const Home = (): JSX.Element => {
       <div className="absolute top-[5vh] right-[10vw] w-[30vw] max-w-[456px] aspect-square bg-d-rs-4a-2 rounded-full blur-[200px] opacity-20 pointer-events-none" />
 
       {/* Main content wrapper */}
-      <div className="landing-shell landing-shell--wide relative z-10 flex flex-col items-center justify-center gap-8 py-10 sm:py-12 min-[1200px]:flex-row min-[1200px]:items-start min-[1200px]:gap-[clamp(24px,4vw,96px)] min-[1200px]:py-14">
+      <div className="relative z-10 mx-auto flex w-full max-w-[1200px] flex-col items-center justify-center gap-8 px-4 py-10 sm:px-6 sm:py-12 min-[1200px]:flex-row min-[1200px]:items-start min-[1200px]:gap-16 min-[1200px]:px-8 min-[1200px]:py-14">
         {/* Text + CTA column */}
-        <div className="order-2 flex max-w-2xl shrink-0 flex-col items-center text-center min-[1200px]:order-1 min-[1200px]:max-w-[56%] min-[1200px]:flex-1 min-[1200px]:items-start min-[1200px]:text-left">
+        <div className="order-2 flex max-w-2xl shrink-0 flex-col items-center text-center min-[1200px]:order-1 min-[1200px]:max-w-[55%] min-[1200px]:items-start min-[1200px]:text-left">
           <h1 className="font-bold text-transparent text-4xl sm:text-5xl md:text-6xl min-[1200px]:text-7xl min-[1200px]:text-[86px] leading-[1.2] [font-family:'Geologica',Helvetica] tracking-[0]">
             <span className="text-white">ЗАБРОНИРУЙТЕ </span>
             <span className="text-[#08d070]">ДЕМО СЕГОДНЯ</span>
