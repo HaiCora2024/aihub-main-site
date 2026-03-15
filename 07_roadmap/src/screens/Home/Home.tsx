@@ -28,7 +28,13 @@ export const Home = (): JSX.Element => {
     <div className="w-full relative overflow-visible">
       {/* Desktop layout — preserved exactly as original */}
       <div className="hidden min-[1200px]:block">
-        <DesktopScaleFrame baseWidth={1920} baseHeight={749}>
+        <DesktopScaleFrame
+          baseWidth={1920}
+          baseHeight={749}
+          contentLeft={389}
+          contentWidth={1155}
+          targetWidth={1140}
+        >
           <div className="relative h-[749px] w-[1920px]">
         <OptimizationPhaseSection />
         <img
