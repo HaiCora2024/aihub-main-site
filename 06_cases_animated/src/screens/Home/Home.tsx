@@ -1,11 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 
 /* ── Animated value hook ── */
-function useAnimatedValue(target: number, duration = 1200, delay = 0) {
+function useAnimatedValue(target: number, duration = 1200, delay = 0, active = true) {
   const [value, setValue] = useState(0);
   const rafRef = useRef<number>(0);
 
   useEffect(() => {
+    cancelAnimationFrame(rafRef.current);
+
+    if (!active) {
+      setValue(0);
+      return;
+    }
+
     let start: number | null = null;
     let timeout: ReturnType<typeof setTimeout>;
 
@@ -29,7 +36,7 @@ function useAnimatedValue(target: number, duration = 1200, delay = 0) {
       clearTimeout(timeout);
       cancelAnimationFrame(rafRef.current);
     };
-  }, [target, duration, delay]);
+  }, [target, duration, delay, active]);
 
   return value;
 }
@@ -64,13 +71,15 @@ const CircleGauge = ({
   color,
   size = 65,
   animDelay = 0,
+  active = true,
 }: {
   percent: number;
   color: string;
   size?: number;
   animDelay?: number;
+  active?: boolean;
 }) => {
-  const animatedPercent = useAnimatedValue(percent, 1400, animDelay);
+  const animatedPercent = useAnimatedValue(percent, 1400, animDelay, active);
   const strokeWidth = 5;
   const radius = (size - strokeWidth) / 2;
   const cx = size / 2;
@@ -110,14 +119,16 @@ const SpeedometerGauge = ({
   color,
   size = 65,
   animDelay = 0,
+  active = true,
 }: {
   value: number;
   max: number;
   color: string;
   size?: number;
   animDelay?: number;
+  active?: boolean;
 }) => {
-  const animatedValue = useAnimatedValue(value, 1400, animDelay);
+  const animatedValue = useAnimatedValue(value, 1400, animDelay, active);
   const strokeWidth = 5;
   const radius = (size - strokeWidth) / 2;
   const cx = size / 2;
@@ -196,7 +207,7 @@ const AnimCard = ({
 }: {
   className: string;
   delay: number;
-  children: React.ReactNode;
+  children: (visible: boolean) => React.ReactNode;
 }) => {
   const { ref, visible } = useAppear(delay);
   return (
@@ -209,7 +220,7 @@ const AnimCard = ({
         transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
       }}
     >
-      {children}
+      {children(visible)}
     </div>
   );
 };
@@ -221,15 +232,15 @@ interface CardDef {
   border: string;
   delay: number;       // stagger ms
   gaugeDelay: number;  // gauge anim delay
-  content: (gd: number) => JSX.Element;
+  content: (gd: number, active: boolean) => JSX.Element;
 }
 
 const cards: CardDef[] = [
   {
     area: "cases-c1", glow: "card-glow-purple", border: "purple", delay: 0, gaugeDelay: 300,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <CircleGauge percent={82} color="rgba(191,91,243,1)" animDelay={gd} />
+        <CircleGauge percent={82} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">На 82% рутинных задач автоматизировали в агентстве недвижимости</p>
       </>
     ),
@@ -245,81 +256,81 @@ const cards: CardDef[] = [
   },
   {
     area: "cases-c10", glow: "card-glow-green", border: "green", delay: 200, gaugeDelay: 500,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <CircleGauge percent={61} color="rgba(8,208,112,1)" animDelay={gd} />
+        <CircleGauge percent={61} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">На 61% снизили расходы на контент для маркетплейса</p>
       </>
     ),
   },
   {
     area: "cases-c11", glow: "card-glow-orange", border: "orange", delay: 320, gaugeDelay: 620,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <SpeedometerGauge value={60} max={75} color="rgba(254,138,4,1)" animDelay={gd} />
+        <SpeedometerGauge value={60} max={75} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 60 раз ускорили обработку жалоб в компании ЖКХ</p>
       </>
     ),
   },
   {
     area: "cases-c9", glow: "card-glow-orange", border: "orange", delay: 180, gaugeDelay: 480,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <CircleGauge percent={80} color="rgba(254,138,4,1)" animDelay={gd} />
+        <CircleGauge percent={80} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">На 80% снизили время обработки звонков и постановки задач в компании с большим количеством внутренних совещаний</p>
       </>
     ),
   },
   {
     area: "cases-c7", glow: "card-glow-teal", border: "teal", delay: 400, gaugeDelay: 700,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <SpeedometerGauge value={7} max={10} color="rgba(99,230,225,1)" animDelay={gd} />
+        <SpeedometerGauge value={7} max={10} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 7 раз ускорили создание слайдов для презентаций в он-лайн школе</p>
       </>
     ),
   },
   {
     area: "cases-c8", glow: "card-glow-yellow", border: "yellow", delay: 500, gaugeDelay: 800,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <CircleGauge percent={30} color="rgba(255,212,9,1)" animDelay={gd} />
+        <CircleGauge percent={30} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">на 30% сократили время обработки звонков в компании, где 90% выручки приходится на продажи по телефону</p>
       </>
     ),
   },
   {
     area: "cases-c6", glow: "card-glow-teal", border: "teal", delay: 350, gaugeDelay: 650,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <SpeedometerGauge value={80} max={100} color="rgba(99,230,225,1)" animDelay={gd} />
+        <SpeedometerGauge value={80} max={100} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 80 раз ускорили создание эскизов сайтов в рекламном агентстве</p>
       </>
     ),
   },
   {
     area: "cases-c5", glow: "card-glow-purple", border: "purple", delay: 280, gaugeDelay: 580,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <SpeedometerGauge value={1.5} max={2} color="rgba(191,91,243,1)" animDelay={gd} />
+        <SpeedometerGauge value={1.5} max={2} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">в 1,5 раза ускорили онбординг новых сотрудников в компании с большим объемом неструктурированной информации</p>
       </>
     ),
   },
   {
     area: "cases-c3", glow: "card-glow-green", border: "green", delay: 450, gaugeDelay: 750,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <SpeedometerGauge value={20} max={25} color="rgba(8,208,112,1)" animDelay={gd} />
+        <SpeedometerGauge value={20} max={25} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 20 раз ускорили создание дайджестов в новостном агентстве</p>
       </>
     ),
   },
   {
     area: "cases-c2", glow: "card-glow-red", border: "red", delay: 550, gaugeDelay: 850,
-    content: (gd) => (
+    content: (gd, active) => (
       <>
-        <CircleGauge percent={42} color="rgba(255,70,58,1)" animDelay={gd} />
+        <CircleGauge percent={42} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
         <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">На 42% снизили нагрузку на сейлза в отеле</p>
       </>
     ),
@@ -354,7 +365,7 @@ export const Home = (): JSX.Element => {
               className={`${c.area} ${c.glow} ${CARD_BASE} ${BORDER[c.border]}`}
               delay={c.delay}
             >
-              {c.content(c.gaugeDelay)}
+              {(visible) => c.content(c.gaugeDelay, visible)}
             </AnimCard>
           ))}
         </div>
