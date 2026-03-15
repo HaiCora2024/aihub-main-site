@@ -99,7 +99,7 @@ export const Home = (): JSX.Element => {
 
   return (
     <div
-      className="bg-[#060c24] w-full min-h-screen relative overflow-hidden"
+      className="w-full min-h-screen relative overflow-visible"
       data-model-id="316:6178"
     >
       <div className="hidden min-[1200px]:block">

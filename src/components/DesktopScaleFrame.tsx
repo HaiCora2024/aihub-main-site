@@ -48,7 +48,7 @@ export function DesktopScaleFrame({
 
   return (
     <div
-      className="relative mx-auto w-full overflow-hidden"
+      className="relative mx-auto w-full overflow-visible"
       style={{ height: `${Math.round(baseHeight * scale)}px` }}
     >
       <div

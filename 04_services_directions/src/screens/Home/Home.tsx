@@ -25,7 +25,7 @@ const serviceItems = [
 
 export const Home = (): JSX.Element => {
   return (
-    <div className="bg-[#060c24] w-full relative overflow-hidden" data-model-id="316:6212">
+    <div className="w-full relative overflow-visible" data-model-id="316:6212">
       <div className="hidden min-[1200px]:block">
         <DesktopScaleFrame baseWidth={1920} baseHeight={800}>
           <div className="relative h-[800px] w-[1920px]">

@@ -25,7 +25,7 @@ const cards = [
 
 export const Home = (): JSX.Element => {
   return (
-    <div className="bg-[#060c24] w-full min-h-screen relative overflow-hidden">
+    <div className="w-full min-h-screen relative overflow-visible">
       {/* Desktop layout — preserved exactly as original */}
       <div className="hidden min-[1200px]:block">
         <DesktopScaleFrame baseWidth={1920} baseHeight={749}>

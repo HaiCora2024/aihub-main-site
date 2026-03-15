@@ -66,7 +66,7 @@ const getDelayStyle = (index: number, offset = 0): CSSProperties =>
 
 export const Home = (): JSX.Element => {
   return (
-    <div className="bg-[#060c24] w-full relative overflow-hidden" data-model-id="316:6667">
+    <div className="w-full relative overflow-visible" data-model-id="316:6667">
       <div className="hidden min-[1200px]:block">
         <DesktopScaleFrame baseWidth={1920} baseHeight={505}>
           <div className="relative h-[505px] w-[1920px]">

@@ -1,7 +1,7 @@
 export const Home = (): JSX.Element => {
   return (
     <div
-      className="bg-[#060c24] w-full min-h-[20vh] flex flex-col items-center gap-8 px-4 py-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-12 md:gap-16 min-[1200px]:justify-between min-[1200px]:px-[10%] min-[1200px]:py-16 min-[1200px]:px-[20%]"
+      className="w-full min-h-[20vh] flex flex-col items-center gap-8 px-4 py-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-12 md:gap-16 min-[1200px]:justify-between min-[1200px]:px-[10%] min-[1200px]:py-16 min-[1200px]:px-[20%]"
       data-model-id="316:6850"
     >
       <img

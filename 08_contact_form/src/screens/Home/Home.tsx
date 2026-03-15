@@ -9,7 +9,7 @@ export const Home = (): JSX.Element => {
   };
 
   return (
-    <div className="bg-[#060c24] w-full min-h-screen flex flex-col items-center overflow-hidden relative">
+    <div className="w-full min-h-screen flex flex-col items-center overflow-visible relative">
       {/* Decorative glow */}
       <div className="absolute top-1/4 right-[10%] w-[20rem] h-[20rem] md:w-[28rem] md:h-[28rem] bg-wqw-a-mg rounded-full blur-[200px] opacity-10 pointer-events-none" />
 
@@ -71,7 +71,7 @@ export const Home = (): JSX.Element => {
         {/* ── Right column: Text + Egg image ── */}
         <div className="relative flex flex-col gap-6 w-full min-[1200px]:max-w-[36rem] order-1 min-[1200px]:order-2">
           {/* Egg background images */}
-          <div className="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none overflow-hidden">
+          <div className="absolute inset-0 flex items-center justify-center opacity-40 pointer-events-none overflow-visible">
             <div className="w-full max-w-[33rem] aspect-[529/709] bg-[url(https://c.animaapp.com/6QJxRgNq/img/egg-2.png)] bg-cover bg-center">
               <img
                 className="w-full h-full object-cover"
