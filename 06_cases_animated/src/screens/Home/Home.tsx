@@ -338,7 +338,7 @@ const cards: CardDef[] = [
 export const Home = (): JSX.Element => {
   return (
     <div className="w-full" data-model-id="316:6331">
-      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-6 min-[1200px]:px-8 py-8 sm:py-12">
+      <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-5 min-[1200px]:px-3 py-8 sm:py-12">
 
         {/* Header */}
         <header className="relative mb-8 sm:mb-10">

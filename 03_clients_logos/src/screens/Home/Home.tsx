@@ -4,7 +4,13 @@ export const Home = (): JSX.Element => {
   return (
     <div className="w-full relative overflow-visible" data-model-id="316:6256">
       <div className="hidden min-[1200px]:block">
-        <DesktopScaleFrame baseWidth={1920} baseHeight={540}>
+        <DesktopScaleFrame
+          baseWidth={1920}
+          baseHeight={540}
+          contentLeft={389}
+          contentWidth={1141}
+          targetWidth={1140}
+        >
           <div className="relative h-[540px] w-[1920px]">
             <img
               className="absolute top-[19px] left-[calc(50.00%_-_516px)] w-[503px] h-[120px]"

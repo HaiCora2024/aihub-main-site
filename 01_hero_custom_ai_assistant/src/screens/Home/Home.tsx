@@ -103,7 +103,13 @@ export const Home = (): JSX.Element => {
       data-model-id="316:6178"
     >
       <div className="hidden min-[1200px]:block">
-        <DesktopScaleFrame baseWidth={1920} baseHeight={800}>
+        <DesktopScaleFrame
+          baseWidth={1920}
+          baseHeight={800}
+          contentLeft={389}
+          contentWidth={1142}
+          targetWidth={1140}
+        >
           <div className="relative h-[800px] w-[1920px]">
         <img
           className="absolute top-[580px] left-[391px] w-[555px] h-[131px] mix-blend-screen"
