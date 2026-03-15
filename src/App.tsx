@@ -34,7 +34,7 @@ export function App(): JSX.Element {
           key={id}
           id={id}
           className={`relative overflow-visible scroll-mt-6 min-[1200px]:scroll-mt-8 ${
-            index === 0 ? "" : "-mt-4 sm:-mt-6 min-[1200px]:-mt-8"
+            index === 0 ? "" : "mt-6 sm:mt-8 min-[1200px]:mt-10"
           }`}
         >
           <Component />
