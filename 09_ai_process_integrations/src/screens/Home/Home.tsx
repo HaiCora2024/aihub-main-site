@@ -167,7 +167,7 @@ export const Home = (): JSX.Element => {
       {/* Background decorative elements */}
       <div className="absolute top-5 left-1/2 -translate-x-1/4 w-[30vw] max-w-[456px] aspect-square bg-JMR-sn-8 rounded-full blur-[200px] opacity-20 pointer-events-none" />
 
-      <div className="absolute top-[50px] left-1/2 ml-[150px] -translate-x-1/3 w-[28vw] max-w-[529px] opacity-40 pointer-events-none hidden min-[1200px]:block">
+      <div className="absolute top-[50px] left-1/2 ml-[200px] -translate-x-1/3 w-[28vw] max-w-[529px] opacity-40 pointer-events-none hidden min-[1200px]:block">
         <div className="w-full aspect-[529/709] bg-[url(https://c.animaapp.com/C2kc9y9O/img/egg-2.png)] bg-cover bg-center">
           <img
             className="w-full h-full object-cover"
