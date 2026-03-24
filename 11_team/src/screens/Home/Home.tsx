@@ -65,10 +65,10 @@ export const Home = (): JSX.Element => {
       imgClass: "absolute top-0 left-0 h-[134px] w-[134px]",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-1k-2dej text-xl tracking-[0] leading-[24.0px]",
-      role: "Machine Learning",
-      name: "Artem Astapenko",
+      role: "AI Solutions Business Lead",
+      name: "Danil Usik",
       description:
-        "AI & ML Technologies Integrator | TensorFlow Expert | Scikit-learn, RAG, PyTorch, Langchain and LlamaIndex Specialist",
+        "Custom AI for Sales & Ops | B2B Business Automation | Turning Business Challenges into AI That Works",
     },
     {
       id: 3,
