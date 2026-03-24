@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
+
 interface TeamMember {
   id: number;
   borderGradient: string;
@@ -18,6 +20,7 @@ interface TeamMember {
 }
 
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   const teamMembers: TeamMember[] = [
@@ -180,8 +183,8 @@ export const Home = (): JSX.Element => {
 
       {/* Title */}
       <p className="mt-4 sm:mt-6 md:mt-8 px-4 [font-family:'Geologica',Helvetica] font-bold text-transparent text-3xl sm:text-4xl md:text-5xl min-[1200px]:text-[64px] text-center tracking-[0] leading-tight md:leading-[76.8px]">
-        <span className="text-[#ffffff]">НАША </span>
-        <span className="text-[#08d070]">КОМАНДА</span>
+        <span className="text-[#ffffff]">{t.team.part1}</span>
+        <span className="text-[#08d070]">{t.team.part2}</span>
       </p>
 
       {/* Team Grid */}

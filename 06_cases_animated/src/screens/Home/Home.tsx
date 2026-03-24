@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
+
 /* ── Animated value hook ── */
 function useAnimatedValue(target: number, duration = 1200, delay = 0, active = true) {
   const [value, setValue] = useState(0);
@@ -20,7 +22,6 @@ function useAnimatedValue(target: number, duration = 1200, delay = 0, active = t
       if (start === null) start = ts;
       const elapsed = ts - start;
       const progress = Math.min(elapsed / duration, 1);
-      // easeOutCubic
       const eased = 1 - Math.pow(1 - progress, 3);
       setValue(eased * target);
       if (progress < 1) {
@@ -145,7 +146,6 @@ const SpeedometerGauge = ({
   const nx = cx + needleLen * Math.cos(needleRad);
   const ny = cy + needleLen * Math.sin(needleRad);
 
-  // display: round only when close to integer
   const displayNum = animatedValue < 10
     ? (Math.round(animatedValue * 10) / 10).toString()
     : Math.round(animatedValue).toString();
@@ -225,128 +225,130 @@ const AnimCard = ({
   );
 };
 
-/* ── Card data ── */
-interface CardDef {
-  area: string;
-  glow: string;
-  border: string;
-  delay: number;       // stagger ms
-  gaugeDelay: number;  // gauge anim delay
-  content: (gd: number, active: boolean) => JSX.Element;
-}
-
-const cards: CardDef[] = [
-  {
-    area: "cases-c1", glow: "card-glow-purple", border: "purple", delay: 0, gaugeDelay: 300,
-    content: (gd, active) => (
-      <>
-        <CircleGauge percent={82} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">На 82% рутинных задач автоматизировали в агентстве недвижимости</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c4", glow: "card-glow-red", border: "red", delay: 120, gaugeDelay: 420,
-    content: () => (
-      <>
-        <img className="h-[65px] w-[69px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005.svg" />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">Автоматизировали формирование ответов на FAQ в компании, где большинство задач решалось через WhatsApp</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c10", glow: "card-glow-green", border: "green", delay: 200, gaugeDelay: 500,
-    content: (gd, active) => (
-      <>
-        <CircleGauge percent={61} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">На 61% снизили расходы на контент для маркетплейса</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c11", glow: "card-glow-orange", border: "orange", delay: 320, gaugeDelay: 620,
-    content: (gd, active) => (
-      <>
-        <SpeedometerGauge value={60} max={75} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 60 раз ускорили обработку жалоб в компании ЖКХ</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c9", glow: "card-glow-orange", border: "orange", delay: 180, gaugeDelay: 480,
-    content: (gd, active) => (
-      <>
-        <CircleGauge percent={80} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">На 80% снизили время обработки звонков и постановки задач в компании с большим количеством внутренних совещаний</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c7", glow: "card-glow-teal", border: "teal", delay: 400, gaugeDelay: 700,
-    content: (gd, active) => (
-      <>
-        <SpeedometerGauge value={7} max={10} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 7 раз ускорили создание слайдов для презентаций в он-лайн школе</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c8", glow: "card-glow-yellow", border: "yellow", delay: 500, gaugeDelay: 800,
-    content: (gd, active) => (
-      <>
-        <CircleGauge percent={30} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">на 30% сократили время обработки звонков в компании, где 90% выручки приходится на продажи по телефону</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c6", glow: "card-glow-teal", border: "teal", delay: 350, gaugeDelay: 650,
-    content: (gd, active) => (
-      <>
-        <SpeedometerGauge value={80} max={100} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 80 раз ускорили создание эскизов сайтов в рекламном агентстве</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c5", glow: "card-glow-purple", border: "purple", delay: 280, gaugeDelay: 580,
-    content: (gd, active) => (
-      <>
-        <SpeedometerGauge value={1.5} max={2} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">в 1,5 раза ускорили онбординг новых сотрудников в компании с большим объемом неструктурированной информации</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c3", glow: "card-glow-green", border: "green", delay: 450, gaugeDelay: 750,
-    content: (gd, active) => (
-      <>
-        <SpeedometerGauge value={20} max={25} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 20 раз ускорили создание дайджестов в новостном агентстве</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c2", glow: "card-glow-red", border: "red", delay: 550, gaugeDelay: 850,
-    content: (gd, active) => (
-      <>
-        <CircleGauge percent={42} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">На 42% снизили нагрузку на сейлза в отеле</p>
-      </>
-    ),
-  },
-  {
-    area: "cases-c12", glow: "card-glow-orange", border: "orange", delay: 600, gaugeDelay: 900,
-    content: () => (
-      <>
-        <img className="h-[65px] w-[65px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005-2.svg" />
-        <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">В 2 раза увеличили доступность информации из тренингов в клининговой компании</p>
-      </>
-    ),
-  },
-];
-
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
+  const texts = t.cases.cardTexts;
+
+  interface CardDef {
+    area: string;
+    glow: string;
+    border: string;
+    delay: number;
+    gaugeDelay: number;
+    content: (gd: number, active: boolean) => JSX.Element;
+  }
+
+  const cards: CardDef[] = [
+    {
+      area: "cases-c1", glow: "card-glow-purple", border: "purple", delay: 0, gaugeDelay: 300,
+      content: (gd, active) => (
+        <>
+          <CircleGauge percent={82} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[0]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c4", glow: "card-glow-red", border: "red", delay: 120, gaugeDelay: 420,
+      content: () => (
+        <>
+          <img className="h-[65px] w-[69px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005.svg" />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[1]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c10", glow: "card-glow-green", border: "green", delay: 200, gaugeDelay: 500,
+      content: (gd, active) => (
+        <>
+          <CircleGauge percent={61} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[2]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c11", glow: "card-glow-orange", border: "orange", delay: 320, gaugeDelay: 620,
+      content: (gd, active) => (
+        <>
+          <SpeedometerGauge value={60} max={75} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[3]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c9", glow: "card-glow-orange", border: "orange", delay: 180, gaugeDelay: 480,
+      content: (gd, active) => (
+        <>
+          <CircleGauge percent={80} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[4]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c7", glow: "card-glow-teal", border: "teal", delay: 400, gaugeDelay: 700,
+      content: (gd, active) => (
+        <>
+          <SpeedometerGauge value={7} max={10} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[5]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c8", glow: "card-glow-yellow", border: "yellow", delay: 500, gaugeDelay: 800,
+      content: (gd, active) => (
+        <>
+          <CircleGauge percent={30} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[6]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c6", glow: "card-glow-teal", border: "teal", delay: 350, gaugeDelay: 650,
+      content: (gd, active) => (
+        <>
+          <SpeedometerGauge value={80} max={100} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[7]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c5", glow: "card-glow-purple", border: "purple", delay: 280, gaugeDelay: 580,
+      content: (gd, active) => (
+        <>
+          <SpeedometerGauge value={1.5} max={2} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[8]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c3", glow: "card-glow-green", border: "green", delay: 450, gaugeDelay: 750,
+      content: (gd, active) => (
+        <>
+          <SpeedometerGauge value={20} max={25} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[9]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c2", glow: "card-glow-red", border: "red", delay: 550, gaugeDelay: 850,
+      content: (gd, active) => (
+        <>
+          <CircleGauge percent={42} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[10]}</p>
+        </>
+      ),
+    },
+    {
+      area: "cases-c12", glow: "card-glow-orange", border: "orange", delay: 600, gaugeDelay: 900,
+      content: () => (
+        <>
+          <img className="h-[65px] w-[65px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005-2.svg" />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[11]}</p>
+        </>
+      ),
+    },
+  ];
+
   return (
     <div className="w-full" data-model-id="316:6331">
       <div className="mx-auto w-full max-w-[1200px] px-4 sm:px-5 min-[1200px]:px-3 py-8 sm:py-12">
@@ -354,7 +356,7 @@ export const Home = (): JSX.Element => {
         {/* Header */}
         <header className="relative mb-8 sm:mb-10">
           <img className="w-full max-w-[646px] h-auto" alt="Union" src="https://c.animaapp.com/Raa0F4h8/img/union.svg" />
-          <h1 className="mt-2 [font-family:'Geologica',Helvetica] font-bold text-j-0jl3o text-2xl sm:text-[32px] leading-tight">КЕЙСЫ</h1>
+          <h1 className="mt-2 [font-family:'Geologica',Helvetica] font-bold text-j-0jl3o text-2xl sm:text-[32px] leading-tight">{t.cases.title}</h1>
         </header>
 
         {/* Cards grid */}
@@ -374,7 +376,7 @@ export const Home = (): JSX.Element => {
         <div className="flex justify-center mt-8 sm:mt-10">
           <div className="cta-frame">
             <button type="button" className="glow-button glow-button--orange absolute left-5 right-5 top-5 z-10 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-j-0jl3o px-10 py-5 shadow-[0px_2px_20px_#fe8a0466,inset_0px_8px_12px_#ffffff4c] cursor-pointer transition-all duration-300 active:scale-[0.98] font-semibold text-black-100 text-base text-center leading-[17.6px] whitespace-nowrap [font-family:'Geologica',Helvetica]">
-              Скачать все кейсы
+              {t.cases.downloadBtn}
             </button>
             <img className="absolute left-0 top-0 h-full w-full pointer-events-none hidden min-[1200px]:block" alt="Rectangle" src="https://c.animaapp.com/Raa0F4h8/img/rectangle-12.svg" />
           </div>

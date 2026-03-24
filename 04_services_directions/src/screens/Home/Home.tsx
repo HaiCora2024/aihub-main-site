@@ -2,39 +2,20 @@ import type { CSSProperties } from "react";
 
 import { DesktopScaleFrame } from "../../../../src/components/DesktopScaleFrame";
 import { useRevealOnView } from "../../../../src/hooks/useRevealOnView";
-
-const serviceItems = [
-  {
-    title: "Виртуальные сотрудники",
-    text:
-      "Сократите расходы на поддержку клиентов в 3 раза. Голосовые и текстовые AI-ассистенты встраиваются в ваши каналы связи, работают 24/7 и помогают закрывать рутинные запросы без перегруза команды.",
-  },
-  {
-    title: "Автоматизация бизнес-процессов",
-    text:
-      "Освободите сотрудников от рутины и ускорьте работу в 5-10 раз: обработка данных, создание контента, заполнение документов, ведение отчетности и другие повторяемые операции.",
-  },
-  {
-    title: "AI аналитика",
-    text:
-      "Получайте структурированные отчеты, распознавание данных, прогнозы и кастомную аналитику. Мы можем анализировать текст, цифры, голос и видео для принятия более точных решений.",
-  },
-  {
-    title: "Рекомендательные системы",
-    text:
-      "Увеличьте средний чек на 20-30% через персонализацию, умные рекомендации, подборки товаров и выявление скрытых закономерностей в поведении пользователей.",
-  },
-];
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
 
 const getRevealStyle = (delay: number): CSSProperties =>
   ({ "--reveal-delay": `${delay}s` }) as CSSProperties;
 
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
   const { ref, isVisible } = useRevealOnView<HTMLDivElement>();
   const getRevealClassName = (baseClassName: string) =>
     `${baseClassName} reveal-sequence-item${isVisible ? " reveal-sequence-item--visible" : ""}`;
   const getAnimatedClassName = (baseClassName: string, animationClassName: string) =>
     `${baseClassName}${isVisible ? ` ${animationClassName}` : " opacity-0"}`;
+
+  const items = t.services.items;
 
   return (
     <div ref={ref} className="w-full relative overflow-visible" data-model-id="316:6212">
@@ -79,18 +60,13 @@ export const Home = (): JSX.Element => {
             className={getAnimatedClassName("relative self-stretch font-medium text-x-2l-jg-IF text-lg leading-[21.6px] [font-family:'Geologica',Helvetica] tracking-[0]", "animate-reveal-title")}
             style={getRevealStyle(0.36)}
           >
-            Виртуальные сотрудники
+            {items[0].title}
           </div>
           <p
             className={getAnimatedClassName("relative self-stretch font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica] tracking-[0]", "animate-reveal-text")}
             style={getRevealStyle(0.48)}
           >
-            Сократите расходы на поддержку клиентов в 3 раза. Голосовые <br />и
-            текстовые AI-ассистенты встраиваются в ваши каналы связи (web, TG,
-            PMS), работают 24/7, мгновенно отвечают и решают проблемы, снижают
-            стресс клиентов, находят с ними общий язык, отвечают на простые и
-            сложные вопросы,предлагают скидки, облегчают задачи: запись на прием,
-            обработка заказов, сбор обратной связи.
+            {items[0].textLong}
           </p>
         </div>
 
@@ -108,17 +84,13 @@ export const Home = (): JSX.Element => {
             className={getAnimatedClassName("relative self-stretch font-medium text-x-2l-jg-IF text-lg leading-[21.6px] [font-family:'Geologica',Helvetica] tracking-[0]", "animate-reveal-title")}
             style={getRevealStyle(0.52)}
           >
-            Автоматизация бизнес-процессов
+            {items[1].title}
           </div>
           <p
             className={getAnimatedClassName("relative self-stretch font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica] tracking-[0]", "animate-reveal-text")}
             style={getRevealStyle(0.64)}
           >
-            Освободите сотрудников от рутины и ускорьте работу в 5-10 раз. Вместо
-            ручной обработки и структурирования данных <br />
-            вы получаете автоматическое создание описаний товаров, статей, постов
-            в соцсетях, обработку заказов, заполнение документов, ведение
-            отчетности.
+            {items[1].textLong}
           </p>
         </div>
 
@@ -136,19 +108,13 @@ export const Home = (): JSX.Element => {
             className={getAnimatedClassName("relative self-stretch [font-family:'Geologica',Helvetica] font-medium text-x-2l-jg-IF text-lg tracking-[0] leading-[21.6px]", "animate-reveal-title")}
             style={getRevealStyle(0.68)}
           >
-            AI аналитика
+            {items[2].title}
           </div>
           <p
             className={getAnimatedClassName("relative self-stretch font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica] tracking-[0]", "animate-reveal-text")}
             style={getRevealStyle(0.8)}
           >
-            Вы загружаете свои данные и с помощью AI-инструментов получаете:
-            структурированные отчеты, real-time обновления новостей/котировок,{" "}
-            <br />
-            кастомные отчеты, распознавание данных, прогнозы. Мы можем
-            анализировать как текст и цифры, так и голос и даже видео, создавая
-            удобные документы <br />
-            для принятия верных решений.
+            {items[2].textLong}
           </p>
         </div>
 
@@ -166,18 +132,13 @@ export const Home = (): JSX.Element => {
             className={getAnimatedClassName("relative self-stretch font-medium text-x-2l-jg-IF text-lg leading-[21.6px] [font-family:'Geologica',Helvetica] tracking-[0]", "animate-reveal-title")}
             style={getRevealStyle(0.84)}
           >
-            Рекомендательные системы
+            {items[3].title}
           </div>
           <p
             className={getAnimatedClassName("relative self-stretch font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica] tracking-[0]", "animate-reveal-text")}
             style={getRevealStyle(0.96)}
           >
-            Увеличьте средний чек на 20-30%&nbsp;&nbsp;
-            <br />
-            без дополнительных расходов на рекламу <br />и взрастите вовлеченность
-            клиентов через умные алгоритмы персонализации, подборки товаров,
-            выявление поведенческих паттернов пользователей и поиск скрытых
-            закономерностей.
+            {items[3].textLong}
           </p>
         </div>
 
@@ -185,8 +146,8 @@ export const Home = (): JSX.Element => {
           className={getRevealClassName("absolute top-[333px] left-[584px] w-[555px] font-bold text-transparent text-[64px] leading-[76.8px] [font-family:'Geologica',Helvetica] tracking-[0]")}
           style={getRevealStyle(0.18)}
         >
-          <span className="text-[#bf5bf3]">НАШИ </span>
-          <span className="text-[#ffffff]">НАПРАВЛЕНИЯ</span>
+          <span className="text-[#bf5bf3]">{t.services.part1}</span>
+          <span className="text-[#ffffff]">{t.services.part2}</span>
         </p>
 
         <img
@@ -233,13 +194,13 @@ export const Home = (): JSX.Element => {
               className={getRevealClassName("font-bold text-3xl leading-tight sm:text-5xl md:text-6xl [font-family:'Geologica',Helvetica]")}
               style={getRevealStyle(0.06)}
             >
-              <span className="text-[#bf5bf3]">НАШИ </span>
-              <span className="text-white">НАПРАВЛЕНИЯ</span>
+              <span className="text-[#bf5bf3]">{t.services.part1}</span>
+              <span className="text-white">{t.services.part2}</span>
             </p>
           </div>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
-            {serviceItems.map((item, index) => (
+            {items.map((item, index) => (
               <article
                 key={item.title}
                 className={getRevealClassName(`relative rounded-[28px] bg-[#060c2499] p-5 sm:p-6 backdrop-blur-[10px] before:pointer-events-none before:absolute before:inset-0 before:rounded-[28px] before:p-px before:[background:linear-gradient(112deg,rgba(191,91,243,1)_0%,rgba(191,91,243,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] ${
@@ -262,7 +223,7 @@ export const Home = (): JSX.Element => {
                     className={getAnimatedClassName("mt-3 font-light text-white text-sm sm:text-base leading-relaxed [font-family:'Geologica',Helvetica]", "animate-reveal-text")}
                     style={getRevealStyle(0.46 + index * 0.18)}
                   >
-                    {item.text}
+                    {item.textShort}
                   </p>
                 </div>
               </article>

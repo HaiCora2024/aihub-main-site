@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
 
+import { useLanguage } from "../../../../../../src/i18n/LanguageContext";
+
 type CustomAISectionProps = {
   mobile?: boolean;
   className?: string;
@@ -11,13 +13,8 @@ export const CustomAISection = ({
   className = "",
   style,
 }: CustomAISectionProps): JSX.Element => {
-  const bulletItems = [
-    "Память контекста чата для лучшей связности",
-    "Настройка характера ассистента",
-    "Рекомендации покупок на основе интересов",
-    "Интеграция с Amazon и Perplexity",
-    "Единовременная обработка нескольких процессов",
-  ];
+  const { t } = useLanguage();
+  const { title, description, bullets } = t.roadmap.customAI;
 
   if (mobile) {
     return (
@@ -27,14 +24,14 @@ export const CustomAISection = ({
       >
         <div className="flex flex-col items-start gap-2.5 w-full">
           <div className="[font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base sm:text-lg leading-snug">
-            Разработка AI-агента
+            {title}
           </div>
           <p className="[font-family:'Geologica',Helvetica] font-normal text-white text-xs sm:text-sm leading-relaxed">
-            Создали первого полнофункционального AI-агента на облачной инфраструктуре AWS с интеграцией Amazon EventBridge и Langchain для масштабируемости и расширенной функциональности.
+            {description}
           </p>
         </div>
         <div className="flex flex-col items-start gap-3 sm:gap-4 w-full">
-          {bulletItems.map((item, index) => (
+          {bullets.map((item, index) => (
             <div key={index} className="flex items-start gap-1.5 w-full">
               <div className="inline-flex items-center justify-center gap-2.5 flex-shrink-0 mt-1">
                 <div className="relative w-1.5 h-1.5">
@@ -59,17 +56,14 @@ export const CustomAISection = ({
     >
       <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
         <div className="relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base tracking-[0] leading-[19.2px]">
-          Разработка AI-агента
+          {title}
         </div>
         <p className="self-stretch font-normal text-xs leading-[14.4px] relative [font-family:'Geologica',Helvetica] text-white tracking-[0]">
-          Создали первого полнофункционального <br />
-          AI-агента на облачной инфраструктуре AWS <br />с интеграцией Amazon
-          EventBridge и Langchain <br />
-          для масштабируемости <br />и расширенной функциональности.
+          {description}
         </p>
       </div>
       <div className="flex flex-col items-start gap-[15px] relative self-stretch w-full flex-[0_0_auto]">
-        {bulletItems.map((item, index) => (
+        {bullets.map((item, index) => (
           <div key={index} className="flex items-start gap-[3px] relative self-stretch w-full flex-[0_0_auto]">
             <div className="inline-flex items-center justify-center gap-2.5 relative flex-[0_0_auto]">
               <div className="relative w-1.5 h-1.5">
