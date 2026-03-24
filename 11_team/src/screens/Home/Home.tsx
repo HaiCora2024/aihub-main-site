@@ -30,15 +30,15 @@ export const Home = (): JSX.Element => {
         "linear-gradient(102deg,rgba(191,91,243,1) 0%,rgba(191,91,243,0) 100%)",
       glowColor: "191,91,243",
       imageWrapperClass:
-        "w-[134px] shrink-0 self-center flex items-center justify-center rounded-[20px] overflow-hidden bg-[url(https://c.animaapp.com/pz5xnCNR/img/frame-1948760049@2x.png)] bg-cover bg-[50%_50%]",
+        "h-[134px] w-[134px] shrink-0 self-center relative bg-[#ffffff] rounded-[20px] overflow-hidden",
       imageOverlayStyle: {
         background:
           "linear-gradient(102deg,rgba(191,91,243,1) 0%,rgba(191,91,243,0) 100%)",
       },
-      imageOverlayClass: "opacity-40 h-[134px] w-[134px]",
-      useImgTag: false,
-      imgSrc: null,
-      imgAlt: null,
+      imageOverlayClass: "opacity-40 absolute top-0 left-0 w-[134px] h-[134px]",
+      useImgTag: true,
+      imgSrc: `${import.meta.env.BASE_URL}denis-salnikov.jpg`,
+      imgAlt: "Denis Salnikov",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-r-snce-k text-xl tracking-[0] leading-[24.0px]",
       role: "Fullstack Development",
@@ -60,8 +60,8 @@ export const Home = (): JSX.Element => {
       imageOverlayClass:
         "opacity-60 absolute top-0 left-0 w-[134px] h-[134px]",
       useImgTag: true,
-      imgSrc: "https://c.animaapp.com/pz5xnCNR/img/rectangle-5@2x.png",
-      imgAlt: "Rectangle",
+      imgSrc: `${import.meta.env.BASE_URL}Danil_Usik.png`,
+      imgAlt: "Danil Usik",
       imgClass: "absolute top-0 left-0 h-[134px] w-[134px]",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-1k-2dej text-xl tracking-[0] leading-[24.0px]",
