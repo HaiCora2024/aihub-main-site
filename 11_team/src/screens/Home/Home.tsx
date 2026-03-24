@@ -41,10 +41,10 @@ export const Home = (): JSX.Element => {
       imgAlt: null,
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-r-snce-k text-xl tracking-[0] leading-[24.0px]",
-      role: "Backend Development",
-      name: "Ugur Cekmez",
+      role: "Fullstack Development",
+      name: "Denis Salnikov",
       description:
-        "MLOps Engineer at Silicon Valley | Research Engineer at Global Media Corporation | R&D Engineer at Siemens",
+        "Microservices Architecture | Database AI Enrichment & Parsing Expert | C#, Python, .NET Core, Docker, Kubernetes, PostgreSQL, RAG Systems",
     },
     {
       id: 2,
