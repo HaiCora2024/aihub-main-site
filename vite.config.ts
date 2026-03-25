@@ -19,6 +19,7 @@ export default defineConfig({
       input: {
         main: path.resolve(__dirname, "index.html"),
         hotelConcierge: path.resolve(__dirname, "cases/hotel-concierge.html"),
+        realEstate: path.resolve(__dirname, "cases/real-estate.html"),
       },
     },
   },

@@ -257,6 +257,7 @@ export const Home = (): JSX.Element => {
   const cards: CardDef[] = [
     {
       area: "cases-c1", glow: "card-glow-purple", border: "purple", delay: 0, gaugeDelay: 300,
+      href: `${import.meta.env.BASE_URL}cases/real-estate.html`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={82} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
