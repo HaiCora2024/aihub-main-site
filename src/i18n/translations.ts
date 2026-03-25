@@ -71,7 +71,7 @@ export const translations = {
         "80x faster website sketch creation at an advertising agency",
         "1.5x faster onboarding of new employees at a company with large volumes of unstructured information",
         "20x faster digest creation at a news agency",
-        "42% reduction in sales load at a hotel",
+        "42% less load on Hotel's reception",
         "2x increase in training information accessibility at a cleaning company",
       ],
     },

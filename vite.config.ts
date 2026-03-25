@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import path from "path";
 import tailwind from "tailwindcss";
 import { defineConfig } from "vite";
 
@@ -11,6 +12,14 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [tailwind()],
+    },
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        hotelConcierge: path.resolve(__dirname, "cases/hotel-concierge.html"),
+      },
     },
   },
   server: {

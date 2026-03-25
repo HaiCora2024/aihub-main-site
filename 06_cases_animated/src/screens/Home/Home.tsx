@@ -204,21 +204,36 @@ const AnimCard = ({
   className,
   delay,
   children,
+  href,
 }: {
   className: string;
   delay: number;
   children: (visible: boolean) => React.ReactNode;
+  href?: string;
 }) => {
   const { ref, visible } = useAppear(delay);
+  const sharedStyle = {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.96)",
+    transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
+  };
+  if (href) {
+    return (
+      <a
+        ref={ref as React.RefObject<HTMLAnchorElement>}
+        href={href}
+        className={`${className} cursor-pointer`}
+        style={sharedStyle}
+      >
+        {children(visible)}
+      </a>
+    );
+  }
   return (
     <div
       ref={ref}
       className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.96)",
-        transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
-      }}
+      style={sharedStyle}
     >
       {children(visible)}
     </div>
@@ -236,6 +251,7 @@ export const Home = (): JSX.Element => {
     delay: number;
     gaugeDelay: number;
     content: (gd: number, active: boolean) => JSX.Element;
+    href?: string;
   }
 
   const cards: CardDef[] = [
@@ -331,6 +347,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c2", glow: "card-glow-red", border: "red", delay: 550, gaugeDelay: 850,
+      href: `${import.meta.env.BASE_URL}cases/hotel-concierge.html`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={42} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
@@ -366,6 +383,7 @@ export const Home = (): JSX.Element => {
               key={c.area}
               className={`${c.area} ${c.glow} ${CARD_BASE} ${BORDER[c.border]}`}
               delay={c.delay}
+              href={c.href}
             >
               {(visible) => c.content(c.gaugeDelay, visible)}
             </AnimCard>
