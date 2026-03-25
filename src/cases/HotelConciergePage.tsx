@@ -52,21 +52,21 @@ function KpiCard({ value, label, delay = 0 }: KpiProps) {
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(24px)",
         transition: `opacity 0.6s cubic-bezier(.22,1,.36,1) ${delay}ms, transform 0.6s cubic-bezier(.22,1,.36,1) ${delay}ms`,
-        boxShadow: "inset 0 0 40px rgba(255, 70, 58, 0.08)",
+        boxShadow: "inset 0 0 40px rgba(8, 208, 112, 0.08)",
       }}
     >
       <div
         className="absolute inset-0 p-px rounded-[24px] pointer-events-none"
         style={{
-          background: "linear-gradient(129deg, rgba(255,70,58,0.8) 0%, transparent 70%)",
+          background: "linear-gradient(129deg, rgba(8, 208, 112, 0.8) 0%, transparent 70%)",
           WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMaskComposite: "xor",
           maskComposite: "exclude",
         }}
       />
       <span
-        className="[font-family:'Geologica',Helvetica] font-bold text-[#ff463a] leading-none mb-2"
-        style={{ fontSize: "clamp(28px,5vw,44px)" }}
+        className="[font-family:'Geologica',Helvetica] font-bold leading-none mb-2"
+        style={{ fontSize: "clamp(28px,5vw,44px)", color: "rgba(8, 208, 112, 0.95)" }}
       >
         {value}
       </span>
@@ -85,7 +85,7 @@ interface SectionProps {
   accentColor?: string;
 }
 
-function Section({ title, children, delay = 0, accentColor = "rgba(255,70,58,1)" }: SectionProps) {
+function Section({ title, children, delay = 0, accentColor = "rgba(8, 208, 112, 0.95)" }: SectionProps) {
   const { ref, visible } = useReveal();
   return (
     <div
@@ -95,7 +95,7 @@ function Section({ title, children, delay = 0, accentColor = "rgba(255,70,58,1)"
         opacity: visible ? 1 : 0,
         transform: visible ? "translateY(0)" : "translateY(28px)",
         transition: `opacity 0.7s cubic-bezier(.22,1,.36,1) ${delay}ms, transform 0.7s cubic-bezier(.22,1,.36,1) ${delay}ms`,
-        boxShadow: "inset 0 0 40px rgba(255, 70, 58, 0.06)",
+        boxShadow: "inset 0 0 40px rgba(8, 208, 112, 0.06)",
       }}
     >
       <div
@@ -119,7 +119,7 @@ function Section({ title, children, delay = 0, accentColor = "rgba(255,70,58,1)"
 function BulletItem({ children }: { children: React.ReactNode }) {
   return (
     <li className="flex items-start gap-3 [font-family:'Geologica',Helvetica] font-light text-white/80 text-sm sm:text-base leading-relaxed">
-      <span className="mt-[5px] shrink-0 w-1.5 h-1.5 rounded-full bg-[#ff463a]" />
+      <span className="mt-[5px] shrink-0 w-1.5 h-1.5 rounded-full" style={{ background: "rgba(8, 208, 112, 0.95)" }} />
       <span>{children}</span>
     </li>
   );
@@ -128,8 +128,8 @@ function BulletItem({ children }: { children: React.ReactNode }) {
 /* ── Feature pill ── */
 function FeaturePill({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-[12px] bg-[#ffffff08] border border-[#ff463a22]">
-      <span className="w-1.5 h-1.5 rounded-full bg-[#ff463a] shrink-0" />
+    <div className="flex items-center gap-2.5 px-4 py-2.5 rounded-[12px] bg-[#ffffff08]" style={{ border: "1px solid rgba(8, 208, 112, 0.13)" }}>
+      <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: "rgba(8, 208, 112, 0.95)" }} />
       <span className="[font-family:'Geologica',Helvetica] font-light text-white/80 text-sm leading-snug">
         {children}
       </span>
@@ -140,7 +140,7 @@ function FeaturePill({ children }: { children: React.ReactNode }) {
 /* ── Tag pill ── */
 function Tag({ children }: { children: React.ReactNode }) {
   return (
-    <span className="px-3 py-1 rounded-full bg-[#ff463a18] border border-[#ff463a33] [font-family:'Geologica',Helvetica] font-light text-[#ff8880] text-xs">
+    <span className="px-3 py-1 rounded-full [font-family:'Geologica',Helvetica] font-light text-xs" style={{ background: "rgba(8, 208, 112, 0.08)", border: "1px solid rgba(8, 208, 112, 0.2)", color: "rgba(8, 208, 112, 0.9)" }}>
       {children}
     </span>
   );
@@ -192,7 +192,7 @@ export function HotelConciergePage() {
           }}
         >
           {/* eyebrow */}
-          <p className="[font-family:'Geologica',Helvetica] font-light text-[#ff463a] text-sm uppercase tracking-widest mb-3">
+          <p className="[font-family:'Geologica',Helvetica] font-light text-sm uppercase tracking-widest mb-3" style={{ color: "rgba(8, 208, 112, 0.95)" }}>
             Case Study
           </p>
 
