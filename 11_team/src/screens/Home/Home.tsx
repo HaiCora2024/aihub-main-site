@@ -140,7 +140,7 @@ export const Home = (): JSX.Element => {
       role: "Co-Founder AIHUB.WORKS",
       name: "Svetlana Galakhova",
       description:
-        "AI Solutions Leader | 11 Case Studies Across Industries | B2B Automation Specialist | No-Code Platform Expert",
+        "AI Transformation Lead | 50+ Projects Delivered | Voice Agents · Multi-Agent Systems · End-to-End Automation | Middleware Architect",
     },
     {
       id: 6,
