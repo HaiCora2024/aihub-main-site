@@ -320,7 +320,7 @@ export const Home = (): JSX.Element => {
       href: `${import.meta.env.BASE_URL}cases/clinic-voice-ai.html`,
       content: (gd, active) => (
         <>
-          <CircleGauge percent={30} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
+          <CircleGauge percent={80} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
           <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[6]}</p>
         </>
       ),
@@ -360,7 +360,7 @@ export const Home = (): JSX.Element => {
       href: `${import.meta.env.BASE_URL}cases/hotel-concierge.html`,
       content: (gd, active) => (
         <>
-          <CircleGauge percent={42} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
+          <CircleGauge percent={82} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
           <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[10]}</p>
         </>
       ),

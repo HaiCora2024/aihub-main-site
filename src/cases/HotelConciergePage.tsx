@@ -216,7 +216,7 @@ export function HotelConciergePage() {
 
         {/* KPI grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <KpiCard value="42%" label="Reduction in front desk workload" delay={0} />
+          <KpiCard value="82%" label="Reduction in manual handling" delay={0} />
           <KpiCard value="72%" label="Requests handled without staff" delay={80} />
           <KpiCard value="30 days" label="Implementation time" delay={160} />
           <KpiCard value="3–5 sec" label="Average response time" delay={240} />
@@ -249,7 +249,7 @@ export function HotelConciergePage() {
         {/* Results */}
         <Section title="Results" delay={120}>
           <ul className="space-y-3">
-            <BulletItem>42% reduction in routine front desk load in the first month of operation</BulletItem>
+            <BulletItem>82% reduction in manual handling with AI in the first month of operation</BulletItem>
             <BulletItem>72% of all guest requests resolved without any staff involvement</BulletItem>
             <BulletItem>Zero outdated pricing or availability shown — RAG architecture ensures every response pulls live data</BulletItem>
             <BulletItem>Consistent guest experience across all time zones, 24/7</BulletItem>
