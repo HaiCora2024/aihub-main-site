@@ -24,6 +24,8 @@ export default defineConfig({
         roboticsFleet: path.resolve(__dirname, "cases/robotics-fleet.html"),
         claudeCodeLanding: path.resolve(__dirname, "cases/claude-code-landing.html"),
         partnerKpi: path.resolve(__dirname, "cases/partner-kpi.html"),
+        clinicVoiceAi: path.resolve(__dirname, "cases/clinic-voice-ai.html"),
+        telegramSentiment: path.resolve(__dirname, "cases/telegram-sentiment.html"),
         privacyPolicy: path.resolve(__dirname, "legal/privacy-policy.html"),
         terms: path.resolve(__dirname, "legal/terms.html"),
       },

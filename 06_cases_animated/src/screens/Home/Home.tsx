@@ -306,6 +306,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c7", glow: "card-glow-teal", border: "teal", delay: 400, gaugeDelay: 700,
+      href: `${import.meta.env.BASE_URL}cases/telegram-sentiment.html`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={7} max={10} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
@@ -315,6 +316,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c8", glow: "card-glow-yellow", border: "yellow", delay: 500, gaugeDelay: 800,
+      href: `${import.meta.env.BASE_URL}cases/clinic-voice-ai.html`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={30} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
