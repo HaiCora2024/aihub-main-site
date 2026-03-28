@@ -24,7 +24,7 @@ export const translations = {
       cards: [
         { title: "Time Savings", text: "Automation frees the team from routine" },
         { title: "Risk Protection", text: "Proven solutions with guaranteed results" },
-        { title: "Proven Effectiveness", text: "11 successful cases" },
+        { title: "Proven Effectiveness", text: "50+ successful cases" },
       ],
     },
     clients: {
@@ -215,7 +215,7 @@ export const translations = {
       cards: [
         { title: "Экономия времени", text: "Автоматизация освобождает команду от рутины" },
         { title: "Защита от рисков", text: "Проверенные решения с гарантией результата" },
-        { title: "Доказанная эффективность", text: "11 успешных кейсов" },
+        { title: "Доказанная эффективность", text: "50+ успешных кейсов" },
       ],
     },
     clients: {
