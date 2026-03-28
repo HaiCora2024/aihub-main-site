@@ -69,7 +69,7 @@ export const translations = {
         "7x faster customer sentiment monitoring for an EMI tracking dozens of Telegram chats by hand",
         "80% of routine calls handled without staff — for a clinic that missed 700+ bookings every month",
         "80x faster website creation with Claude Code",
-        "1.5x faster onboarding of new employees at a company with large volumes of unstructured information",
+        "10x faster ad moderation across 22 compliance parameters",
         "20x faster digest creation at a news agency",
         "42% less load on Hotel's reception",
         "2x increase in 360 review process accessibility at a bank with AI-voice agent",

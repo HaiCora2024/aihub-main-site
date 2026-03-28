@@ -28,6 +28,7 @@ export default defineConfig({
         telegramSentiment: path.resolve(__dirname, "cases/telegram-sentiment.html"),
         bank360Review: path.resolve(__dirname, "cases/bank-360-review.html"),
         kybScreening: path.resolve(__dirname, "cases/kyb-screening.html"),
+        adModeration: path.resolve(__dirname, "cases/ad-moderation.html"),
         privacyPolicy: path.resolve(__dirname, "legal/privacy-policy.html"),
         terms: path.resolve(__dirname, "legal/terms.html"),
       },

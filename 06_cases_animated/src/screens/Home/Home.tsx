@@ -337,9 +337,10 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c5", glow: "card-glow-purple", border: "purple", delay: 280, gaugeDelay: 580,
+      href: `${import.meta.env.BASE_URL}cases/ad-moderation.html`,
       content: (gd, active) => (
         <>
-          <SpeedometerGauge value={1.5} max={2} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
+          <SpeedometerGauge value={10} max={12} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
           <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[8]}</p>
         </>
       ),
