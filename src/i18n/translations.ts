@@ -62,7 +62,7 @@ export const translations = {
       downloadBtn: "Download all cases",
       cardTexts: [
         "82% of routine tasks automated in a real estate agency",
-        "Automated FAQ response generation in a company where most tasks were solved via WhatsApp",
+        "Automated order processing from purchase order in Email into 1C",
         "61% reduction in content costs for a marketplace",
         "60x faster complaint processing at a housing company",
         "80% reduction in call processing and task assignment time in a company with many internal meetings",
