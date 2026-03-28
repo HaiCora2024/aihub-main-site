@@ -72,7 +72,7 @@ export const translations = {
         "1.5x faster onboarding of new employees at a company with large volumes of unstructured information",
         "20x faster digest creation at a news agency",
         "42% less load on Hotel's reception",
-        "2x increase in training information accessibility at a cleaning company",
+        "2x increase in 360 review process accessibility at a bank with AI-voice agent",
       ],
     },
     roadmap: {

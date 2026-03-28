@@ -26,6 +26,7 @@ export default defineConfig({
         partnerKpi: path.resolve(__dirname, "cases/partner-kpi.html"),
         clinicVoiceAi: path.resolve(__dirname, "cases/clinic-voice-ai.html"),
         telegramSentiment: path.resolve(__dirname, "cases/telegram-sentiment.html"),
+        bank360Review: path.resolve(__dirname, "cases/bank-360-review.html"),
         privacyPolicy: path.resolve(__dirname, "legal/privacy-policy.html"),
         terms: path.resolve(__dirname, "legal/terms.html"),
       },

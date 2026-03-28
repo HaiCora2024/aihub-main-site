@@ -364,6 +364,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c12", glow: "card-glow-orange", border: "orange", delay: 600, gaugeDelay: 900,
+      href: `${import.meta.env.BASE_URL}cases/bank-360-review.html`,
       content: () => (
         <>
           <img className="h-[65px] w-[65px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005-2.svg" />
