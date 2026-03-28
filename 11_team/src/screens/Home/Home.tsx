@@ -108,15 +108,15 @@ export const Home = (): JSX.Element => {
       imageOverlayClass:
         "opacity-60 absolute top-0 left-0 w-[134px] h-[134px]",
       useImgTag: true,
-      imgSrc: "https://c.animaapp.com/pz5xnCNR/img/rectangle-5-2@2x.png",
-      imgAlt: "Rectangle",
-      imgClass: "absolute top-0 left-0 h-[134px] w-[134px]",
+      imgSrc: `${import.meta.env.BASE_URL}Anastasia Ivanova.jpg`,
+      imgAlt: "Anastasia Ivanova",
+      imgClass: "absolute top-0 left-0 h-[134px] w-[134px] object-cover",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-fp-664u text-lg sm:text-xl tracking-[0] leading-[1.2] break-words",
-      role: "UX/UI Design",
-      name: "Nikita Noskov",
+      role: "Low-Code Developer",
+      name: "Anastasia Ivanova",
       description:
-        "Lead Designer of 15+ Team | Banking Apps Expert | AI Chat-Bots Developer",
+        "n8n expert | NLP-Bots Developer & Prompt Engineer",
     },
     {
       id: 5,
