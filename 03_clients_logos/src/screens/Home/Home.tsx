@@ -117,8 +117,8 @@ export const Home = (): JSX.Element => {
           className={revealClassName("mt-4 px-4 text-center [font-family:'Geologica',Helvetica] font-bold text-transparent text-xl leading-snug sm:text-2xl")}
           style={getRevealStyle(1, 0.02)}
         >
-          <span className="text-[#0385ff]">НАШИ </span>
-          <span className="text-[#ffffff]">КЛИЕНТЫ</span>
+          <span className="text-[#0385ff]">{t.clients.part1}</span>
+          <span className="text-[#ffffff]">{t.clients.part2}</span>
         </p>
 
         <div className="grid grid-cols-2 gap-3 py-6 sm:grid-cols-3 sm:gap-4 md:gap-5">
