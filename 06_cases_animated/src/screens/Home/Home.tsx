@@ -347,6 +347,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c3", glow: "card-glow-green", border: "green", delay: 450, gaugeDelay: 750,
+      href: `${import.meta.env.BASE_URL}cases/multilang-digest.html`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={20} max={25} color="rgba(8,208,112,1)" animDelay={gd} active={active} />

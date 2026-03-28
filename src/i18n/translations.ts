@@ -70,7 +70,7 @@ export const translations = {
         "80% of routine calls handled without staff — for a clinic that missed 700+ bookings every month",
         "80x faster website creation with Claude Code",
         "10x faster ad moderation across 22 compliance parameters",
-        "20x faster digest creation at a news agency",
+        "20x faster multilanguage digest creation at a news agency",
         "42% less load on Hotel's reception",
         "2x increase in 360 review process accessibility at a bank with AI-voice agent",
       ],
