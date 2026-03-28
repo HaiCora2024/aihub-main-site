@@ -295,6 +295,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c9", glow: "card-glow-orange", border: "orange", delay: 180, gaugeDelay: 480,
+      href: `${import.meta.env.BASE_URL}cases/robotics-fleet.html`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={80} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
