@@ -277,6 +277,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c10", glow: "card-glow-green", border: "green", delay: 200, gaugeDelay: 500,
+      href: `${import.meta.env.BASE_URL}cases/partner-kpi.html`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={61} color="rgba(8,208,112,1)" animDelay={gd} active={active} />

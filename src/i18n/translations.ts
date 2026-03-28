@@ -63,7 +63,7 @@ export const translations = {
       cardTexts: [
         "82% of routine tasks automated in a real estate agency",
         "Automated order processing from purchase order in Email into 1C",
-        "61% reduction in content costs for a marketplace",
+        "61% reduction time on partner KPI reporting for a company tracking commissions",
         "60x faster complaint processing at a housing company",
         "80% reduction in manual performance monitoring effort for a cleaning robotics fleet",
         "7x faster slide creation for presentations at an online school",
