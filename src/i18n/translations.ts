@@ -68,7 +68,7 @@ export const translations = {
         "80% reduction in manual performance monitoring effort for a cleaning robotics fleet",
         "7x faster slide creation for presentations at an online school",
         "30% reduction in call processing time at a company where 90% of revenue comes from phone sales",
-        "80x faster website sketch creation at an advertising agency",
+        "80x faster website creation with Claude Code",
         "1.5x faster onboarding of new employees at a company with large volumes of unstructured information",
         "20x faster digest creation at a news agency",
         "42% less load on Hotel's reception",

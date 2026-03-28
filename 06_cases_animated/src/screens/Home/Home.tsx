@@ -323,6 +323,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c6", glow: "card-glow-teal", border: "teal", delay: 350, gaugeDelay: 650,
+      href: `${import.meta.env.BASE_URL}cases/claude-code-landing.html`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={80} max={100} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
