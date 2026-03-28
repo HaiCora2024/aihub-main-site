@@ -27,6 +27,7 @@ export default defineConfig({
         clinicVoiceAi: path.resolve(__dirname, "cases/clinic-voice-ai.html"),
         telegramSentiment: path.resolve(__dirname, "cases/telegram-sentiment.html"),
         bank360Review: path.resolve(__dirname, "cases/bank-360-review.html"),
+        kybScreening: path.resolve(__dirname, "cases/kyb-screening.html"),
         privacyPolicy: path.resolve(__dirname, "legal/privacy-policy.html"),
         terms: path.resolve(__dirname, "legal/terms.html"),
       },

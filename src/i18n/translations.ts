@@ -64,7 +64,7 @@ export const translations = {
         "82% of routine tasks automated in a real estate agency",
         "Automated order processing from purchase order in Email into 1C",
         "61% reduction time on partner KPI reporting for a company tracking commissions",
-        "60x faster complaint processing at a housing company",
+        "60x faster KYB compliance screening & lead qualification",
         "80% reduction in manual performance monitoring effort for a cleaning robotics fleet",
         "7x faster customer sentiment monitoring for an EMI tracking dozens of Telegram chats by hand",
         "80% of routine calls handled without staff — for a clinic that missed 700+ bookings every month",

@@ -287,6 +287,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c11", glow: "card-glow-orange", border: "orange", delay: 320, gaugeDelay: 620,
+      href: `${import.meta.env.BASE_URL}cases/kyb-screening.html`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={60} max={75} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
