@@ -1,4 +1,8 @@
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
+
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
+
   return (
     <div
       className="w-full relative overflow-visible"
@@ -12,14 +16,14 @@ export const Home = (): JSX.Element => {
         {/* Text + CTA column */}
         <div className="order-2 flex max-w-2xl shrink-0 flex-col items-center text-center min-[1200px]:order-1 min-[1200px]:max-w-[55%] min-[1200px]:items-start min-[1200px]:text-left">
           <h1 className="font-bold text-transparent text-4xl sm:text-5xl md:text-6xl min-[1200px]:text-7xl min-[1200px]:text-[86px] leading-[1.2] [font-family:'Geologica',Helvetica] tracking-[0]">
-            <span className="text-white">ЗАБРОНИРУЙТЕ </span>
-            <span className="text-[#08d070]">ДЕМО СЕГОДНЯ</span>
+            <span className="text-white">{t.demo.title1} </span>
+            <span className="text-[#08d070]">{t.demo.title2}</span>
           </h1>
 
           <p className="mt-6 font-medium text-transparent text-xl sm:mt-8 sm:text-2xl md:text-3xl min-[1200px]:text-4xl min-[1200px]:mt-10 min-[1200px]:text-5xl leading-[1.2] [font-family:'Geologica',Helvetica] tracking-[0]">
-            <span className="text-white">И ПОЛУЧИТЕ </span>
-            <span className="text-[#08d070]">ПЕРСОНАЛЬНЫЙ ПЛАН</span>
-            <span className="text-white"> АВТОМАТИЗАЦИИ БЕСПЛАТНО</span>
+            <span className="text-white">{t.demo.sub1} </span>
+            <span className="text-[#08d070]">{t.demo.sub2}</span>
+            <span className="text-white"> {t.demo.sub3}</span>
           </p>
 
           {/* CTA button */}
@@ -29,7 +33,7 @@ export const Home = (): JSX.Element => {
               type="button"
             >
               <span className="font-semibold text-white text-sm sm:text-base text-center leading-[17.6px] [font-family:'Geologica',Helvetica] tracking-[0]">
-                Забронировать<br />консультацию
+                {t.demo.ctaLine1}<br />{t.demo.ctaLine2}
               </span>
             </button>
             <img

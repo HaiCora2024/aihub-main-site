@@ -1,24 +1,10 @@
 import { DesktopScaleFrame } from "../../../../src/components/DesktopScaleFrame";
-
-const resultCards = [
-  {
-    title: "Экономия времени",
-    text: "Автоматизация освобождает команду от рутины",
-    image: "https://c.animaapp.com/98I8TU6Y/img/group-13@2x.png",
-  },
-  {
-    title: "Защита от рисков",
-    text: "Проверенные решения с гарантией результата",
-    image: "https://c.animaapp.com/98I8TU6Y/img/group-14@2x.png",
-  },
-  {
-    title: "Доказанная эффективность",
-    text: "11 успешных кейсов",
-    image: "https://c.animaapp.com/98I8TU6Y/img/group-15@2x.png",
-  },
-];
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
 
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
+  const resultCards = t.results.cards;
+
   return (
     <div className="w-full relative overflow-visible" data-model-id="316:6743">
       <div className="hidden min-[1200px]:block">
@@ -42,11 +28,11 @@ export const Home = (): JSX.Element => {
 
         <div className="flex flex-col w-[555px] items-start gap-9 absolute top-[calc(50.00%_-_200px)] right-[361px]">
           <div className="w-[555px] mt-[-1.00px] font-bold text-jo2i-fe text-[64px] leading-[76.8px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
-            МГНОВЕННЫЙ РЕЗУЛЬТАТ
+            {t.results.title1}
           </div>
 
           <div className="w-[521px] font-bold text-white text-[64px] leading-[76.8px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
-            ДЛЯ ВАШЕГО БИЗНЕСА
+            {t.results.title2}
           </div>
         </div>
 
@@ -56,9 +42,9 @@ export const Home = (): JSX.Element => {
             className="glow-button glow-button--yellow absolute left-5 right-5 top-5 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-jo2i-fe px-10 py-2.5 shadow-[0px_2px_20px_#ffd40966,inset_0px_8px_12px_#ffffff4c]"
           >
             <span className="w-fit font-semibold text-black-100 text-base text-center leading-[17.6px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
-              Получить
+              {t.results.ctaLine1}
               <br />
-              персональное демо
+              {t.results.ctaLine2}
             </span>
           </button>
 
@@ -79,7 +65,7 @@ export const Home = (): JSX.Element => {
             <img
               className="absolute left-[24px] top-1/2 -translate-y-1/2 w-[70px] h-[70px] object-contain"
               alt={card.title}
-              src={card.image}
+              src={`https://c.animaapp.com/98I8TU6Y/img/group-${13 + index}@2x.png`}
             />
             <div className="flex flex-col w-[321px] items-start gap-5 absolute top-1/2 -translate-y-1/2 left-[118px]">
               <div className="w-[321px] mt-[-1.00px] font-medium text-jo2i-fe text-[26px] leading-[31.2px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
@@ -115,9 +101,9 @@ export const Home = (): JSX.Element => {
         <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-8">
           <div className="max-w-3xl">
             <p className="font-bold text-3xl leading-tight sm:text-5xl md:text-6xl [font-family:'Geologica',Helvetica]">
-              <span className="text-[#ffd409]">МГНОВЕННЫЙ РЕЗУЛЬТАТ</span>
+              <span className="text-[#ffd409]">{t.results.title1}</span>
               <br />
-              <span className="text-white">ДЛЯ ВАШЕГО БИЗНЕСА</span>
+              <span className="text-white">{t.results.title2}</span>
             </p>
           </div>
 
@@ -127,9 +113,9 @@ export const Home = (): JSX.Element => {
               className="glow-button glow-button--yellow absolute left-5 right-5 top-5 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-jo2i-fe px-10 py-2.5 shadow-[0px_2px_20px_#ffd40966,inset_0px_8px_12px_#ffffff4c]"
             >
               <span className="font-semibold text-black-100 text-base text-center leading-[17.6px] [font-family:'Geologica',Helvetica] tracking-[0]">
-                Получить
+                {t.results.ctaLine1}
                 <br />
-                персональное демо
+                {t.results.ctaLine2}
               </span>
             </button>
             <img
@@ -150,7 +136,7 @@ export const Home = (): JSX.Element => {
                 <img
                   className="h-10 w-10 object-contain"
                   alt={card.title}
-                  src={card.image}
+                  src={`https://c.animaapp.com/98I8TU6Y/img/group-${13 + index}@2x.png`}
                 />
                 <div className="mt-5 font-medium text-[#ffd409] text-xl leading-tight [font-family:'Geologica',Helvetica]">
                   {card.title}

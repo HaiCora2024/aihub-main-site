@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
 
+import { useLanguage } from "../../../../../../src/i18n/LanguageContext";
+
 type LaunchPhaseSectionProps = {
   mobile?: boolean;
   className?: string;
@@ -11,17 +13,8 @@ export const LaunchPhaseSection = ({
   className = "",
   style,
 }: LaunchPhaseSectionProps): JSX.Element => {
-  const bulletItems = [
-    "Парсинг данных со сторонних сайтов + Создание контента",
-    "Алгоритмы для удержания пользователей",
-    "Кастомные настройки интерфейса для desktop и mobile",
-    "Выбор Ton of voice ассистентов",
-    "Открытый доступ через API",
-    "Интерфейс в виде виджетов, а также в Telegram, Whatsup",
-    "Расширенная аналитика",
-    "Обновления данных в реальном времени",
-    "Интеграция со сторонними сервисами",
-  ];
+  const { t } = useLanguage();
+  const { title, description, bullets } = t.roadmap.launch;
 
   if (mobile) {
     return (
@@ -31,14 +24,14 @@ export const LaunchPhaseSection = ({
       >
         <div className="flex flex-col items-start gap-2.5 w-full">
           <div className="[font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base sm:text-lg leading-snug">
-            Кастомные AI-ассистенты
+            {title}
           </div>
           <p className="[font-family:'Geologica',Helvetica] font-normal text-white text-xs sm:text-sm leading-relaxed">
-            Выпуск кастомизируемых ассистентов с доступом через Open API Сhat GPT 4.0, Anthropic Claude 3.5 Sonnet. Возможность интегрировать решения в свои экосистемы.
+            {description}
           </p>
         </div>
         <div className="flex flex-col items-start gap-3 sm:gap-4 w-full">
-          {bulletItems.map((item, index) => (
+          {bullets.map((item, index) => (
             <div key={index} className="flex items-start gap-1.5 w-full">
               <div className="inline-flex items-center justify-center gap-2.5 flex-shrink-0 mt-1">
                 <div className="relative w-1.5 h-1.5">
@@ -63,17 +56,14 @@ export const LaunchPhaseSection = ({
     >
       <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
         <div className="relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base tracking-[0] leading-[19.2px]">
-          Кастомные <br />
-          AI-ассистенты
+          {title}
         </div>
         <p className="self-stretch font-normal text-xs leading-[14.4px] relative [font-family:'Geologica',Helvetica] text-white tracking-[0]">
-          Выпуск кастомизируемых ассистентов с доступом через Open API Сhat GPT
-          4.0, Anthropic Claude 3.5 Sonnet. Возможность интегрировать решения в
-          свои экосистемы.
+          {description}
         </p>
       </div>
       <div className="flex flex-col items-start gap-[15px] relative self-stretch w-full flex-[0_0_auto]">
-        {bulletItems.map((item, index) => (
+        {bullets.map((item, index) => (
           <div key={index} className="flex items-start gap-[3px] relative self-stretch w-full flex-[0_0_auto]">
             <div className="inline-flex items-center justify-center gap-2.5 relative flex-[0_0_auto]">
               <div className="relative w-1.5 h-1.5">

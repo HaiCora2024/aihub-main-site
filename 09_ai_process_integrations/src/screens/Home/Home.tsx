@@ -1,6 +1,7 @@
 import React, { type CSSProperties } from "react";
 
 import { useRevealOnView } from "../../../../src/hooks/useRevealOnView";
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
 
 const getRevealStyle = (delay: number): CSSProperties =>
   ({ "--reveal-delay": `${delay}s` }) as CSSProperties;
@@ -160,6 +161,7 @@ const infraCol2 = ["Azure", "Google Cloud"];
 const infraCol3 = ["Vercel", "Netlify"];
 
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
   const { ref, isVisible } = useRevealOnView<HTMLDivElement>();
 
   return (
@@ -224,11 +226,10 @@ export const Home = (): JSX.Element => {
           style={getRevealStyle(0.04)}
         >
           <span className="text-white">
-            МЫ НЕ ЛОМАЕМ СУЩЕСТВУЮЩИЕ ПРОЦЕССЫ,{" "}
+            {t.integrations.heading1}{" "}
             <br className="hidden sm:block" />
           </span>
-          <span className="text-[#ffd409]">А УСИЛИВАЕМ ИХ, БЛАГОДАРЯ AI</span>
-          <span className="text-white">.</span>
+          <span className="text-[#ffd409]">{t.integrations.heading2}</span>
         </h1>
 
         {/* Integration grid */}

@@ -2,12 +2,14 @@ import type { CSSProperties } from "react";
 
 import { DesktopScaleFrame } from "../../../../src/components/DesktopScaleFrame";
 import { useRevealOnView } from "../../../../src/hooks/useRevealOnView";
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
 import greenClientCardFrame from "./assets/frame-1948760013-unified.svg";
 
 const getRevealStyle = (index: number, offset = 0): CSSProperties =>
   ({ "--reveal-delay": `${offset + index * 0.12}s` }) as CSSProperties;
 
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
   const { ref, isVisible } = useRevealOnView<HTMLDivElement>();
   const revealClassName = (baseClassName: string) =>
     `${baseClassName} reveal-sequence-item${isVisible ? " reveal-sequence-item--visible" : ""}`;
@@ -34,8 +36,8 @@ export const Home = (): JSX.Element => {
               className={revealClassName("absolute top-[84px] left-[389px] w-[653px] [font-family:'Geologica',Helvetica] font-bold text-transparent text-[32px] leading-[38.4px]")}
               style={getRevealStyle(1, 0.02)}
             >
-              <span className="text-[#0385ff]">НАШИ </span>
-              <span className="text-[#ffffff]">КЛИЕНТЫ</span>
+              <span className="text-[#0385ff]">{t.clients.part1}</span>
+              <span className="text-[#ffffff]">{t.clients.part2}</span>
             </p>
 
             <div

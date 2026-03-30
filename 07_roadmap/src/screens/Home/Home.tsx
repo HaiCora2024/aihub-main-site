@@ -9,22 +9,29 @@ import { RoadmapSection } from "./sections/RoadmapSection";
 
 import { DesktopScaleFrame } from "../../../../src/components/DesktopScaleFrame";
 import { useRevealOnView } from "../../../../src/hooks/useRevealOnView";
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
 
 const cards = [
-  { date: "Ноябрь 2023", Component: OptimizationPhaseSection },
-  { date: "Апрель 2024", Component: CustomAISection },
-  { date: "Июль 2024", Component: DevelopmentPhaseSection },
-  { date: "Сентябрь 2024", Component: LaunchPhaseSection },
-  { date: "Сентябрь 2024", Component: AdvancedAutomationSection },
+  { Component: OptimizationPhaseSection },
+  { Component: CustomAISection },
+  { Component: DevelopmentPhaseSection },
+  { Component: LaunchPhaseSection },
+  { Component: AdvancedAutomationSection },
 ];
 
 const getRevealStyle = (index: number, offset = 0): CSSProperties =>
   ({ "--reveal-delay": `${offset + index * 0.12}s` }) as CSSProperties;
 
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
   const { ref, isVisible } = useRevealOnView<HTMLDivElement>();
   const revealClassName = (baseClassName: string) =>
     `${baseClassName} reveal-sequence-item${isVisible ? " reveal-sequence-item--visible" : ""}`;
+
+  const desktopDates = t.roadmap.dates.map((date, i) => {
+    const lefts = [389, 623, 857, 1091, 1325];
+    return { top: 255, left: lefts[i], label: date };
+  });
 
   return (
     <div ref={ref} className="w-full relative overflow-visible">
@@ -67,13 +74,7 @@ export const Home = (): JSX.Element => {
               className={revealClassName("")}
               style={getRevealStyle(6, 0.08)}
             />
-            {[
-              { top: 255, left: 389, label: "Ноябрь 2023" },
-              { top: 255, left: 623, label: "Апрель 2024" },
-              { top: 255, left: 857, label: "Июль 2024" },
-              { top: 255, left: 1091, label: "Сентябрь 2024" },
-              { top: 255, left: 1325, label: "Сентябрь 2024" },
-            ].map((item, index) => (
+            {desktopDates.map((item, index) => (
               <div
                 key={index}
                 className={revealClassName("inline-flex items-center justify-center gap-2.5 p-[15px] absolute bg-[#060c2499] rounded-xl border-[none] shadow-[var(--)] backdrop-blur-[10px] backdrop-brightness-[100%] [-webkit-backdrop-filter:blur(10px)_brightness(100%)] before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-xl before:[background:linear-gradient(112deg,rgba(255,212,9,1)_0%,rgba(255,212,9,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:z-[1] before:pointer-events-none")}
@@ -93,10 +94,9 @@ export const Home = (): JSX.Element => {
           className={revealClassName("[font-family:'Geologica',Helvetica] font-bold text-center text-2xl sm:text-3xl md:text-4xl min-[1200px]:text-5xl leading-tight")}
           style={getRevealStyle(0)}
         >
-          <span className="text-[#08d070]">ДОРОЖНАЯ </span>
-          <span className="text-white">КАРТА</span>
-          <span className="text-[#08d070]"> AIHUB.</span>
-          <span className="text-white">WORKS</span>
+          {t.roadmap.titleSpans.map((span, i) => (
+            <span key={i} className={span.green ? "text-[#08d070]" : "text-[#ffffff]"}>{span.text}</span>
+          ))}
         </h1>
 
         <img
@@ -107,7 +107,7 @@ export const Home = (): JSX.Element => {
         />
 
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 min-[1200px]:grid-cols-3 gap-4 sm:gap-5 md:gap-6 max-w-5xl">
-          {cards.map(({ date, Component }, index) => (
+          {cards.map(({ Component }, index) => (
             <div
               key={index}
               className={revealClassName("flex flex-col items-center gap-3")}
@@ -115,7 +115,7 @@ export const Home = (): JSX.Element => {
             >
               <div className="inline-flex items-center justify-center gap-2.5 p-3 bg-[#060c2499] rounded-xl backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-xl before:[background:linear-gradient(112deg,rgba(255,212,9,1)_0%,rgba(255,212,9,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:z-[1] before:pointer-events-none">
                 <div className="font-medium text-y-c9z-sz text-xs sm:text-sm [font-family:'Geologica',Helvetica] whitespace-nowrap">
-                  {date}
+                  {t.roadmap.dates[index]}
                 </div>
               </div>
               <Component mobile />

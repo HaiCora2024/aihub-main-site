@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 
 import { DesktopScaleFrame } from "../../../../src/components/DesktopScaleFrame";
 import { useRevealOnView } from "../../../../src/hooks/useRevealOnView";
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
 
 type DesktopStep = {
   number: string;
@@ -11,67 +12,25 @@ type DesktopStep = {
 };
 
 const desktopSteps: DesktopStep[] = [
-  {
-    number: "1",
-    numberLeft: "left-[490px]",
-    dotLeft: "left-[481px]",
-    lineLeft: "left-[489px]",
-  },
-  {
-    number: "2",
-    numberLeft: "left-[715px]",
-    dotLeft: "left-[716px]",
-    lineLeft: "left-[724px]",
-  },
-  {
-    number: "3",
-    numberLeft: "left-[958px]",
-    dotLeft: "left-[953px]",
-    lineLeft: "left-[961px]",
-  },
-  {
-    number: "4",
-    numberLeft: "left-[1194px]",
-    dotLeft: "left-[1188px]",
-    lineLeft: "left-[1196px]",
-  },
-];
-
-const mobileSteps = [
-  {
-    number: "1",
-    items: [
-      { type: "yellow", text: "30-минутный звонок" },
-      { type: "purple", text: "Карта текущих процессов" },
-    ],
-  },
-  {
-    number: "2",
-    items: [
-      { type: "yellow", text: "Поиск «бутылочных горлышек» в процессах" },
-      { type: "purple", text: "План быстрых улучшений с AI" },
-    ],
-  },
-  {
-    number: "3",
-    items: [{ type: "yellow", text: "Расчет потенциального эффекта" }],
-  },
-  {
-    number: "4",
-    items: [{ type: "yellow", text: "Предложение с AI-решением" }],
-  },
+  { number: "1", numberLeft: "left-[490px]", dotLeft: "left-[481px]", lineLeft: "left-[489px]" },
+  { number: "2", numberLeft: "left-[715px]", dotLeft: "left-[716px]", lineLeft: "left-[724px]" },
+  { number: "3", numberLeft: "left-[958px]", dotLeft: "left-[953px]", lineLeft: "left-[961px]" },
+  { number: "4", numberLeft: "left-[1194px]", dotLeft: "left-[1188px]", lineLeft: "left-[1196px]" },
 ];
 
 const getDelayStyle = (index: number, offset = 0): CSSProperties =>
   ({ "--timeline-delay": `${index * 0.18 + offset}s` }) as CSSProperties;
 
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
   const { ref, isVisible } = useRevealOnView<HTMLDivElement>();
   const getTimelineClassName = (
     baseClassName: string,
     animationClassName: string,
     pendingClassName: string,
   ) => `${baseClassName} ${isVisible ? animationClassName : pendingClassName}`;
+
+  const steps = t.workProcess.steps;
 
   return (
     <div ref={ref} className="w-full relative overflow-visible" data-model-id="316:6667">
@@ -91,8 +50,8 @@ export const Home = (): JSX.Element => {
               "timeline-appear-pending",
             )}
           >
-            <span className="text-[#ffffff]">ТАК ОБЫЧНО ВЫГЛЯДИТ </span>
-            <span className="text-[#bf5bf3]">ПРОЦЕСС РАБОТЫ:</span>
+            <span className="text-[#ffffff]">{t.workProcess.title1}</span>
+            <span className="text-[#bf5bf3]">{t.workProcess.title2}</span>
           </p>
 
           <img
@@ -159,6 +118,7 @@ export const Home = (): JSX.Element => {
             </div>
           ))}
 
+          {/* Step 1 */}
           <div
             className={getTimelineClassName(
               "inline-flex flex-col items-start gap-[30px] absolute top-[359px] left-[482px]",
@@ -167,31 +127,31 @@ export const Home = (): JSX.Element => {
             )}
             style={getDelayStyle(0, 0.32)}
           >
-            <div className="flex items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
-              <div className="relative w-4 h-4">
-                <div className="absolute top-px left-px w-3.5 h-3.5 bg-ptd-d-av rounded-[7px] blur-[6px]" />
-                <div className="absolute top-[3px] left-[3px] w-2.5 h-2.5 rounded-[5px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(255,222,65,1)_0%,rgba(255,212,9,1)_100%)]" />
-              </div>
-              <div className="flex flex-col w-[210px] items-start gap-5 pt-[3px] pb-0 px-0 relative">
-                <div className="relative self-stretch mt-[-1.00px] font-medium text-j-fvz-ag text-base leading-[19.2px] [font-family:'Geologica',Helvetica] tracking-[0]">
-                  30-минутный звонок
+            {steps[0].map((item, itemIndex) => (
+              <div key={itemIndex} className={`flex items-${item.type === "yellow" ? "start" : "center"} gap-2.5 relative self-stretch w-full flex-[0_0_auto]`}>
+                <div className="relative w-4 h-4">
+                  {item.type === "yellow" ? (
+                    <>
+                      <div className="absolute top-px left-px w-3.5 h-3.5 bg-ptd-d-av rounded-[7px] blur-[6px]" />
+                      <div className="absolute top-[3px] left-[3px] w-2.5 h-2.5 rounded-[5px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(255,222,65,1)_0%,rgba(255,212,9,1)_100%)]" />
+                    </>
+                  ) : (
+                    <>
+                      <div className="absolute top-[calc(50.00%_-_5px)] left-[calc(50.00%_-_5px)] w-2.5 h-2.5 bg-j-fvz-ag rounded-[5px] blur-[6px]" />
+                      <div className="absolute top-[calc(50.00%_-_3px)] left-[calc(50.00%_-_3px)] w-1.5 h-1.5 rounded-[3px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(220,154,255,1)_0%,rgba(191,91,243,1)_100%)]" />
+                    </>
+                  )}
+                </div>
+                <div className={`flex flex-col w-[210px] items-start gap-5 pt-[3px] pb-0 px-0 relative ${item.type === "purple" ? "flex-1 grow" : ""}`}>
+                  <div className={`relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] ${item.type === "yellow" ? "font-medium text-j-fvz-ag text-base leading-[19.2px]" : "font-normal text-white text-sm leading-[16.8px]"} tracking-[0]`}>
+                    {item.text}
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
-              <div className="relative w-4 h-4">
-                <div className="absolute top-[calc(50.00%_-_5px)] left-[calc(50.00%_-_5px)] w-2.5 h-2.5 bg-j-fvz-ag rounded-[5px] blur-[6px]" />
-                <div className="absolute top-[calc(50.00%_-_3px)] left-[calc(50.00%_-_3px)] w-1.5 h-1.5 rounded-[3px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(220,154,255,1)_0%,rgba(191,91,243,1)_100%)]" />
-              </div>
-              <div className="flex-1 grow flex flex-col items-start gap-5 relative">
-                <div className="relative self-stretch mt-[-1.00px] font-normal text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica] tracking-[0]">
-                  Карта текущих процессов
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
 
+          {/* Step 2 */}
           <div
             className={getTimelineClassName(
               "inline-flex flex-col items-start gap-[30px] absolute top-[359px] left-[717px]",
@@ -200,33 +160,31 @@ export const Home = (): JSX.Element => {
             )}
             style={getDelayStyle(1, 0.32)}
           >
-            <div className="flex items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
-              <div className="relative w-4 h-4">
-                <div className="absolute top-px left-px w-3.5 h-3.5 bg-ptd-d-av rounded-[7px] blur-[6px]" />
-                <div className="absolute top-[3px] left-[3px] w-2.5 h-2.5 rounded-[5px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(255,222,65,1)_0%,rgba(255,212,9,1)_100%)]" />
+            {steps[1].map((item, itemIndex) => (
+              <div key={itemIndex} className={`flex items-${item.type === "yellow" ? "start" : "center"} gap-2.5 relative self-stretch w-full flex-[0_0_auto]`}>
+                <div className="relative w-4 h-4">
+                  {item.type === "yellow" ? (
+                    <>
+                      <div className="absolute top-px left-px w-3.5 h-3.5 bg-ptd-d-av rounded-[7px] blur-[6px]" />
+                      <div className="absolute top-[3px] left-[3px] w-2.5 h-2.5 rounded-[5px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(255,222,65,1)_0%,rgba(255,212,9,1)_100%)]" />
+                    </>
+                  ) : (
+                    <>
+                      <div className="absolute top-[calc(50.00%_-_5px)] left-[calc(50.00%_-_5px)] w-2.5 h-2.5 bg-j-fvz-ag rounded-[5px] blur-[6px]" />
+                      <div className="absolute top-[calc(50.00%_-_3px)] left-[calc(50.00%_-_3px)] w-1.5 h-1.5 rounded-[3px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(220,154,255,1)_0%,rgba(191,91,243,1)_100%)]" />
+                    </>
+                  )}
+                </div>
+                <div className={`flex flex-col w-[210px] items-start gap-5 pt-[3px] pb-0 px-0 relative ${item.type === "purple" ? "flex-1 grow" : ""}`}>
+                  <p className={`relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] ${item.type === "yellow" ? "font-medium text-j-fvz-ag text-base leading-[19.2px]" : "font-normal text-white text-sm leading-[16.8px]"} tracking-[0]`}>
+                    {item.text}
+                  </p>
+                </div>
               </div>
-              <div className="flex flex-col w-[210px] items-start gap-5 pt-[3px] pb-0 px-0 relative">
-                <p className="relative self-stretch mt-[-1.00px] font-medium text-j-fvz-ag text-base leading-[19.2px] [font-family:'Geologica',Helvetica] tracking-[0]">
-                  Поиск <br />
-                  «бутылочных горлышек» <br />в процессах
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
-              <div className="relative w-4 h-4">
-                <div className="absolute top-[calc(50.00%_-_5px)] left-[calc(50.00%_-_5px)] w-2.5 h-2.5 bg-j-fvz-ag rounded-[5px] blur-[6px]" />
-                <div className="absolute top-[calc(50.00%_-_3px)] left-[calc(50.00%_-_3px)] w-1.5 h-1.5 rounded-[3px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(220,154,255,1)_0%,rgba(191,91,243,1)_100%)]" />
-              </div>
-              <div className="flex-1 grow flex flex-col items-start gap-5 relative">
-                <p className="font-normal text-white text-sm leading-[16.8px] relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] tracking-[0]">
-                  План быстрых <br />
-                  улучшений с AI
-                </p>
-              </div>
-            </div>
+            ))}
           </div>
 
+          {/* Step 3 */}
           <div
             className={getTimelineClassName(
               "flex flex-col w-[222px] items-start gap-[30px] absolute top-[359px] left-[954px]",
@@ -235,19 +193,22 @@ export const Home = (): JSX.Element => {
             )}
             style={getDelayStyle(2, 0.32)}
           >
-            <div className="flex items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
-              <div className="relative w-4 h-4">
-                <div className="absolute top-px left-px w-3.5 h-3.5 bg-ptd-d-av rounded-[7px] blur-[6px]" />
-                <div className="absolute top-[3px] left-[3px] w-2.5 h-2.5 rounded-[5px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(255,222,65,1)_0%,rgba(255,212,9,1)_100%)]" />
-              </div>
-              <div className="w-[210px] pt-[3px] pb-0 px-0 mr-[-14.00px] flex flex-col items-start gap-5 relative">
-                <div className="relative self-stretch mt-[-1.00px] font-medium text-j-fvz-ag text-base leading-[19.2px] [font-family:'Geologica',Helvetica] tracking-[0]">
-                  Расчет потенциального эффекта
+            {steps[2].map((item, itemIndex) => (
+              <div key={itemIndex} className="flex items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
+                <div className="relative w-4 h-4">
+                  <div className="absolute top-px left-px w-3.5 h-3.5 bg-ptd-d-av rounded-[7px] blur-[6px]" />
+                  <div className="absolute top-[3px] left-[3px] w-2.5 h-2.5 rounded-[5px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(255,222,65,1)_0%,rgba(255,212,9,1)_100%)]" />
+                </div>
+                <div className="w-[210px] pt-[3px] pb-0 px-0 mr-[-14.00px] flex flex-col items-start gap-5 relative">
+                  <div className="relative self-stretch mt-[-1.00px] font-medium text-j-fvz-ag text-base leading-[19.2px] [font-family:'Geologica',Helvetica] tracking-[0]">
+                    {item.text}
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
 
+          {/* Step 4 */}
           <div
             className={getTimelineClassName(
               "flex flex-col w-[222px] items-start gap-[30px] absolute top-[359px] left-[1189px]",
@@ -256,17 +217,19 @@ export const Home = (): JSX.Element => {
             )}
             style={getDelayStyle(3, 0.32)}
           >
-            <div className="flex items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
-              <div className="relative w-4 h-4">
-                <div className="absolute top-px left-px w-3.5 h-3.5 bg-ptd-d-av rounded-[7px] blur-[6px]" />
-                <div className="absolute top-[3px] left-[3px] w-2.5 h-2.5 rounded-[5px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(255,222,65,1)_0%,rgba(255,212,9,1)_100%)]" />
-              </div>
-              <div className="w-[210px] pt-[3px] pb-0 px-0 mr-[-14.00px] flex flex-col items-start gap-5 relative">
-                <div className="font-medium text-j-fvz-ag text-base leading-[19.2px] relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] tracking-[0]">
-                  Предложение <br />с AI-решением
+            {steps[3].map((item, itemIndex) => (
+              <div key={itemIndex} className="flex items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
+                <div className="relative w-4 h-4">
+                  <div className="absolute top-px left-px w-3.5 h-3.5 bg-ptd-d-av rounded-[7px] blur-[6px]" />
+                  <div className="absolute top-[3px] left-[3px] w-2.5 h-2.5 rounded-[5px] [background:radial-gradient(50%_50%_at_50%_50%,rgba(255,222,65,1)_0%,rgba(255,212,9,1)_100%)]" />
+                </div>
+                <div className="w-[210px] pt-[3px] pb-0 px-0 mr-[-14.00px] flex flex-col items-start gap-5 relative">
+                  <div className="font-medium text-j-fvz-ag text-base leading-[19.2px] relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] tracking-[0]">
+                    {item.text}
+                  </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
         </DesktopScaleFrame>
@@ -280,8 +243,8 @@ export const Home = (): JSX.Element => {
             "timeline-appear-pending",
           )}
         >
-          <span className="text-white">ТАК ОБЫЧНО ВЫГЛЯДИТ </span>
-          <span className="text-[#bf5bf3]">ПРОЦЕСС РАБОТЫ:</span>
+          <span className="text-white">{t.workProcess.title1}</span>
+          <span className="text-[#bf5bf3]">{t.workProcess.title2}</span>
         </p>
 
         <div className="relative mt-10 pl-8">
@@ -293,9 +256,9 @@ export const Home = (): JSX.Element => {
             )}
           />
 
-          {mobileSteps.map((step, index) => (
+          {steps.map((stepItems, index) => (
             <div
-              key={step.number}
+              key={index}
               className={getTimelineClassName(
                 "relative pb-8",
                 "timeline-appear",
@@ -308,12 +271,12 @@ export const Home = (): JSX.Element => {
               </div>
 
               <div className="opacity-30 [font-family:'Manrope',Helvetica] font-extrabold text-transparent text-[44px] leading-[52px] bg-[linear-gradient(180deg,rgba(255,212,9,1)_0%,rgba(255,212,9,0)_100%)] [-webkit-background-clip:text] bg-clip-text [-webkit-text-fill-color:transparent] [text-fill-color:transparent]">
-                {step.number}
+                {index + 1}
               </div>
 
               <div className="mt-2 space-y-3">
-                {step.items.map((item, itemIndex) => (
-                  <div key={`${step.number}-${itemIndex}`} className="flex items-start gap-2.5">
+                {stepItems.map((item, itemIndex) => (
+                  <div key={itemIndex} className="flex items-start gap-2.5">
                     <div className="relative w-4 h-4 mt-0.5">
                       {item.type === "yellow" ? (
                         <>

@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
 
+import { useLanguage } from "../../../../../../src/i18n/LanguageContext";
+
 type OptimizationPhaseSectionProps = {
   mobile?: boolean;
   className?: string;
@@ -11,36 +13,8 @@ export const OptimizationPhaseSection = ({
   className = "",
   style,
 }: OptimizationPhaseSectionProps): JSX.Element => {
-  const bulletItems = [
-    {
-      id: 1,
-      text: (
-        <>
-          No-code решения с Make и Zapier
-          <br className="hidden min-[1200px]:inline" />
-          {" "}для автоматизации задач
-        </>
-      ),
-    },
-    {
-      id: 2,
-      text: (
-        <>
-          Обработка и рерайт контента
-          <br className="hidden min-[1200px]:inline" />
-          {" "}на основе ChatGPT
-        </>
-      ),
-    },
-    {
-      id: 3,
-      text: <>Интеграция с Odoo для внутреннего управления и CRM</>,
-    },
-    {
-      id: 4,
-      text: <>Создание инфраструктуры</>,
-    },
-  ];
+  const { t } = useLanguage();
+  const { title, description, bullets } = t.roadmap.optimization;
 
   if (mobile) {
     return (
@@ -50,15 +24,15 @@ export const OptimizationPhaseSection = ({
       >
         <div className="flex flex-col items-start gap-2.5 w-full">
           <div className="[font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base sm:text-lg leading-snug">
-            Запуск
+            {title}
           </div>
           <p className="[font-family:'Geologica',Helvetica] font-normal text-white text-xs sm:text-sm leading-relaxed">
-            Мы стартовали в 01/11/2023 с автоматизации простых бизнес-процессов и интеграции промптов GPT в рабочий поток.
+            {description}
           </p>
         </div>
         <div className="flex flex-col items-start gap-3 sm:gap-4 w-full">
-          {bulletItems.map((item) => (
-            <div key={item.id} className="flex items-start gap-1.5 w-full">
+          {bullets.map((bullet, id) => (
+            <div key={id} className="flex items-start gap-1.5 w-full">
               <div className="inline-flex items-center justify-center gap-2.5 flex-shrink-0 mt-1">
                 <div className="relative w-1.5 h-1.5">
                   <div className="absolute top-0 left-0 w-1.5 h-1.5 bg-y-c9z-sz rounded-[3px] blur-[3px] opacity-60" />
@@ -66,7 +40,7 @@ export const OptimizationPhaseSection = ({
                 </div>
               </div>
               <p className="flex-1 [font-family:'Geologica',Helvetica] font-light text-white text-[11px] sm:text-xs leading-relaxed">
-                {item.text}
+                {bullet}
               </p>
             </div>
           ))}
@@ -82,17 +56,15 @@ export const OptimizationPhaseSection = ({
     >
       <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
         <div className="self-stretch mt-[-1.00px] font-medium text-x-9qhb-f5 text-base leading-[19.2px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
-          Запуск
+          {title}
         </div>
         <p className="relative self-stretch [font-family:'Geologica',Helvetica] font-normal text-white text-xs tracking-[0] leading-[14.4px]">
-          Мы стартовали в 01/11/2023 <br />с автоматизации простых
-          бизнес-процессов <br />и интеграции промптов <br />
-          GPT в рабочий поток.
+          {description}
         </p>
       </div>
       <div className="flex flex-col items-start gap-[15px] relative self-stretch w-full flex-[0_0_auto]">
-        {bulletItems.map((item) => (
-          <div key={item.id} className="flex items-start gap-[3px] relative self-stretch w-full flex-[0_0_auto]">
+        {bullets.map((bullet, id) => (
+          <div key={id} className="flex items-start gap-[3px] relative self-stretch w-full flex-[0_0_auto]">
             <div className="inline-flex items-center justify-center gap-2.5 relative flex-[0_0_auto]">
               <div className="relative w-1.5 h-1.5">
                 <div className="absolute top-0 left-0 w-1.5 h-1.5 bg-y-c9z-sz rounded-[3px] blur-[3px] opacity-60" />
@@ -100,7 +72,7 @@ export const OptimizationPhaseSection = ({
               </div>
             </div>
             <p className="relative flex-1 mt-[-1.00px] [font-family:'Geologica',Helvetica] font-light text-white text-[10px] tracking-[0] leading-[12.0px]">
-              {item.text}
+              {bullet}
             </p>
           </div>
         ))}

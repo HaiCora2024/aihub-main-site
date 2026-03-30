@@ -1,6 +1,9 @@
 import { useState } from "react";
 
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
+
 export const Home = (): JSX.Element => {
+  const { t } = useLanguage();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
 
@@ -34,7 +37,7 @@ export const Home = (): JSX.Element => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="Ваше имя"
+              placeholder={t.contact.namePlaceholder}
               className="relative w-full font-normal text-white text-sm leading-[1.2] [font-family:'Geologica',Helvetica] bg-transparent border-none outline-none placeholder:opacity-50 placeholder:text-white"
             />
           </div>
@@ -45,7 +48,7 @@ export const Home = (): JSX.Element => {
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="Ваш телефон"
+              placeholder={t.contact.phonePlaceholder}
               className="relative w-full font-normal text-white text-sm leading-[1.2] [font-family:'Geologica',Helvetica] bg-transparent border-none outline-none placeholder:opacity-50 placeholder:text-white"
             />
           </div>
@@ -57,7 +60,7 @@ export const Home = (): JSX.Element => {
               className="glow-button glow-button--blue flex w-[calc(100%-2.5rem)] h-20 items-center justify-center px-10 absolute top-5 left-5 bg-wqw-a-mg rounded-[600px] shadow-[0px_2px_20px_#0385ff66,inset_0px_8px_12px_#ffffff4c] cursor-pointer"
             >
               <span className="font-semibold text-white text-base text-center leading-[1.1] whitespace-nowrap [font-family:'Geologica',Helvetica]">
-                Отправить
+                {t.contact.submitBtn}
               </span>
             </button>
             <img
@@ -84,20 +87,20 @@ export const Home = (): JSX.Element => {
           {/* Text content */}
           <div className="relative z-10 flex flex-col gap-6">
             <p className="font-bold text-3xl sm:text-4xl md:text-5xl min-[1200px]:text-[4rem] leading-[1.2] [font-family:'Geologica',Helvetica]">
-              <span className="text-white">ОСТАВЬТЕ ВАШ </span>
-              <span className="text-[#0385ff]">НОМЕР ТЕЛЕФОНА</span>
+              <span className="text-white">{t.contact.title1} </span>
+              <span className="text-[#0385ff]">{t.contact.title2}</span>
             </p>
 
             <p className="font-medium text-xl sm:text-2xl md:text-[2rem] leading-[1.2] [font-family:'Geologica',Helvetica]">
-              <span className="text-white">МЫ СВЯЖЕМСЯ С ВАМИ,{" "}</span>
+              <span className="text-white">{t.contact.sub1}{" "}</span>
               <br className="hidden sm:inline" />
-              <span className="text-[#0385ff]">ОБСУДИМ ВАШИ ЗАДАЧИ</span>
+              <span className="text-[#0385ff]">{t.contact.sub2}</span>
             </p>
 
             <p className="font-bold text-3xl sm:text-4xl md:text-5xl min-[1200px]:text-[4rem] leading-[1.2] [font-family:'Geologica',Helvetica]">
-              <span className="text-white">И ПРЕДЛОЖИМ РЕШЕНИЕ</span>
+              <span className="text-white">{t.contact.sub3}</span>
               <br />
-              <span className="text-[#0385ff]">НА ОСНОВЕ AI</span>
+              <span className="text-[#0385ff]">{t.contact.sub4}</span>
             </p>
           </div>
         </div>

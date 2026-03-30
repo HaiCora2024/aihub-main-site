@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
 
+import { useLanguage } from "../../../../../../src/i18n/LanguageContext";
+
 type AdvancedAutomationSectionProps = {
   mobile?: boolean;
   className?: string;
@@ -11,14 +13,8 @@ export const AdvancedAutomationSection = ({
   className = "",
   style,
 }: AdvancedAutomationSectionProps): JSX.Element => {
-  const listItems = [
-    "Аналитические модули",
-    "Голосовые ассистенты",
-    "Видео ассистенты",
-    "Мультиязычные боты",
-    "Масштабируемая обработка транзакций",
-    "Многоступенчатые задачи",
-  ];
+  const { t } = useLanguage();
+  const { title, description, bullets } = t.roadmap.advanced;
 
   if (mobile) {
     return (
@@ -28,14 +24,14 @@ export const AdvancedAutomationSection = ({
       >
         <div className="flex flex-col items-start gap-2.5 w-full">
           <div className="[font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base sm:text-lg leading-snug">
-            Продвинутая AI-автоматизация
+            {title}
           </div>
           <p className="[font-family:'Geologica',Helvetica] font-normal text-white text-xs sm:text-sm leading-relaxed">
-            Разработка продвинутых автоматизаций с применением нейросетей для управления бизнес-процессами, анализа данных и поддержки пользователей в реальном времени.
+            {description}
           </p>
         </div>
         <div className="flex flex-col items-start gap-3 sm:gap-4 w-full">
-          {listItems.map((item, index) => (
+          {bullets.map((item, index) => (
             <div key={index} className="flex items-start gap-1.5 w-full">
               <div className="inline-flex items-center justify-center gap-2.5 flex-shrink-0 mt-1">
                 <div className="relative w-1.5 h-1.5">
@@ -60,17 +56,14 @@ export const AdvancedAutomationSection = ({
     >
       <div className="flex flex-col items-start gap-2.5 relative self-stretch w-full flex-[0_0_auto]">
         <div className="relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-9qhb-f5 text-base tracking-[0] leading-[19.2px]">
-          Продвинутая <br />
-          AI-автоматизация
+          {title}
         </div>
         <p className="self-stretch font-normal text-white text-xs leading-[14.4px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
-          Разработка продвинутых автоматизаций <br />с применением нейросетей
-          для управления бизнес-процессами, анализа данных и поддержки
-          пользователей в реальном времени.
+          {description}
         </p>
       </div>
       <div className="flex flex-col items-start gap-[15px] relative self-stretch w-full flex-[0_0_auto]">
-        {listItems.map((item, index) => (
+        {bullets.map((item, index) => (
           <div key={index} className="flex items-start gap-[3px] relative self-stretch w-full flex-[0_0_auto]">
             <div className="inline-flex items-center justify-center gap-2.5 relative flex-[0_0_auto]">
               <div className="relative w-1.5 h-1.5">
