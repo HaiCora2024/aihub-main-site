@@ -1,14 +1,79 @@
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 import { useLanguage } from "../../../../src/i18n/LanguageContext";
 
+const CONTACT_API_URL = (import.meta.env.VITE_CONTACT_API_URL || "").replace(/\/$/, "");
+
+type SubmitState = "idle" | "sending" | "success" | "error";
+
 export const Home = (): JSX.Element => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [submitState, setSubmitState] = useState<SubmitState>("idle");
+  const [submitMessage, setSubmitMessage] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const statusText = {
+    required: lang === "ru" ? "Заполните имя и телефон." : "Please enter your name and phone.",
+    notConfigured:
+      lang === "ru"
+        ? "Форма временно недоступна: API ещё не настроен."
+        : "The form is temporarily unavailable: API is not configured yet.",
+    sending: lang === "ru" ? "Отправляем заявку..." : "Sending your request...",
+    success:
+      lang === "ru"
+        ? "Спасибо. Заявка отправлена, мы свяжемся с вами."
+        : "Thank you. Your request has been sent.",
+    error:
+      lang === "ru"
+        ? "Не удалось отправить заявку. Попробуйте ещё раз или напишите нам напрямую."
+        : "Could not send the request. Please try again or contact us directly.",
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!name.trim() || !phone.trim()) {
+      setSubmitState("error");
+      setSubmitMessage(statusText.required);
+      return;
+    }
+
+    if (!CONTACT_API_URL) {
+      setSubmitState("error");
+      setSubmitMessage(statusText.notConfigured);
+      return;
+    }
+
+    setSubmitState("sending");
+    setSubmitMessage(statusText.sending);
+
+    try {
+      const response = await fetch(`${CONTACT_API_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          source: "aihub-site",
+          page: window.location.href,
+          website: "",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Contact API returned ${response.status}`);
+      }
+
+      setName("");
+      setPhone("");
+      setSubmitState("success");
+      setSubmitMessage(statusText.success);
+    } catch (error) {
+      console.error(error);
+      setSubmitState("error");
+      setSubmitMessage(statusText.error);
+    }
   };
 
   return (
@@ -35,6 +100,8 @@ export const Home = (): JSX.Element => {
           <div className="form-field-shell flex h-[4.5rem] items-center px-6 bg-[#060c2499] rounded-[1.875rem] backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-[1.875rem] before:[background:linear-gradient(112deg,rgba(3,133,255,1)_0%,rgba(3,133,255,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:pointer-events-none">
             <input
               type="text"
+              name="name"
+              autoComplete="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t.contact.namePlaceholder}
@@ -46,6 +113,8 @@ export const Home = (): JSX.Element => {
           <div className="form-field-shell flex h-[4.5rem] items-center px-6 bg-[#060c2499] rounded-[1.875rem] backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-[1.875rem] before:[background:linear-gradient(112deg,rgba(3,133,255,1)_0%,rgba(3,133,255,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:pointer-events-none">
             <input
               type="tel"
+              name="phone"
+              autoComplete="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder={t.contact.phonePlaceholder}
@@ -57,10 +126,11 @@ export const Home = (): JSX.Element => {
           <div className="relative w-full max-w-[22.5rem] h-[7.3rem] mx-auto min-[1200px]:mx-0">
             <button
               type="submit"
-              className="glow-button glow-button--blue flex w-[calc(100%-2.5rem)] h-20 items-center justify-center px-10 absolute top-5 left-5 bg-wqw-a-mg rounded-[600px] shadow-[0px_2px_20px_#0385ff66,inset_0px_8px_12px_#ffffff4c] cursor-pointer"
+              disabled={submitState === "sending"}
+              className="glow-button glow-button--blue flex w-[calc(100%-2.5rem)] h-20 items-center justify-center px-10 absolute top-5 left-5 bg-wqw-a-mg rounded-[600px] shadow-[0px_2px_20px_#0385ff66,inset_0px_8px_12px_#ffffff4c] cursor-pointer disabled:cursor-wait disabled:opacity-70"
             >
               <span className="font-semibold text-white text-base text-center leading-[1.1] whitespace-nowrap [font-family:'Geologica',Helvetica]">
-                {t.contact.submitBtn}
+                {submitState === "sending" ? statusText.sending : t.contact.submitBtn}
               </span>
             </button>
             <img
@@ -69,6 +139,18 @@ export const Home = (): JSX.Element => {
               src="https://c.animaapp.com/6QJxRgNq/img/rectangle-12.svg"
             />
           </div>
+
+          {submitMessage && (
+            <p
+              className={`min-h-5 text-center min-[1200px]:text-left text-sm leading-snug [font-family:'Geologica',Helvetica] ${
+                submitState === "success" ? "text-[#08d070]" : "text-white/80"
+              }`}
+              role="status"
+              aria-live="polite"
+            >
+              {submitMessage}
+            </p>
+          )}
         </form>
 
         {/* ── Right column: Text + Egg image ── */}

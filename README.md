@@ -119,6 +119,35 @@ npm run preview
 - `index.html` копируется в `404.html` для SPA-fallback;
 - артефакт публикуется в GitHub Pages.
 
+## Contact API для формы
+
+Для отправки заявок с формы добавлен минимальный backend:
+
+- [`backend/contact-api/server.js`](backend/contact-api/server.js)
+- [`backend/contact-api/Dockerfile`](backend/contact-api/Dockerfile)
+- [`amvera.yaml`](amvera.yaml)
+
+Backend принимает `POST /api/contact` и отправляет письмо на `aihubworks@gmail.com` через SMTP. Для деплоя на Amvera используется slug `aihub-form`, регион `waw0`.
+
+Нужные env-переменные на Amvera:
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_SECURE`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `CONTACT_TO=aihubworks@gmail.com`
+- `CONTACT_FROM`
+- `ALLOWED_ORIGINS=https://getcher123.github.io`
+
+После деплоя backend URL нужно передать во frontend build как:
+
+```bash
+VITE_CONTACT_API_URL=https://<amvera-backend-domain>
+```
+
+Форма подключена в [`08_contact_form/src/screens/Home/Home.tsx`](08_contact_form/src/screens/Home/Home.tsx). Если `VITE_CONTACT_API_URL` не задан, форма покажет сообщение, что API ещё не настроен.
+
 ## Общие правила редактирования дизайна
 
 ### 1. Где править глобальные эффекты

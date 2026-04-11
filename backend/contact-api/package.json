@@ -1,0 +1,15 @@
+{
+  "name": "aihub-contact-api",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "nodemailer": "^8.0.5"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
