@@ -206,6 +206,20 @@ function formatDateForSheet(date = new Date()) {
   return `'${formatted}`;
 }
 
+function formatContactsForSheet(lead) {
+  const parts = [];
+
+  if (lead.phone) {
+    parts.push(`Phone: ${lead.phone}`);
+  }
+
+  if (lead.email) {
+    parts.push(`E-mail: ${lead.email}`);
+  }
+
+  return parts.join(" | ");
+}
+
 async function appendLeadToSheet(lead) {
   if (!GOOGLE_SHEETS_SPREADSHEET_ID) {
     return;
@@ -216,7 +230,7 @@ async function appendLeadToSheet(lead) {
   const values = [
     lead.name,
     "",
-    lead.phone || lead.email,
+    formatContactsForSheet(lead),
     "",
     "",
     "",
