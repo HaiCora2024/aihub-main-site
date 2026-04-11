@@ -37,7 +37,7 @@ jobs:
 
       - name: Build
         env:
-          VITE_BASE: /aihub-site/
+          VITE_BASE: ${{ vars.VITE_BASE || format('/{0}/', github.event.repository.name) }}
           VITE_CONTACT_API_URL: https://aihub-form-getcher.waw0.amvera.tech
         run: npm run build
 
