@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import { DesktopScaleFrame } from "../../../../src/components/DesktopScaleFrame";
 import { useLanguage } from "../../../../src/i18n/LanguageContext";
+import { scrollToSection } from "../../../../src/utils/scrollToSection";
 
 interface HeroLine {
   text: string;
@@ -111,6 +112,7 @@ export const Home = (): JSX.Element => {
   const { t, lang, toggleLang } = useLanguage();
   const navHrefs = ["#services", "#cases", "#roadmap", "#team"];
   const lines = t.hero.lines;
+  const handleContactScroll = () => scrollToSection("contact");
 
   return (
     <div
@@ -177,6 +179,7 @@ export const Home = (): JSX.Element => {
         <div className="cta-btn-wrapper absolute top-[18px] left-[1201px] cursor-pointer">
           <button
             type="button"
+            onClick={handleContactScroll}
             className="cta-btn-inner glow-button glow-button--green flex w-[290px] h-20 items-center justify-center gap-2.5 px-10 py-2.5 absolute top-5 left-5 bg-LZ-cyid rounded-[600px] shadow-[0px_2px_20px_#08d07066,inset_0px_8px_12px_#ffffff4c]"
           >
             <span className="w-fit font-semibold text-white text-base text-center leading-[17.6px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
@@ -259,7 +262,7 @@ export const Home = (): JSX.Element => {
           </div>
 
           <div className="hidden md:block">
-            <button type="button" className="cta-btn-responsive glow-button glow-button--green relative bg-LZ-cyid rounded-full px-6 py-3 font-semibold text-white text-sm text-center [font-family:'Geologica',Helvetica] shadow-[0px_2px_20px_#08d07066,inset_0px_8px_12px_#ffffff4c] cursor-pointer">
+            <button type="button" onClick={handleContactScroll} className="cta-btn-responsive glow-button glow-button--green relative bg-LZ-cyid rounded-full px-6 py-3 font-semibold text-white text-sm text-center [font-family:'Geologica',Helvetica] shadow-[0px_2px_20px_#08d07066,inset_0px_8px_12px_#ffffff4c] cursor-pointer">
               {t.hero.ctaLine1}&nbsp;{t.hero.ctaLine2}
             </button>
           </div>
@@ -293,7 +296,7 @@ export const Home = (): JSX.Element => {
             />
 
             <div className="md:hidden mt-2">
-              <button type="button" className="cta-btn-responsive glow-button glow-button--green relative bg-LZ-cyid rounded-full w-full max-w-[20rem] px-6 py-4 font-semibold text-white text-base text-center [font-family:'Geologica',Helvetica] shadow-[0px_2px_20px_#08d07066,inset_0px_8px_12px_#ffffff4c] cursor-pointer">
+              <button type="button" onClick={handleContactScroll} className="cta-btn-responsive glow-button glow-button--green relative bg-LZ-cyid rounded-full w-full max-w-[20rem] px-6 py-4 font-semibold text-white text-base text-center [font-family:'Geologica',Helvetica] shadow-[0px_2px_20px_#08d07066,inset_0px_8px_12px_#ffffff4c] cursor-pointer">
                 {t.hero.ctaLine1}&nbsp;{t.hero.ctaLine2}
               </button>
             </div>

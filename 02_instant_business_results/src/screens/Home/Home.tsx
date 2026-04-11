@@ -1,9 +1,11 @@
 import { DesktopScaleFrame } from "../../../../src/components/DesktopScaleFrame";
 import { useLanguage } from "../../../../src/i18n/LanguageContext";
+import { scrollToSection } from "../../../../src/utils/scrollToSection";
 
 export const Home = (): JSX.Element => {
   const { t } = useLanguage();
   const resultCards = t.results.cards;
+  const handleContactScroll = () => scrollToSection("contact");
 
   return (
     <div className="w-full relative overflow-visible" data-model-id="316:6743">
@@ -39,6 +41,7 @@ export const Home = (): JSX.Element => {
         <div className="cta-frame absolute top-[650px] left-[1199px]">
           <button
             type="button"
+            onClick={handleContactScroll}
             className="glow-button glow-button--yellow absolute left-5 right-5 top-5 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-jo2i-fe px-10 py-2.5 shadow-[0px_2px_20px_#ffd40966,inset_0px_8px_12px_#ffffff4c]"
           >
             <span className="w-fit font-semibold text-black-100 text-base text-center leading-[17.6px] relative [font-family:'Geologica',Helvetica] tracking-[0]">
@@ -110,6 +113,7 @@ export const Home = (): JSX.Element => {
           <div className="relative h-[7.3rem] w-full max-w-[22.5rem]">
             <button
               type="button"
+              onClick={handleContactScroll}
               className="glow-button glow-button--yellow absolute left-5 right-5 top-5 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-jo2i-fe px-10 py-2.5 shadow-[0px_2px_20px_#ffd40966,inset_0px_8px_12px_#ffffff4c]"
             >
               <span className="font-semibold text-black-100 text-base text-center leading-[17.6px] [font-family:'Geologica',Helvetica] tracking-[0]">

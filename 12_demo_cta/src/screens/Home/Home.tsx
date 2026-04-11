@@ -1,7 +1,9 @@
 import { useLanguage } from "../../../../src/i18n/LanguageContext";
+import { scrollToSection } from "../../../../src/utils/scrollToSection";
 
 export const Home = (): JSX.Element => {
   const { t } = useLanguage();
+  const handleContactScroll = () => scrollToSection("contact");
 
   return (
     <div
@@ -31,6 +33,7 @@ export const Home = (): JSX.Element => {
             <button
               className="glow-button glow-button--green flex w-[250px] sm:w-[290px] h-20 items-center justify-center gap-2.5 px-8 sm:px-10 py-2.5 absolute top-5 left-5 bg-d-rs-4a-2 rounded-[600px] shadow-[0px_2px_20px_#08d07066,inset_0px_8px_12px_#ffffff4c] cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
               type="button"
+              onClick={handleContactScroll}
             >
               <span className="font-semibold text-white text-sm sm:text-base text-center leading-[17.6px] [font-family:'Geologica',Helvetica] tracking-[0]">
                 {t.demo.ctaLine1}<br />{t.demo.ctaLine2}
