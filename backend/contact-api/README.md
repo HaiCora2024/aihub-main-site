@@ -2,6 +2,7 @@
 
 Minimal HTTP backend for the landing contact form. It accepts contact leads and sends them to `aihubworks@gmail.com` via SMTP.
 If Google Sheets integration is configured, it also appends each submitted lead to the CRM spreadsheet.
+By default it fills only `Имя лида`, `Контакты`, and `Дата контакта`.
 
 ## Endpoints
 
@@ -31,7 +32,7 @@ If Google Sheets integration is configured, it also appends each submitted lead 
 - `CONTACT_FROM` - sender, defaults to `SMTP_USER`.
 - `ALLOWED_ORIGINS` - comma-separated CORS allowlist. Example: `https://getcher123.github.io,https://getcher123.github.io/aihub-site`.
 - `GOOGLE_SHEETS_SPREADSHEET_ID` - spreadsheet ID for lead append. If omitted, Sheets append is skipped.
-- `GOOGLE_SHEETS_RANGE` - append range, defaults to `Лист1!A:J`.
+- `GOOGLE_SHEETS_RANGE` - append range, defaults to `Лист1!A:I`.
 - `GOOGLE_SHEETS_DEFAULT_STATUS` - value for the `Статус` column, defaults to `Новый`.
 - `GOOGLE_SHEETS_DEFAULT_PRIORITY` - value for the `Приоритет` column, defaults to empty.
 - `GOOGLE_SERVICE_ACCOUNT_JSON` - service account JSON for Google Sheets API. Store as a secret.

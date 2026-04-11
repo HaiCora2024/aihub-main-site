@@ -16,7 +16,7 @@ const RATE_LIMIT_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 
 const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || 5);
 const MAX_BODY_BYTES = 20 * 1024;
 const GOOGLE_SHEETS_SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
-const GOOGLE_SHEETS_RANGE = process.env.GOOGLE_SHEETS_RANGE || "Лист1!A:J";
+const GOOGLE_SHEETS_RANGE = process.env.GOOGLE_SHEETS_RANGE || "Лист1!A:I";
 const GOOGLE_SHEETS_DEFAULT_STATUS = process.env.GOOGLE_SHEETS_DEFAULT_STATUS || "Новый";
 const GOOGLE_SHEETS_DEFAULT_PRIORITY = process.env.GOOGLE_SHEETS_DEFAULT_PRIORITY || "";
 
@@ -182,12 +182,19 @@ async function getSheetsClient() {
 }
 
 function formatDateForSheet(date = new Date()) {
-  return new Intl.DateTimeFormat("ru-RU", {
+  const formatted = new Intl.DateTimeFormat("sv-SE", {
     timeZone: "Europe/Moscow",
-    day: "2-digit",
-    month: "2-digit",
     year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
   }).format(date);
+
+  // Force plain-text storage so Sheets does not reformat the timestamp column.
+  return `'${formatted}`;
 }
 
 async function appendLeadToSheet(lead) {
@@ -202,12 +209,11 @@ async function appendLeadToSheet(lead) {
     "",
     lead.phone,
     "",
-    lead.source || "Лид-форма",
-    GOOGLE_SHEETS_DEFAULT_STATUS,
-    GOOGLE_SHEETS_DEFAULT_PRIORITY,
+    "",
+    "",
+    "",
     "",
     submittedAt,
-    lead.page ? `Страница: ${lead.page}` : "",
   ];
 
   await sheets.spreadsheets.values.append({
