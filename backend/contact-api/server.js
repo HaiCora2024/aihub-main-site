@@ -213,7 +213,7 @@ async function handleContact(req, res, corsOrigin) {
     }
 
     if (message === "SMTP_NOT_CONFIGURED") {
-      sendJson(res, 503, { ok: false, error: message }, corsOrigin);
+      sendJson(res, 500, { ok: false, error: message }, corsOrigin);
       return;
     }
 

@@ -38,6 +38,7 @@ jobs:
       - name: Build
         env:
           VITE_BASE: /aihub-site/
+          VITE_CONTACT_API_URL: https://aihub-form-getcher.waw0.amvera.tech
         run: npm run build
 
       - name: Disable Jekyll
