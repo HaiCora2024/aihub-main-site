@@ -98,6 +98,7 @@ function getClientIp(req) {
 
 function validateLead(body) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const phone = typeof body.phone === "string" ? body.phone.trim() : "";
   const source = typeof body.source === "string" ? body.source.trim().slice(0, 120) : "aihub-site";
   const page = typeof body.page === "string" ? body.page.trim().slice(0, 500) : "";
@@ -111,11 +112,19 @@ function validateLead(body) {
     return { ok: false, error: "INVALID_NAME" };
   }
 
-  if (phone.length < 5 || phone.length > 60) {
+  if (!email || email.length > 160) {
+    return { ok: false, error: "INVALID_EMAIL" };
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { ok: false, error: "INVALID_EMAIL" };
+  }
+
+  if (phone && (phone.length < 5 || phone.length > 60)) {
     return { ok: false, error: "INVALID_PHONE" };
   }
 
-  return { ok: true, lead: { name, phone, source, page } };
+  return { ok: true, lead: { name, email, phone, source, page } };
 }
 
 function createTransporter() {
@@ -207,7 +216,7 @@ async function appendLeadToSheet(lead) {
   const values = [
     lead.name,
     "",
-    lead.phone,
+    lead.phone || lead.email,
     "",
     "",
     "",
@@ -233,7 +242,8 @@ async function sendLeadEmail(lead) {
     "New lead from AIHUB landing",
     "",
     `Name: ${lead.name}`,
-    `Phone: ${lead.phone}`,
+    `Email: ${lead.email}`,
+    `Phone: ${lead.phone || "-"}`,
     `Source: ${lead.source}`,
     `Page: ${lead.page || "-"}`,
     `Submitted at: ${submittedAt}`,
@@ -241,7 +251,8 @@ async function sendLeadEmail(lead) {
   const html = `
     <h2>New lead from AIHUB landing</h2>
     <p><b>Name:</b> ${escapeHtml(lead.name)}</p>
-    <p><b>Phone:</b> ${escapeHtml(lead.phone)}</p>
+    <p><b>Email:</b> ${escapeHtml(lead.email)}</p>
+    <p><b>Phone:</b> ${escapeHtml(lead.phone || "-")}</p>
     <p><b>Source:</b> ${escapeHtml(lead.source)}</p>
     <p><b>Page:</b> ${escapeHtml(lead.page || "-")}</p>
     <p><b>Submitted at:</b> ${escapeHtml(submittedAt)}</p>
@@ -253,7 +264,7 @@ async function sendLeadEmail(lead) {
     subject,
     text,
     html,
-    replyTo: CONTACT_FROM,
+    replyTo: lead.email,
   });
 }
 

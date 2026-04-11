@@ -9,12 +9,15 @@ type SubmitState = "idle" | "sending" | "success" | "error";
 export const Home = (): JSX.Element => {
   const { t, lang } = useLanguage();
   const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>("idle");
   const [submitMessage, setSubmitMessage] = useState("");
 
   const statusText = {
-    required: lang === "ru" ? "Заполните имя и телефон." : "Please enter your name and phone.",
+    requiredName: lang === "ru" ? "Заполните поле имени." : "Please enter your name.",
+    requiredEmail: lang === "ru" ? "Заполните поле e-mail." : "Please enter your e-mail.",
+    invalidEmail: lang === "ru" ? "Введите корректный e-mail." : "Please enter a valid e-mail.",
     notConfigured:
       lang === "ru"
         ? "Форма временно недоступна: API ещё не настроен."
@@ -33,9 +36,21 @@ export const Home = (): JSX.Element => {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!name.trim() || !phone.trim()) {
+    if (!name.trim()) {
       setSubmitState("error");
-      setSubmitMessage(statusText.required);
+      setSubmitMessage(statusText.requiredName);
+      return;
+    }
+
+    if (!email.trim()) {
+      setSubmitState("error");
+      setSubmitMessage(statusText.requiredEmail);
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setSubmitState("error");
+      setSubmitMessage(statusText.invalidEmail);
       return;
     }
 
@@ -54,6 +69,7 @@ export const Home = (): JSX.Element => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
+          email,
           phone,
           source: "aihub-site",
           page: window.location.href,
@@ -66,6 +82,7 @@ export const Home = (): JSX.Element => {
       }
 
       setName("");
+      setEmail("");
       setPhone("");
       setSubmitState("success");
       setSubmitMessage(statusText.success);
@@ -105,6 +122,20 @@ export const Home = (): JSX.Element => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t.contact.namePlaceholder}
+              className="relative w-full font-normal text-white text-sm leading-[1.2] [font-family:'Geologica',Helvetica] bg-transparent border-none outline-none placeholder:opacity-50 placeholder:text-white"
+            />
+          </div>
+
+          {/* Email input */}
+          <div className="form-field-shell flex h-[4.5rem] items-center px-6 bg-[#060c2499] rounded-[1.875rem] backdrop-blur-[10px] relative before:content-[''] before:absolute before:inset-0 before:p-px before:rounded-[1.875rem] before:[background:linear-gradient(112deg,rgba(3,133,255,1)_0%,rgba(3,133,255,0)_100%)] before:[-webkit-mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[-webkit-mask-composite:xor] before:[mask-composite:exclude] before:pointer-events-none">
+            <input
+              type="email"
+              name="email"
+              autoComplete="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={t.contact.emailPlaceholder}
               className="relative w-full font-normal text-white text-sm leading-[1.2] [font-family:'Geologica',Helvetica] bg-transparent border-none outline-none placeholder:opacity-50 placeholder:text-white"
             />
           </div>
