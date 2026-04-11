@@ -30,21 +30,21 @@ export const Home = (): JSX.Element => {
         "linear-gradient(102deg,rgba(191,91,243,1) 0%,rgba(191,91,243,0) 100%)",
       glowColor: "191,91,243",
       imageWrapperClass:
-        "w-[134px] shrink-0 self-center flex items-center justify-center rounded-[20px] overflow-hidden bg-[url(https://c.animaapp.com/pz5xnCNR/img/frame-1948760049@2x.png)] bg-cover bg-[50%_50%]",
+        "h-[134px] w-[134px] shrink-0 self-center relative bg-[#ffffff] rounded-[20px] overflow-hidden",
       imageOverlayStyle: {
         background:
           "linear-gradient(102deg,rgba(191,91,243,1) 0%,rgba(191,91,243,0) 100%)",
       },
-      imageOverlayClass: "opacity-40 h-[134px] w-[134px]",
-      useImgTag: false,
-      imgSrc: null,
-      imgAlt: null,
+      imageOverlayClass: "opacity-40 absolute top-0 left-0 w-[134px] h-[134px]",
+      useImgTag: true,
+      imgSrc: `${import.meta.env.BASE_URL}denis-salnikov.jpg`,
+      imgAlt: "Denis Salnikov",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-r-snce-k text-xl tracking-[0] leading-[24.0px]",
-      role: "Backend Development",
-      name: "Ugur Cekmez",
+      role: "Fullstack Development",
+      name: "Denis Salnikov",
       description:
-        "MLOps Engineer at Silicon Valley | Research Engineer at Global Media Corporation | R&D Engineer at Siemens",
+        "Microservices Architecture | Database AI Enrichment & Parsing Expert | C#, Python, .NET Core, Docker, Kubernetes, PostgreSQL, RAG Systems",
     },
     {
       id: 2,
@@ -60,15 +60,15 @@ export const Home = (): JSX.Element => {
       imageOverlayClass:
         "opacity-60 absolute top-0 left-0 w-[134px] h-[134px]",
       useImgTag: true,
-      imgSrc: "https://c.animaapp.com/pz5xnCNR/img/rectangle-5@2x.png",
-      imgAlt: "Rectangle",
+      imgSrc: `${import.meta.env.BASE_URL}Danil_Usik.png`,
+      imgAlt: "Danil Usik",
       imgClass: "absolute top-0 left-0 h-[134px] w-[134px]",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-1k-2dej text-xl tracking-[0] leading-[24.0px]",
-      role: "Machine Learning",
-      name: "Artem Astapenko",
+      role: "AI Solutions Business Lead",
+      name: "Danil Usik",
       description:
-        "AI & ML Technologies Integrator | TensorFlow Expert | Scikit-learn, RAG, PyTorch, Langchain and LlamaIndex Specialist",
+        "Custom AI for Sales & Ops | B2B Business Automation | Turning Business Challenges into AI That Works",
     },
     {
       id: 3,
@@ -108,15 +108,15 @@ export const Home = (): JSX.Element => {
       imageOverlayClass:
         "opacity-60 absolute top-0 left-0 w-[134px] h-[134px]",
       useImgTag: true,
-      imgSrc: "https://c.animaapp.com/pz5xnCNR/img/rectangle-5-2@2x.png",
-      imgAlt: "Rectangle",
-      imgClass: "absolute top-0 left-0 h-[134px] w-[134px]",
+      imgSrc: `${import.meta.env.BASE_URL}Anastasia Ivanova.jpg`,
+      imgAlt: "Anastasia Ivanova",
+      imgClass: "absolute top-0 left-0 h-[134px] w-[134px] object-cover",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-fp-664u text-lg sm:text-xl tracking-[0] leading-[1.2] break-words",
-      role: "UX/UI Design",
-      name: "Nikita Noskov",
+      role: "Low-Code Developer",
+      name: "Anastasia Ivanova",
       description:
-        "Lead Designer of 15+ Team | Banking Apps Expert | AI Chat-Bots Developer",
+        "n8n expert | NLP-Bots Developer & Prompt Engineer",
     },
     {
       id: 5,
@@ -140,7 +140,7 @@ export const Home = (): JSX.Element => {
       role: "Co-Founder AIHUB.WORKS",
       name: "Svetlana Galakhova",
       description:
-        "AI Solutions Leader | 11 Case Studies Across Industries | B2B Automation Specialist | No-Code Platform Expert",
+        "AI Transformation Lead | 50+ Projects Delivered | Voice Agents · Multi-Agent Systems · End-to-End Automation | Middleware Architect",
     },
     {
       id: 6,

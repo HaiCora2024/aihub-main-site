@@ -1,4 +1,5 @@
 import react from "@vitejs/plugin-react";
+import path from "path";
 import tailwind from "tailwindcss";
 import { defineConfig } from "vite";
 
@@ -11,6 +12,27 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [tailwind()],
+    },
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, "index.html"),
+        hotelConcierge: path.resolve(__dirname, "cases/hotel-concierge.html"),
+        realEstate: path.resolve(__dirname, "cases/real-estate.html"),
+        orderProcessing1c: path.resolve(__dirname, "cases/order-processing-1c.html"),
+        roboticsFleet: path.resolve(__dirname, "cases/robotics-fleet.html"),
+        claudeCodeLanding: path.resolve(__dirname, "cases/claude-code-landing.html"),
+        partnerKpi: path.resolve(__dirname, "cases/partner-kpi.html"),
+        clinicVoiceAi: path.resolve(__dirname, "cases/clinic-voice-ai.html"),
+        telegramSentiment: path.resolve(__dirname, "cases/telegram-sentiment.html"),
+        bank360Review: path.resolve(__dirname, "cases/bank-360-review.html"),
+        kybScreening: path.resolve(__dirname, "cases/kyb-screening.html"),
+        adModeration: path.resolve(__dirname, "cases/ad-moderation.html"),
+        multilangDigest: path.resolve(__dirname, "cases/multilang-digest.html"),
+        privacyPolicy: path.resolve(__dirname, "legal/privacy-policy.html"),
+        terms: path.resolve(__dirname, "legal/terms.html"),
+      },
     },
   },
   server: {

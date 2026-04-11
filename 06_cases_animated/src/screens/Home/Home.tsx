@@ -204,21 +204,36 @@ const AnimCard = ({
   className,
   delay,
   children,
+  href,
 }: {
   className: string;
   delay: number;
   children: (visible: boolean) => React.ReactNode;
+  href?: string;
 }) => {
   const { ref, visible } = useAppear(delay);
+  const sharedStyle = {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.96)",
+    transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
+  };
+  if (href) {
+    return (
+      <a
+        ref={ref as React.RefObject<HTMLAnchorElement>}
+        href={href}
+        className={`${className} cursor-pointer`}
+        style={sharedStyle}
+      >
+        {children(visible)}
+      </a>
+    );
+  }
   return (
     <div
       ref={ref}
       className={className}
-      style={{
-        opacity: visible ? 1 : 0,
-        transform: visible ? "translateY(0) scale(1)" : "translateY(32px) scale(0.96)",
-        transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
-      }}
+      style={sharedStyle}
     >
       {children(visible)}
     </div>
@@ -236,11 +251,13 @@ export const Home = (): JSX.Element => {
     delay: number;
     gaugeDelay: number;
     content: (gd: number, active: boolean) => JSX.Element;
+    href?: string;
   }
 
   const cards: CardDef[] = [
     {
       area: "cases-c1", glow: "card-glow-purple", border: "purple", delay: 0, gaugeDelay: 300,
+      href: `${import.meta.env.BASE_URL}cases/real-estate.html`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={82} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
@@ -250,6 +267,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c4", glow: "card-glow-red", border: "red", delay: 120, gaugeDelay: 420,
+      href: `${import.meta.env.BASE_URL}cases/order-processing-1c.html`,
       content: () => (
         <>
           <img className="h-[65px] w-[69px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005.svg" />
@@ -259,6 +277,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c10", glow: "card-glow-green", border: "green", delay: 200, gaugeDelay: 500,
+      href: `${import.meta.env.BASE_URL}cases/partner-kpi.html`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={61} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
@@ -268,6 +287,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c11", glow: "card-glow-orange", border: "orange", delay: 320, gaugeDelay: 620,
+      href: `${import.meta.env.BASE_URL}cases/kyb-screening.html`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={60} max={75} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
@@ -277,6 +297,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c9", glow: "card-glow-orange", border: "orange", delay: 180, gaugeDelay: 480,
+      href: `${import.meta.env.BASE_URL}cases/robotics-fleet.html`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={80} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
@@ -286,6 +307,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c7", glow: "card-glow-teal", border: "teal", delay: 400, gaugeDelay: 700,
+      href: `${import.meta.env.BASE_URL}cases/telegram-sentiment.html`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={7} max={10} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
@@ -295,15 +317,17 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c8", glow: "card-glow-yellow", border: "yellow", delay: 500, gaugeDelay: 800,
+      href: `${import.meta.env.BASE_URL}cases/clinic-voice-ai.html`,
       content: (gd, active) => (
         <>
-          <CircleGauge percent={30} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
+          <CircleGauge percent={80} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
           <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[6]}</p>
         </>
       ),
     },
     {
       area: "cases-c6", glow: "card-glow-teal", border: "teal", delay: 350, gaugeDelay: 650,
+      href: `${import.meta.env.BASE_URL}cases/claude-code-landing.html`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={80} max={100} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
@@ -313,15 +337,17 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c5", glow: "card-glow-purple", border: "purple", delay: 280, gaugeDelay: 580,
+      href: `${import.meta.env.BASE_URL}cases/ad-moderation.html`,
       content: (gd, active) => (
         <>
-          <SpeedometerGauge value={1.5} max={2} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
+          <SpeedometerGauge value={10} max={12} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
           <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[8]}</p>
         </>
       ),
     },
     {
       area: "cases-c3", glow: "card-glow-green", border: "green", delay: 450, gaugeDelay: 750,
+      href: `${import.meta.env.BASE_URL}cases/multilang-digest.html`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={20} max={25} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
@@ -331,15 +357,17 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c2", glow: "card-glow-red", border: "red", delay: 550, gaugeDelay: 850,
+      href: `${import.meta.env.BASE_URL}cases/hotel-concierge.html`,
       content: (gd, active) => (
         <>
-          <CircleGauge percent={42} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
+          <CircleGauge percent={82} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
           <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[10]}</p>
         </>
       ),
     },
     {
       area: "cases-c12", glow: "card-glow-orange", border: "orange", delay: 600, gaugeDelay: 900,
+      href: `${import.meta.env.BASE_URL}cases/bank-360-review.html`,
       content: () => (
         <>
           <img className="h-[65px] w-[65px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005-2.svg" />
@@ -366,6 +394,7 @@ export const Home = (): JSX.Element => {
               key={c.area}
               className={`${c.area} ${c.glow} ${CARD_BASE} ${BORDER[c.border]}`}
               delay={c.delay}
+              href={c.href}
             >
               {(visible) => c.content(c.gaugeDelay, visible)}
             </AnimCard>
