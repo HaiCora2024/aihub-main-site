@@ -1,6 +1,8 @@
 import http from "node:http";
+import fs from "node:fs";
 import process from "node:process";
 
+import { google } from "googleapis";
 import nodemailer from "nodemailer";
 
 const PORT = Number(process.env.PORT || 8080);
@@ -13,8 +15,13 @@ const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
 const RATE_LIMIT_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000);
 const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || 5);
 const MAX_BODY_BYTES = 20 * 1024;
+const GOOGLE_SHEETS_SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
+const GOOGLE_SHEETS_RANGE = process.env.GOOGLE_SHEETS_RANGE || "Лист1!A:J";
+const GOOGLE_SHEETS_DEFAULT_STATUS = process.env.GOOGLE_SHEETS_DEFAULT_STATUS || "Новый";
+const GOOGLE_SHEETS_DEFAULT_PRIORITY = process.env.GOOGLE_SHEETS_DEFAULT_PRIORITY || "";
 
 const rateLimitStore = new Map();
+let sheetsClientPromise;
 
 function getCorsOrigin(origin) {
   if (!origin) {
@@ -138,6 +145,80 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function getGoogleCredentials() {
+  if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+    return JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+  }
+
+  if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64) {
+    const decoded = Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64, "base64").toString("utf8");
+    return JSON.parse(decoded);
+  }
+
+  if (process.env.GOOGLE_SERVICE_ACCOUNT_FILE) {
+    return JSON.parse(fs.readFileSync(process.env.GOOGLE_SERVICE_ACCOUNT_FILE, "utf8"));
+  }
+
+  return null;
+}
+
+async function getSheetsClient() {
+  if (!sheetsClientPromise) {
+    const credentials = getGoogleCredentials();
+
+    if (!credentials) {
+      throw new Error("GOOGLE_SHEETS_NOT_CONFIGURED");
+    }
+
+    const auth = new google.auth.GoogleAuth({
+      credentials,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
+
+    sheetsClientPromise = google.sheets({ version: "v4", auth });
+  }
+
+  return sheetsClientPromise;
+}
+
+function formatDateForSheet(date = new Date()) {
+  return new Intl.DateTimeFormat("ru-RU", {
+    timeZone: "Europe/Moscow",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(date);
+}
+
+async function appendLeadToSheet(lead) {
+  if (!GOOGLE_SHEETS_SPREADSHEET_ID) {
+    return;
+  }
+
+  const sheets = await getSheetsClient();
+  const submittedAt = formatDateForSheet();
+  const values = [
+    lead.name,
+    "",
+    lead.phone,
+    "",
+    lead.source || "Лид-форма",
+    GOOGLE_SHEETS_DEFAULT_STATUS,
+    GOOGLE_SHEETS_DEFAULT_PRIORITY,
+    "",
+    submittedAt,
+    lead.page ? `Страница: ${lead.page}` : "",
+  ];
+
+  await sheets.spreadsheets.values.append({
+    spreadsheetId: GOOGLE_SHEETS_SPREADSHEET_ID,
+    range: GOOGLE_SHEETS_RANGE,
+    valueInputOption: "RAW",
+    insertDataOption: "INSERT_ROWS",
+    requestBody: { values: [values] },
+  });
+}
+
 async function sendLeadEmail(lead) {
   const transporter = createTransporter();
   const submittedAt = new Date().toISOString();
@@ -196,7 +277,7 @@ async function handleContact(req, res, corsOrigin) {
       return;
     }
 
-    await sendLeadEmail(validation.lead);
+    await Promise.all([sendLeadEmail(validation.lead), appendLeadToSheet(validation.lead)]);
     sendJson(res, 200, { ok: true }, corsOrigin);
   } catch (error) {
     const message = error instanceof Error ? error.message : "UNKNOWN_ERROR";
