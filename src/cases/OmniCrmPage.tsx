@@ -916,16 +916,6 @@ export function OmniCrmPage() {
           </div>
         </Section>
 
-        {/* Platform features */}
-        <Section title="Platform capabilities" delay={0}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <FeaturePill icon="🔒">Isolated operator circuit — no direct access to account credentials. Access revoked instantly on offboarding.</FeaturePill>
-            <FeaturePill icon="👤">User API, not a bot — the client sees a real human profile. Full Telegram feature support: edits, voice, reactions.</FeaturePill>
-            <FeaturePill icon="🗂">Unified inbox — all requests from Telegram, WhatsApp, Instagram in one feed with smart queue. Nothing lost, nothing duplicated.</FeaturePill>
-            <FeaturePill icon="📈">Full control — every manager action logged. Efficiency analytics. Real-time operator KPIs. Conversations linked to deals.</FeaturePill>
-          </div>
-        </Section>
-
         {/* WHY OMNI CRM */}
         <WhyCrmSection />
 
