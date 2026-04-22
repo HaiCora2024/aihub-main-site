@@ -423,7 +423,7 @@ export const Home = (): JSX.Element => {
               OMNI-Agentic CRM
             </p>
             <p className="[font-family:'Geologica',Helvetica] font-light text-white/50 text-sm mt-1.5 max-w-[480px]">
-              We built it for ourselves — from Telegram group chaos to a managed sales pipeline with AI qualification
+              We built it for 10+ companies — from social media and ads chaos to a managed sales pipeline with AI qualification.
             </p>
           </div>
           <div className="relative z-10 flex items-center gap-2.5 shrink-0 rounded-[12px] px-6 py-3 font-semibold text-sm transition-all duration-200 [font-family:'Geologica',Helvetica]"
