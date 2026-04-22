@@ -541,7 +541,7 @@ export function OmniCrmPage() {
             className="[font-family:'Geologica',Helvetica] font-semibold mb-2 max-w-[720px]"
             style={{ fontSize: "clamp(15px,2vw,18px)", color: "rgba(191,91,243,0.9)" }}
           >
-            Every deal starts in Telegram. But it gets lost there too. We built the system that turns group chat noise into a controllable sales pipeline.
+            Every deal starts in Telegram, WA, Facebook, or wherever your team chats. But it gets lost there too. We built the system that turns omnichannel noise into a controllable sales pipeline.
           </p>
           <p className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-base sm:text-lg leading-relaxed mb-6 max-w-[680px]">
             Isolated operator circuit · AI-first qualification · Unified inbox for TG, WA, and Instagram
