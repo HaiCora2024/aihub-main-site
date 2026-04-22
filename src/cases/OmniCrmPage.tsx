@@ -181,7 +181,7 @@ function DemoSection() {
       <div className="absolute inset-0 p-px rounded-[20px] sm:rounded-[24px] pointer-events-none"
         style={{ background: `linear-gradient(129deg, ${PURPLE} 0%, transparent 70%)`, WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)", WebkitMaskComposite: "xor", maskComposite: "exclude" }}
       />
-      <h2 className="[font-family:'Geologica',Helvetica] font-semibold text-white text-lg sm:text-2xl mb-1.5">How it works</h2>
+      <h2 className="[font-family:'Geologica',Helvetica] font-semibold text-white text-lg sm:text-2xl mb-1.5">What is OMNI-Agentic CRM?</h2>
       <p className="[font-family:'Geologica',Helvetica] font-light text-white/50 text-sm mb-5">A client sends a message. The system extracts the deal and routes it to an operator — without noise.</p>
 
       <div className="flex flex-col sm:grid sm:grid-cols-2 gap-3 sm:gap-4">
