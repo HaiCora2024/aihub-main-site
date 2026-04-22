@@ -30,6 +30,7 @@ export default defineConfig({
         kybScreening: path.resolve(__dirname, "cases/kyb-screening.html"),
         adModeration: path.resolve(__dirname, "cases/ad-moderation.html"),
         multilangDigest: path.resolve(__dirname, "cases/multilang-digest.html"),
+        omniCrm: path.resolve(__dirname, "cases/omni-crm.html"),
         privacyPolicy: path.resolve(__dirname, "legal/privacy-policy.html"),
         terms: path.resolve(__dirname, "legal/terms.html"),
       },

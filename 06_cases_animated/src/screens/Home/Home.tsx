@@ -401,8 +401,43 @@ export const Home = (): JSX.Element => {
           ))}
         </div>
 
+        {/* Own solution banner */}
+        <a
+          href={`${import.meta.env.BASE_URL}cases/omni-crm.html`}
+          className="group relative flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 sm:mt-10 rounded-[24px] px-7 py-6 sm:px-10 sm:py-7 overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
+          style={{
+            background: "linear-gradient(120deg, rgba(191,91,243,0.12) 0%, rgba(6,12,36,0.7) 100%)",
+            border: "1px solid rgba(191,91,243,0.35)",
+            boxShadow: "0 0 40px rgba(191,91,243,0.08)",
+            textDecoration: "none",
+          }}
+        >
+          <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{ background: "linear-gradient(120deg, rgba(191,91,243,0.18) 0%, rgba(6,12,36,0.7) 100%)" }}
+          />
+          <div className="relative z-10 text-center sm:text-left">
+            <p className="[font-family:'Geologica',Helvetica] font-light text-xs uppercase tracking-widest mb-1.5" style={{ color: "rgba(191,91,243,0.7)" }}>
+              Our own solution
+            </p>
+            <p className="[font-family:'Geologica',Helvetica] font-bold text-white text-xl sm:text-2xl leading-tight">
+              OMNI-Agentic CRM
+            </p>
+            <p className="[font-family:'Geologica',Helvetica] font-light text-white/50 text-sm mt-1.5 max-w-[480px]">
+              We built it for ourselves — from Telegram group chaos to a managed sales pipeline with AI qualification
+            </p>
+          </div>
+          <div className="relative z-10 flex items-center gap-2.5 shrink-0 rounded-[12px] px-6 py-3 font-semibold text-sm transition-all duration-200 [font-family:'Geologica',Helvetica]"
+            style={{ background: "rgba(191,91,243,1)", color: "#fff", boxShadow: "0 0 30px rgba(191,91,243,0.3)" }}
+          >
+            See how it works
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+              <path d="M19 12H5M12 5l7 7-7 7" />
+            </svg>
+          </div>
+        </a>
+
         {/* Download button */}
-        <div className="flex justify-center mt-8 sm:mt-10">
+        <div className="flex justify-center mt-6 sm:mt-8">
           <div className="cta-frame">
             <button type="button" className="glow-button glow-button--orange absolute left-5 right-5 top-5 z-10 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-j-0jl3o px-10 py-5 shadow-[0px_2px_20px_#fe8a0466,inset_0px_8px_12px_#ffffff4c] cursor-pointer transition-all duration-300 active:scale-[0.98] font-semibold text-black-100 text-base text-center leading-[17.6px] whitespace-nowrap [font-family:'Geologica',Helvetica]">
               {t.cases.downloadBtn}
