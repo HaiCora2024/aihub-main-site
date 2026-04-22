@@ -488,6 +488,314 @@ function ChatMockup() {
   );
 }
 
+/* ── THE PROBLEM ── */
+function ProblemSection() {
+  const { ref, visible } = useReveal();
+  const pains = [
+    {
+      icon: "💬",
+      title: "Managers drown in threads",
+      text: "Hundreds of simultaneous chats across multiple apps. Nothing gets answered on time.",
+    },
+    {
+      icon: "👁",
+      title: "No visibility into conversations",
+      text: "You can't coach what you can't see. Deal outcomes are a mystery.",
+    },
+    {
+      icon: "⏱",
+      title: "Leads go cold before you reply",
+      text: "Speed is everything in messaging. Slow response = lost deal.",
+    },
+    {
+      icon: "🔌",
+      title: "CRM and messengers don't talk",
+      text: "Manual copy-paste, scattered history, zero automation.",
+    },
+  ];
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-[20px] sm:rounded-[24px] overflow-hidden p-5 sm:p-8"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(28px)",
+        transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
+        background: "rgba(6,12,36,0.6)",
+        border: "1px solid rgba(255,70,58,0.2)",
+        boxShadow: "inset 0 0 60px rgba(255,70,58,0.04)",
+      }}
+    >
+      <div
+        className="absolute inset-0 p-px rounded-[20px] sm:rounded-[24px] pointer-events-none"
+        style={{
+          background: "linear-gradient(129deg, rgba(255,70,58,0.5) 0%, transparent 65%)",
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+      <p className="[font-family:'Geologica',Helvetica] font-light text-xs uppercase tracking-widest mb-2" style={{ color: "rgba(255,70,58,0.8)" }}>
+        The problem
+      </p>
+      <h2 className="[font-family:'Geologica',Helvetica] font-bold text-white text-lg sm:text-2xl leading-tight mb-5 sm:mb-7">
+        Why messenger-based sales are broken today
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        {pains.map((p, i) => (
+          <div
+            key={p.title}
+            className="rounded-[14px] p-4 sm:p-5"
+            style={{
+              background: "rgba(255,70,58,0.05)",
+              border: "1px solid rgba(255,70,58,0.14)",
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(16px)",
+              transition: `opacity 0.5s ease ${i * 100}ms, transform 0.5s ease ${i * 100}ms`,
+            }}
+          >
+            <div className="text-xl sm:text-2xl mb-2.5">{p.icon}</div>
+            <div className="[font-family:'Geologica',Helvetica] font-semibold text-white text-sm sm:text-base mb-1.5">{p.title}</div>
+            <div className="[font-family:'Geologica',Helvetica] font-light text-white/55 text-xs sm:text-sm leading-relaxed">{p.text}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── CUSTOMER JOURNEY TIMELINE ── */
+function JourneySection() {
+  const { ref, visible } = useReveal(0.1);
+  const steps = [
+    {
+      n: "01",
+      title: "Lead messages in",
+      text: "Customer writes via any connected messaging channel.",
+      highlight: false,
+    },
+    {
+      n: "02",
+      title: "AI responds instantly",
+      text: "Agent opens dialogue, qualifies intent and warms up the prospect — 24/7.",
+      highlight: true,
+    },
+    {
+      n: "03",
+      title: "Manager takes over",
+      text: "Hot lead handed off with full conversation context already attached.",
+      highlight: false,
+    },
+    {
+      n: "04",
+      title: "Deal logged automatically",
+      text: "CRM updates the pipeline, analytics refresh — no manual entry needed.",
+      highlight: false,
+    },
+  ];
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-[20px] sm:rounded-[24px] bg-[#060c2499] backdrop-blur-[10px] p-5 sm:p-8"
+      style={{
+        opacity: visible ? 1 : 0,
+        transition: "opacity 0.7s ease",
+        boxShadow: `inset 0 0 40px ${PURPLE_06}`,
+      }}
+    >
+      <div
+        className="absolute inset-0 p-px rounded-[20px] sm:rounded-[24px] pointer-events-none"
+        style={{
+          background: `linear-gradient(129deg, ${PURPLE} 0%, transparent 70%)`,
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+      <p className="[font-family:'Geologica',Helvetica] font-light text-xs uppercase tracking-widest mb-2" style={{ color: PURPLE }}>
+        How it works end-to-end
+      </p>
+      <h2 className="[font-family:'Geologica',Helvetica] font-bold text-white text-lg sm:text-2xl mb-6 sm:mb-8">
+        The customer journey in OMNI CRM
+      </h2>
+
+      {/* Desktop: horizontal timeline */}
+      <div className="hidden sm:block relative">
+        {/* connector line */}
+        <div className="absolute top-[28px] left-[40px] right-[40px] h-px" style={{ background: `linear-gradient(90deg, ${PURPLE_20}, ${PURPLE_20})` }} />
+        <div className="grid grid-cols-4 gap-4">
+          {steps.map((s, i) => (
+            <div
+              key={s.n}
+              className="relative flex flex-col items-center text-center"
+              style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(20px)",
+                transition: `opacity 0.5s ease ${i * 120}ms, transform 0.5s ease ${i * 120}ms`,
+              }}
+            >
+              {/* circle */}
+              <div
+                className="w-14 h-14 rounded-full flex items-center justify-center font-bold text-base mb-4 relative z-10 [font-family:'Geologica',Helvetica]"
+                style={{
+                  background: s.highlight ? PURPLE : "rgba(191,91,243,0.12)",
+                  color: s.highlight ? "#fff" : PURPLE,
+                  border: `2px solid ${s.highlight ? PURPLE : PURPLE_20}`,
+                  boxShadow: s.highlight ? `0 0 24px ${PURPLE_20}` : "none",
+                }}
+              >
+                {s.n}
+              </div>
+              {/* card */}
+              <div
+                className="w-full rounded-[14px] p-4 text-left"
+                style={{
+                  background: s.highlight ? `linear-gradient(135deg, ${PURPLE_13} 0%, ${PURPLE_06} 100%)` : "rgba(255,255,255,0.03)",
+                  border: `1px solid ${s.highlight ? PURPLE_20 : "rgba(255,255,255,0.07)"}`,
+                  boxShadow: s.highlight ? `0 0 30px ${PURPLE_08}` : "none",
+                }}
+              >
+                {s.highlight && (
+                  <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full mb-2" style={{ background: PURPLE_13, color: PURPLE }}>
+                    ★ Key moment
+                  </span>
+                )}
+                <div className="[font-family:'Geologica',Helvetica] font-semibold text-white text-sm mb-1.5" style={{ color: s.highlight ? "#fff" : "rgba(255,255,255,0.9)" }}>
+                  {s.title}
+                </div>
+                <div className="[font-family:'Geologica',Helvetica] font-light text-xs leading-relaxed" style={{ color: s.highlight ? "rgba(255,255,255,0.75)" : "rgba(255,255,255,0.45)" }}>
+                  {s.text}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Mobile: vertical timeline */}
+      <div className="sm:hidden flex flex-col gap-3 relative">
+        <div className="absolute left-[21px] top-6 bottom-6 w-px" style={{ background: `linear-gradient(to bottom, ${PURPLE_20}, transparent)` }} />
+        {steps.map((s, i) => (
+          <div
+            key={s.n}
+            className="flex items-start gap-3"
+            style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateX(0)" : "translateX(-12px)",
+              transition: `opacity 0.5s ease ${i * 100}ms, transform 0.5s ease ${i * 100}ms`,
+            }}
+          >
+            <div
+              className="w-11 h-11 rounded-full flex items-center justify-center font-bold text-sm shrink-0 relative z-10 [font-family:'Geologica',Helvetica]"
+              style={{
+                background: s.highlight ? PURPLE : "rgba(191,91,243,0.12)",
+                color: s.highlight ? "#fff" : PURPLE,
+                border: `2px solid ${s.highlight ? PURPLE : PURPLE_20}`,
+                boxShadow: s.highlight ? `0 0 20px ${PURPLE_20}` : "none",
+              }}
+            >
+              {s.n}
+            </div>
+            <div
+              className="flex-1 rounded-[12px] p-3.5"
+              style={{
+                background: s.highlight ? `linear-gradient(135deg, ${PURPLE_13} 0%, ${PURPLE_06} 100%)` : "rgba(255,255,255,0.03)",
+                border: `1px solid ${s.highlight ? PURPLE_20 : "rgba(255,255,255,0.07)"}`,
+              }}
+            >
+              {s.highlight && (
+                <span className="inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full mb-2" style={{ background: PURPLE_13, color: PURPLE }}>
+                  ★ Key moment
+                </span>
+              )}
+              <div className="[font-family:'Geologica',Helvetica] font-semibold text-white text-sm mb-1">
+                {s.title}
+              </div>
+              <div className="[font-family:'Geologica',Helvetica] font-light text-xs leading-relaxed" style={{ color: s.highlight ? "rgba(255,255,255,0.7)" : "rgba(255,255,255,0.45)" }}>
+                {s.text}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── WHY OMNI CRM ── */
+function WhyCrmSection() {
+  const { ref, visible } = useReveal();
+  const reasons = [
+    {
+      icon: "💬",
+      title: "Messenger-first by design",
+      text: "Not a bolt-on feature. The entire system is architected around the channels your customers already use every day.",
+    },
+    {
+      icon: "📊",
+      title: "Full pipeline visibility",
+      text: "Every deal, every message, every stage tracked in one dashboard. No manual data entry, no guesswork.",
+    },
+    {
+      icon: "🤖",
+      title: "Agentic AI, not just chatbots",
+      text: "The AI understands context, adapts its replies and takes goal-oriented actions. It's not scripted — it thinks.",
+    },
+    {
+      icon: "⚡",
+      title: "Days to go live, not months",
+      text: "Connect your channels, configure your flow and start capturing leads almost immediately.",
+    },
+  ];
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-[20px] sm:rounded-[24px] bg-[#060c2499] backdrop-blur-[10px] p-5 sm:p-8"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(28px)",
+        transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
+        boxShadow: `inset 0 0 40px ${PURPLE_06}`,
+      }}
+    >
+      <div
+        className="absolute inset-0 p-px rounded-[20px] sm:rounded-[24px] pointer-events-none"
+        style={{
+          background: `linear-gradient(129deg, ${PURPLE} 0%, transparent 70%)`,
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+      <p className="[font-family:'Geologica',Helvetica] font-light text-xs uppercase tracking-widest mb-2" style={{ color: PURPLE }}>
+        Why OMNI CRM
+      </p>
+      <h2 className="[font-family:'Geologica',Helvetica] font-bold text-white text-lg sm:text-2xl mb-6 sm:mb-7">
+        Built differently from traditional CRMs
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+        {reasons.map((r, i) => (
+          <div
+            key={r.title}
+            className="rounded-[14px] p-4 sm:p-5"
+            style={{
+              background: PURPLE_08,
+              border: `1px solid ${PURPLE_13}`,
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(16px)",
+              transition: `opacity 0.5s ease ${i * 100}ms, transform 0.5s ease ${i * 100}ms`,
+            }}
+          >
+            <div className="text-xl sm:text-2xl mb-2.5">{r.icon}</div>
+            <div className="[font-family:'Geologica',Helvetica] font-semibold text-white text-sm sm:text-base mb-1.5">{r.title}</div>
+            <div className="[font-family:'Geologica',Helvetica] font-light text-white/55 text-xs sm:text-sm leading-relaxed">{r.text}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function OmniCrmPage() {
   const base = import.meta.env.BASE_URL;
   const [heroVisible, setHeroVisible] = useState(false);
@@ -559,19 +867,14 @@ export function OmniCrmPage() {
           <KpiCard value="24/7" label="AI first-line qualification" delay={240} />
         </div>
 
-        {/* The problem */}
-        <Section title="The problem" delay={0}>
-          <ul className="space-y-3">
-            <BulletItem>Operators drown in group chats — with 10 people in a channel, nobody knows whose client is whose or what was promised</BulletItem>
-            <BulletItem>Conversation history lost when a client switches channels — they messaged in Telegram, continued in WhatsApp, context is gone</BulletItem>
-            <BulletItem>No way to control a remote team — operators in another country, no metrics, no logs, no visibility into what's happening</BulletItem>
-            <BulletItem>Account credentials live with operators — an employee leaves and takes the client database access with them</BulletItem>
-            <BulletItem>No data means no decisions — how many deals fell through? Where's the bottleneck? Unknown</BulletItem>
-          </ul>
-        </Section>
+        {/* THE PROBLEM */}
+        <ProblemSection />
 
         {/* Animated demo */}
         <DemoSection />
+
+        {/* Customer journey timeline */}
+        <JourneySection />
 
         {/* Metric */}
         <MetricBlock />
@@ -623,29 +926,8 @@ export function OmniCrmPage() {
           </div>
         </Section>
 
-        {/* Steps */}
-        <Section title="Three steps to go live" delay={0}>
-          <div className="flex flex-col gap-5 sm:gap-6 mt-2 relative">
-            <div className="absolute left-[19px] top-10 bottom-10 w-0.5" style={{ background: `linear-gradient(to bottom, ${PURPLE}, transparent)` }} />
-            {[
-              { n: 1, title: "We map your process", text: "How a deal flows from the first message to close. We collect criteria, triggers, and roles. 20–40 minutes." },
-              { n: 2, title: "We build the plan and show a demo", text: "Concrete timeline and pricing. Demo on your data — so you see the result before development starts." },
-              { n: 3, title: "We build and launch", text: "Into production. With support at every stage." },
-            ].map(step => (
-              <div key={step.n} className="flex items-start gap-4 sm:gap-5">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-base shrink-0 relative z-10 [font-family:'Geologica',Helvetica]"
-                  style={{ background: PURPLE, color: "#fff" }}
-                >
-                  {step.n}
-                </div>
-                <div className="pt-1">
-                  <div className="font-semibold text-white text-sm sm:text-base mb-1 [font-family:'Geologica',Helvetica]">{step.title}</div>
-                  <div className="text-sm text-white/55 leading-relaxed [font-family:'Geologica',Helvetica]">{step.text}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </Section>
+        {/* WHY OMNI CRM */}
+        <WhyCrmSection />
 
         {/* CTA */}
         <div className="relative rounded-[20px] sm:rounded-[24px] overflow-hidden p-6 sm:p-12 text-center"
