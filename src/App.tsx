@@ -12,27 +12,28 @@ import { Home as DemoSection } from "../12_demo_cta/src/screens/Home";
 import { Home as FooterSection } from "../13_footer_contacts/src/screens/Home";
 
 const sections = [
-  { id: "hero", Component: HeroSection },
-  { id: "results", Component: ResultsSection },
-  { id: "clients", Component: ClientsSection },
-  { id: "services", Component: ServicesSection },
-  { id: "cases", Component: CasesSection },
-  { id: "roadmap", Component: RoadmapSection },
-  { id: "contact", Component: ContactSection },
-  { id: "integrations", Component: IntegrationsSection },
-  { id: "work-process", Component: WorkProcessSection },
-  { id: "team", Component: TeamSection },
-  { id: "demo", Component: DemoSection },
-  { id: "footer", Component: FooterSection },
+  { id: "hero", Component: HeroSection, label: "Hero — Custom AI Assistant" },
+  { id: "results", Component: ResultsSection, label: "Instant Business Results" },
+  { id: "clients", Component: ClientsSection, label: "Our Clients" },
+  { id: "services", Component: ServicesSection, label: "Services" },
+  { id: "cases", Component: CasesSection, label: "Cases" },
+  { id: "roadmap", Component: RoadmapSection, label: "Roadmap" },
+  { id: "contact", Component: ContactSection, label: "Contact" },
+  { id: "integrations", Component: IntegrationsSection, label: "AI Process Integrations" },
+  { id: "work-process", Component: WorkProcessSection, label: "Work Process" },
+  { id: "team", Component: TeamSection, label: "Team" },
+  { id: "demo", Component: DemoSection, label: "Book a Demo" },
+  { id: "footer", Component: FooterSection, label: "Footer" },
 ];
 
 export function App(): JSX.Element {
   return (
-    <main className="relative overflow-x-hidden overflow-y-visible bg-[#060c24] text-white">
-      {sections.map(({ id, Component }, index) => (
+    <main aria-label="AIHub Works" className="relative overflow-x-hidden overflow-y-visible bg-[#060c24] text-white">
+      {sections.map(({ id, Component, label }, index) => (
         <section
           key={id}
           id={id}
+          aria-label={label}
           className={`relative overflow-visible scroll-mt-6 min-[1200px]:scroll-mt-8 ${
             index === 0 ? "" : "mt-6 sm:mt-8 min-[1200px]:mt-10"
           }`}
