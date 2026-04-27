@@ -1,0 +1,31 @@
+# aihub.works
+
+> AIHub is an AI agency that builds custom AI assistants and automation solutions for businesses — deployed in two weeks. We combine cutting-edge AI technologies with deep understanding of real operational problems across industries.
+
+## Services
+
+- [Virtual Employees](https://aihub.works/#services) — Voice and text AI assistants embedded in communication channels (web, Telegram, PMS), working 24/7 to handle customer support, bookings, order processing, and feedback at 3x lower cost
+- [Business Process Automation](https://aihub.works/#services) — Automate data processing, content creation, document filling, and reporting; free employees from routine and speed up work by 5–10x
+- [AI Analytics](https://aihub.works/#analytics) — Structured reports, real-time data recognition, forecasts, and custom analytics from text, numbers, voice, and video
+- [Recommendation Systems](https://aihub.works/#services) — Personalization algorithms and smart product selections that increase average order value by 20–30%
+
+## Results & Cases
+
+- [Business Results](https://aihub.works/#results) — Time savings, risk protection, and proven effectiveness across 50+ successful implementations
+- [Cases](https://aihub.works/#cases) — Real client outcomes: 82% routine tasks automated in real estate, 80% reduction in missed clinic bookings, 60x faster KYB compliance screening, 10x faster ad moderation, 20x faster multilingual digest creation
+
+## How We Work
+
+- [Work Process](https://aihub.works/#work-process) — From discovery to deployment in two weeks: audit, solution design, integration, and ongoing support
+- [Integrations](https://aihub.works/#integrations) — CRM, ERP, Telegram, WhatsApp, web chat, PMS, 1C, and custom API connections
+- [Roadmap](https://aihub.works/#roadmap) — AIHub product evolution: AI Automation Foundation (2023), Product Platform (2024), OMNI Agentic CRM (2025–2026)
+
+## Company
+
+- [Team](https://aihub.works/#team) — AI engineers, product managers, and domain specialists with experience across real estate, hospitality, finance, retail, and logistics
+- [Clients](https://aihub.works/#clients) — Trusted by companies across multiple industries in Russia and internationally
+
+## Contact
+
+- [Book a Consultation](https://aihub.works/#contact) — Free discovery call to assess your automation potential and get a custom solution proposal
+- [Demo](https://aihub.works/#demo) — Request a personal demo of AI assistants tailored to your business
