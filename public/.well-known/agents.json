@@ -1,0 +1,32 @@
+{
+  "agents": [
+    {
+      "name": "AIHub Consultation Agent",
+      "description": "Handles initial consultation requests for AI automation projects. Collects contact details and routes leads to the AIHub sales team.",
+      "url": "https://aihub-form-getcher.waw0.amvera.tech/api/contact",
+      "protocol": "http",
+      "methods": ["POST"],
+      "inputSchema": {
+        "type": "object",
+        "required": ["name", "email"],
+        "properties": {
+          "name": { "type": "string", "description": "Full name" },
+          "email": { "type": "string", "format": "email" },
+          "phone": { "type": "string", "description": "Phone number (optional)" },
+          "source": { "type": "string", "default": "aihub-site" }
+        }
+      }
+    },
+    {
+      "name": "AIHub Chat Agent",
+      "description": "Live AI assistant for answering questions about AIHub services, pricing, integrations, and automation capabilities. Available 24/7.",
+      "url": "https://aihubworks.com/chats/telegram-chat",
+      "protocol": "a2a",
+      "skills": [
+        { "id": "qa", "name": "Questions & Answers", "description": "Answer questions about AIHub services and AI automation" },
+        { "id": "qualification", "name": "Lead Qualification", "description": "Assess business automation needs and recommend solutions" },
+        { "id": "booking", "name": "Consultation Booking", "description": "Schedule a consultation with an AIHub specialist" }
+      ]
+    }
+  ]
+}

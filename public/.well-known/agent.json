@@ -1,0 +1,42 @@
+{
+  "name": "AIHub Chat Agent",
+  "description": "AI assistant representing AIHub Works — an AI agency specializing in custom AI assistants, business process automation, AI analytics, and recommendation systems. Answers questions, qualifies leads, and books consultations.",
+  "url": "https://aihubworks.com/chats/telegram-chat",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "multiTurn": true
+  },
+  "skills": [
+    {
+      "id": "qa",
+      "name": "Service Questions",
+      "description": "Answer questions about AIHub services, pricing, timelines, and technology",
+      "examples": [
+        "What AI services does AIHub offer?",
+        "How long does it take to build a custom AI assistant?",
+        "What integrations do you support?"
+      ]
+    },
+    {
+      "id": "qualification",
+      "name": "Lead Qualification",
+      "description": "Assess the client's business automation needs and recommend the most suitable AIHub solution",
+      "examples": [
+        "We need to automate customer support for our hotel",
+        "Can AI help with our order processing in 1C?"
+      ]
+    },
+    {
+      "id": "booking",
+      "name": "Consultation Booking",
+      "description": "Collect contact details and book a discovery call with an AIHub specialist"
+    }
+  ],
+  "provider": {
+    "organization": "AIHub Works",
+    "url": "https://aihub.works",
+    "contact": "https://aihub.works/#contact"
+  }
+}

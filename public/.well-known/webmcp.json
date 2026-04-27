@@ -1,0 +1,45 @@
+{
+  "spec": "webmcp/0.1",
+  "tools": [
+    {
+      "name": "book-consultation",
+      "description": "Submit a consultation request to AIHub Works. An AI specialist will contact you to discuss your automation needs and propose a solution.",
+      "url": "https://aihub-form-getcher.waw0.amvera.tech/api/contact",
+      "method": "POST",
+      "parameters": [
+        {
+          "name": "name",
+          "type": "string",
+          "required": true,
+          "description": "Full name of the person requesting consultation"
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "required": true,
+          "description": "Email address for follow-up communication"
+        },
+        {
+          "name": "phone",
+          "type": "string",
+          "required": false,
+          "description": "Phone number for direct contact (optional)"
+        },
+        {
+          "name": "source",
+          "type": "string",
+          "required": false,
+          "description": "Traffic source identifier",
+          "default": "aihub-site"
+        }
+      ]
+    },
+    {
+      "name": "chat-with-agent",
+      "description": "Open a live chat with an AIHub AI assistant to get answers about services, pricing, and automation possibilities.",
+      "url": "https://aihubworks.com/chats/telegram-chat",
+      "method": "GET",
+      "parameters": []
+    }
+  ]
+}

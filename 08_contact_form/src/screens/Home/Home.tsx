@@ -111,6 +111,8 @@ export const Home = (): JSX.Element => {
         {/* ── Left column: Form ── */}
         <form
           onSubmit={handleSubmit}
+          tool-name="book-consultation"
+          tool-description="Submit a consultation request to AIHub Works. An AI specialist will contact you to discuss your business automation needs."
           className="flex flex-col w-full max-w-sm gap-6 order-2 min-[1200px]:order-1 shrink-0"
         >
           {/* Name input */}
@@ -119,6 +121,7 @@ export const Home = (): JSX.Element => {
               type="text"
               name="name"
               autoComplete="name"
+              tool-param-description="Full name of the person requesting consultation"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder={t.contact.namePlaceholder}
@@ -133,6 +136,7 @@ export const Home = (): JSX.Element => {
               name="email"
               autoComplete="email"
               required
+              tool-param-description="Email address for follow-up communication (required)"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={t.contact.emailPlaceholder}
@@ -146,6 +150,7 @@ export const Home = (): JSX.Element => {
               type="tel"
               name="phone"
               autoComplete="tel"
+              tool-param-description="Phone number for direct contact (optional)"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder={t.contact.phonePlaceholder}
