@@ -375,6 +375,16 @@ export const Home = (): JSX.Element => {
         </>
       ),
     },
+    {
+      area: "cases-c13", glow: "card-glow-green", border: "green", delay: 680, gaugeDelay: 980,
+      href: `${import.meta.env.BASE_URL}cases/rental-platform.html`,
+      content: (gd, active) => (
+        <>
+          <CircleGauge percent={90} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
+          <p className="font-light text-white text-sm leading-[16.8px] [font-family:'Geologica',Helvetica]">{texts[12]}</p>
+        </>
+      ),
+    },
   ];
 
   return (

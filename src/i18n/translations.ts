@@ -73,6 +73,7 @@ export const translations = {
         "20x faster multilanguage digest creation at a news agency",
         "82% less manual handling with AI on Hotel's reception",
         "2x increase in 360 review process accessibility at a bank with AI-voice agent",
+        "90% of first-line inquiries resolved by AI for a vacation rental platform — voice and chat across 3 languages",
       ],
     },
     roadmap: {
@@ -265,6 +266,7 @@ export const translations = {
         "В 20 раз ускорили создание дайджестов в новостном агентстве",
         "На 82% снизили ручную нагрузку с помощью ИИ в отеле",
         "В 2 раза увеличили доступность информации из тренингов в клининговой компании",
+        "90% первой линии закрывает ИИ для платформы туристической аренды — голос и чат на 3 языках",
       ],
     },
     roadmap: {

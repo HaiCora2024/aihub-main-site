@@ -1104,7 +1104,8 @@ a {
   .cases-c1,
   .cases-c4,
   .cases-c9,
-  .cases-c5 {
+  .cases-c5,
+  .cases-c13 {
     grid-column: span 2;
   }
 }
@@ -1119,7 +1120,8 @@ a {
       "c1  c1  c10 c11"
       "c9  c9  c7  c8"
       "c6  c5  c5  c3"
-      "c2  c12 c12 c12";
+      "c2  c12 c12 c12"
+      "c13 c13 c13 c13";
     gap: 0.875rem;
   }
   .cases-c1  { grid-area: c1;  }
@@ -1134,6 +1136,7 @@ a {
   .cases-c3  { grid-area: c3;  }
   .cases-c2  { grid-area: c2;  }
   .cases-c12 { grid-area: c12; }
+  .cases-c13 { grid-area: c13; }
 }
 
 /* 07_roadmap */
