@@ -21,6 +21,7 @@ const content = {
     heroTitle: "AI Front-Line Coverage for a Vacation Rental Platform",
     heroLead: "A vacation rental platform with international inbound demand eliminated front-line leakage, removed a language bottleneck, and improved conversion without expanding the team.",
     heroNote: "The solution covered phone calls, website chat, and WhatsApp. After implementation, the company stopped losing demand at first contact and gained a controlled inbound handling process during peak season, including automated actions in Bitrix and data validation in Avantio.",
+    demoLabel: "Try voice agent",
     impactKicker: "Core business impact",
     impactTitle1: "~500 missed calls",
     impactTitle2: " during the season before implementation.",
@@ -111,6 +112,7 @@ const content = {
     heroTitle: "AI-агент на первой линии с клиентами для платформы бронирования: 90% звонков и переписок закрываются без менеджера",
     heroLead: "Платформа краткосрочной аренды теряла клиентов в сезон: команда не успевала отвечать на звонки и сообщения на трёх языках. Мы автоматизировали первую линию и убрали потери на входе без расширения штата.",
     heroNote: "AI-агент принял на себя звонки, чат на сайте и WhatsApp. В результате компания перестала терять горячий спрос в момент первого обращения, а менеджеры переключились с рутины на продажи и сложные кейсы.",
+    demoLabel: "Попробовать голосового агента",
     impactKicker: "Главный результат",
     impactTitle1: "≈500 пропущенных звонков",
     impactTitle2: " за летний сезон до запуска.",
@@ -496,6 +498,46 @@ export function RentalPlatformPage() {
               <p style={{ fontSize: 14, lineHeight: 1.6, color: "rgba(255,255,255,0.5)", fontFamily: "'Geologica', Helvetica", fontWeight: 300, maxWidth: 640 }}>
                 {t.heroNote}
               </p>
+              <a
+                href="https://getcher123.github.io/dialog-agent/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  marginTop: 24,
+                  padding: "12px 22px",
+                  borderRadius: 999,
+                  background: GREEN_08,
+                  border: `1px solid ${GREEN_30}`,
+                  color: GREEN,
+                  fontFamily: "'Geologica', Helvetica",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  textDecoration: "none",
+                  transition: "background 0.2s, border-color 0.2s",
+                  cursor: "pointer",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = GREEN_20;
+                  e.currentTarget.style.borderColor = GREEN_80;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = GREEN_08;
+                  e.currentTarget.style.borderColor = GREEN_30;
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <circle cx="8" cy="8" r="3" fill="currentColor" opacity="0.9" />
+                  <circle cx="8" cy="8" r="6.5" stroke="currentColor" strokeWidth="1.2" opacity="0.4" />
+                  <circle cx="8" cy="8" r="3.5" stroke="currentColor" strokeWidth="0.8" opacity="0.25" />
+                </svg>
+                {t.demoLabel}
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ opacity: 0.6 }}>
+                  <path d="M3 7h8M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </a>
             </div>
 
             {/* Right — impact card */}
