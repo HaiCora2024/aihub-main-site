@@ -734,7 +734,7 @@ function RoiCalculator({ t, isRu }: { t: RoiCalcContent; isRu: boolean }) {
             type="button"
             className="mt-5 w-full px-5 py-3 rounded-[12px] [font-family:'Geologica',Helvetica] font-medium text-sm uppercase tracking-widest transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
             style={{ background: GREEN_08, border: `1px solid ${GREEN_20}`, color: GREEN }}
-            onClick={() => window.location.href = "mailto:lepeshkinpump@gmail.com?subject=Расчёт внедрения"}
+            onClick={() => window.location.href = `${import.meta.env.BASE_URL}#contact`}
           >
             {t.roiCta}
           </button>
