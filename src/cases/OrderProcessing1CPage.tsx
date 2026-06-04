@@ -9,6 +9,7 @@ const GREEN_13 = "rgba(8, 208, 112, 0.13)";
 const GREEN_90 = "rgba(8, 208, 112, 0.90)";
 const RED_10 = "rgba(255, 80, 80, 0.10)";
 const RED_30 = "rgba(255, 80, 80, 0.30)";
+const GOLD = "rgba(250, 200, 60, 0.95)";
 
 const content = {
   ru: {
@@ -75,6 +76,22 @@ const content = {
       "Каждое решение задокументировано и прозрачно",
       "Тот же отдел обрабатывает в ×3 больше заказов",
     ],
+    roiTitle: "Посчитайте эффект для своего бизнеса",
+    roiSubtitle: "Введите параметры своих процессов — получите расчёт экономии от автоматизации",
+    roiPosLabel: "Позиций в среднем заказе",
+    roiSuppLabel: "Поставщиков для сравнения",
+    roiOrdersLabel: "Заказов в месяц",
+    roiHoursLabel: "Часов на обработку одного заказа (сейчас)",
+    roiRateLabel: "Стоимость часа сотрудника, ₽",
+    roiDefaultRate: 1200,
+    roiResultTitle: "Расчёт эффекта",
+    roiR1: "Часов на закупки в месяц сейчас",
+    roiR2: "Стоимость этих часов в месяц",
+    roiR3: "Строк сравнений в месяц (вручную)",
+    roiR4: "После автоматизации: часов/мес",
+    roiR5: "Экономия в год",
+    roiCta: "Получить расчёт внедрения →",
+    roiNote: "* Расчёт приблизительный. Реальный эффект зависит от специфики процессов.",
     featuresTitle: "Ключевые функции",
     features: [
       "Приём документов в любом формате",
@@ -157,6 +174,22 @@ const content = {
       "Every decision documented and transparent",
       "Same team handles 3× more orders",
     ],
+    roiTitle: "Calculate the ROI for your business",
+    roiSubtitle: "Enter your process parameters — get an estimate of your automation savings",
+    roiPosLabel: "Line items per order (avg)",
+    roiSuppLabel: "Suppliers to compare",
+    roiOrdersLabel: "Orders per month",
+    roiHoursLabel: "Hours to process one order (currently)",
+    roiRateLabel: "Employee hourly rate, $",
+    roiDefaultRate: 50,
+    roiResultTitle: "Automation impact estimate",
+    roiR1: "Hours on procurement per month now",
+    roiR2: "Cost of those hours (per month)",
+    roiR3: "Manual comparison rows per month",
+    roiR4: "After automation: hours/month",
+    roiR5: "Annual savings",
+    roiCta: "Get an implementation estimate →",
+    roiNote: "* Estimate only. Actual savings depend on your specific processes.",
     featuresTitle: "Key features",
     features: [
       "Multi-format document intake",
@@ -364,9 +397,9 @@ function ProcessFlow({ title, subtitle, steps }: ProcessFlowProps) {
       <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm mb-6">
         {subtitle}
       </p>
-      <div className="flex flex-col sm:flex-row items-start sm:items-start gap-4 sm:gap-0 overflow-x-auto pb-1">
+      <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-0 overflow-x-auto pb-1">
         {steps.map((step, i) => (
-          <div key={step.title} className="flex sm:flex-1 items-center sm:items-start gap-3 sm:gap-0 w-full sm:w-auto">
+          <div key={step.title} className="flex sm:flex-1 items-center gap-3 sm:gap-0 w-full sm:w-auto">
             <div className="flex flex-row sm:flex-col items-center sm:items-center gap-3 sm:gap-2 sm:w-full sm:text-center">
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
@@ -418,10 +451,7 @@ function ScreenshotCard({ src, caption, figNum, delay = 0 }: ScreenshotCardProps
         <img src={src} alt={caption} className="w-full h-auto block" style={{ maxHeight: "420px", objectFit: "cover", objectPosition: "top" }} />
       </div>
       <div className="px-5 py-4 bg-[#060c24e6]" style={{ borderTop: `1px solid ${GREEN_13}` }}>
-        <span
-          className="[font-family:'Geologica',Helvetica] font-medium text-[11px] uppercase tracking-widest mr-3"
-          style={{ color: GREEN }}
-        >
+        <span className="[font-family:'Geologica',Helvetica] font-medium text-[11px] uppercase tracking-widest mr-3" style={{ color: GREEN }}>
           {figNum}
         </span>
         <span className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-sm leading-relaxed">
@@ -496,6 +526,223 @@ function BeforeAfter({ title, subtitle, beforeTitle, afterTitle, beforeItems, af
             ))}
           </ul>
         </div>
+      </div>
+    </div>
+  );
+}
+
+interface RoiCalcContent {
+  roiTitle: string;
+  roiSubtitle: string;
+  roiPosLabel: string;
+  roiSuppLabel: string;
+  roiOrdersLabel: string;
+  roiHoursLabel: string;
+  roiRateLabel: string;
+  roiDefaultRate: number;
+  roiResultTitle: string;
+  roiR1: string;
+  roiR2: string;
+  roiR3: string;
+  roiR4: string;
+  roiR5: string;
+  roiCta: string;
+  roiNote: string;
+}
+
+function RoiCalculator({ t, isRu }: { t: RoiCalcContent; isRu: boolean }) {
+  const { ref, visible } = useReveal();
+  const [positions, setPositions] = useState(200);
+  const [suppliers, setSuppliers] = useState(8);
+  const [orders, setOrders] = useState(15);
+  const [hoursPerOrder, setHoursPerOrder] = useState(4);
+  const [ratePerHour, setRatePerHour] = useState(t.roiDefaultRate);
+
+  const hoursMonth = hoursPerOrder * orders;
+  const costMonth = hoursMonth * ratePerHour;
+  const rowsMonth = positions * suppliers * orders;
+  const hoursAfter = parseFloat((orders * 10 / 60).toFixed(1));
+  const saveYear = Math.max(0, (hoursMonth - hoursAfter) * ratePerHour * 12);
+  const savedHours = Math.max(0, Math.round(hoursMonth - hoursAfter));
+
+  const fmtN = (n: number) =>
+    isRu ? n.toLocaleString("ru-RU") : n.toLocaleString("en-US");
+
+  const fmtMoney = (n: number): string => {
+    if (isRu) {
+      if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)} млн ₽`;
+      if (n >= 1_000) return `${Math.round(n / 1_000)} тыс ₽`;
+      return `${Math.round(n)} ₽`;
+    } else {
+      if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+      if (n >= 1_000) return `$${Math.round(n / 1_000)}K`;
+      return `$${Math.round(n)}`;
+    }
+  };
+
+  const conclusion = (() => {
+    if (saveYear <= 0 || savedHours <= 0) return null;
+    if (isRu) {
+      const part = saveYear > 2_000_000
+        ? `Окупаемость внедрения — как правило, до 3 месяцев.`
+        : `Плюс рост пропускной способности в ×3 без найма.`;
+      return `Автоматизация освобождает ${fmtN(savedHours)} ч/мес — это ${fmtMoney(saveYear)} в год только на ФОТ. ${part}`;
+    } else {
+      const part = saveYear > 100_000
+        ? `Typical implementation payback: under 3 months.`
+        : `Plus 3× throughput increase without additional headcount.`;
+      return `Automation frees up ${fmtN(savedHours)} hrs/month — that's ${fmtMoney(saveYear)} per year in labor cost alone. ${part}`;
+    }
+  })();
+
+  const inputClass = "w-full rounded-[10px] px-4 py-2.5 [font-family:'Geologica',Helvetica] font-light text-white text-sm bg-[#060c24] outline-none focus:ring-1 transition-all";
+
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-[24px] bg-[#060c2499] backdrop-blur-[10px] p-6 sm:p-8"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(28px)",
+        transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
+        boxShadow: `inset 0 0 40px ${GREEN_06}`,
+      }}
+    >
+      <div
+        className="absolute inset-0 p-px rounded-[24px] pointer-events-none"
+        style={{
+          background: `linear-gradient(129deg, ${GREEN_80} 0%, transparent 70%)`,
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+      <h2 className="[font-family:'Geologica',Helvetica] font-semibold text-white text-xl sm:text-2xl mb-1">
+        {t.roiTitle}
+      </h2>
+      <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm mb-6">
+        {t.roiSubtitle}
+      </p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+        {/* Inputs */}
+        <div className="flex flex-col gap-5">
+
+          <div className="flex flex-col gap-1.5">
+            <label className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-[11px] uppercase tracking-widest">
+              {t.roiPosLabel}
+            </label>
+            <input
+              type="number" min={10} max={2000} value={positions}
+              onChange={(e) => setPositions(Math.max(1, parseInt(e.target.value) || 0))}
+              className={inputClass}
+              style={{ border: `1px solid ${GREEN_13}`, "--tw-ring-color": GREEN } as React.CSSProperties}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-[11px] uppercase tracking-widest flex justify-between">
+              <span>{t.roiSuppLabel}</span>
+              <span style={{ color: GREEN, fontFamily: "'Geologica',Helvetica", fontWeight: 700 }}>{suppliers}</span>
+            </label>
+            <input
+              type="range" min={1} max={30} value={suppliers}
+              onChange={(e) => setSuppliers(parseInt(e.target.value))}
+              className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+              style={{ accentColor: GREEN, background: `linear-gradient(90deg, ${GREEN} ${((suppliers - 1) / 29 * 100).toFixed(1)}%, rgba(8,208,112,0.15) ${((suppliers - 1) / 29 * 100).toFixed(1)}%)` }}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-[11px] uppercase tracking-widest">
+              {t.roiOrdersLabel}
+            </label>
+            <input
+              type="number" min={1} max={500} value={orders}
+              onChange={(e) => setOrders(Math.max(1, parseInt(e.target.value) || 0))}
+              className={inputClass}
+              style={{ border: `1px solid ${GREEN_13}`, "--tw-ring-color": GREEN } as React.CSSProperties}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-[11px] uppercase tracking-widest flex justify-between">
+              <span>{t.roiHoursLabel}</span>
+              <span style={{ color: GREEN, fontFamily: "'Geologica',Helvetica", fontWeight: 700 }}>{hoursPerOrder}</span>
+            </label>
+            <input
+              type="range" min={0.5} max={12} step={0.5} value={hoursPerOrder}
+              onChange={(e) => setHoursPerOrder(parseFloat(e.target.value))}
+              className="w-full h-1.5 rounded-full appearance-none cursor-pointer"
+              style={{ accentColor: GREEN, background: `linear-gradient(90deg, ${GREEN} ${((hoursPerOrder - 0.5) / 11.5 * 100).toFixed(1)}%, rgba(8,208,112,0.15) ${((hoursPerOrder - 0.5) / 11.5 * 100).toFixed(1)}%)` }}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <label className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-[11px] uppercase tracking-widest">
+              {t.roiRateLabel}
+            </label>
+            <input
+              type="number" min={100} max={50000} step={isRu ? 100 : 5} value={ratePerHour}
+              onChange={(e) => setRatePerHour(Math.max(1, parseInt(e.target.value) || 0))}
+              className={inputClass}
+              style={{ border: `1px solid ${GREEN_13}`, "--tw-ring-color": GREEN } as React.CSSProperties}
+            />
+          </div>
+
+        </div>
+
+        {/* Results */}
+        <div className="flex flex-col">
+          <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-[11px] uppercase tracking-widest mb-4">
+            {t.roiResultTitle}
+          </p>
+          <div className="flex flex-col gap-0 flex-1" style={{ borderTop: `1px solid rgba(255,255,255,0.06)` }}>
+            {[
+              { label: t.roiR1, value: `${fmtN(Math.round(hoursMonth))} ч`, color: GREEN },
+              { label: t.roiR2, value: fmtMoney(costMonth), color: GOLD },
+              { label: t.roiR3, value: fmtN(rowsMonth), color: GREEN },
+              { label: t.roiR4, value: `${hoursAfter} ч`, color: GREEN },
+              { label: t.roiR5, value: fmtMoney(saveYear), color: GREEN, big: true },
+            ].map(({ label, value, color, big }) => (
+              <div
+                key={label}
+                className="flex items-center justify-between gap-4 py-3"
+                style={{ borderBottom: `1px solid rgba(255,255,255,0.06)` }}
+              >
+                <span className="[font-family:'Geologica',Helvetica] font-light text-white/50 text-xs sm:text-sm leading-snug">
+                  {label}
+                </span>
+                <span
+                  className="[font-family:'Geologica',Helvetica] font-bold shrink-0"
+                  style={{ color, fontSize: big ? "clamp(20px,3vw,28px)" : "clamp(14px,2vw,16px)" }}
+                >
+                  {value}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {conclusion && (
+            <p className="[font-family:'Geologica',Helvetica] font-light text-white/50 text-xs leading-relaxed mt-4">
+              {conclusion}
+            </p>
+          )}
+
+          <button
+            type="button"
+            className="mt-5 w-full px-5 py-3 rounded-[12px] [font-family:'Geologica',Helvetica] font-medium text-sm uppercase tracking-widest transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+            style={{ background: GREEN_08, border: `1px solid ${GREEN_20}`, color: GREEN }}
+            onClick={() => window.location.href = "mailto:lepeshkinpump@gmail.com?subject=Расчёт внедрения"}
+          >
+            {t.roiCta}
+          </button>
+          <p className="[font-family:'Geologica',Helvetica] font-light text-white/25 text-[11px] mt-3">
+            {t.roiNote}
+          </p>
+        </div>
+
       </div>
     </div>
   );
@@ -593,9 +840,7 @@ export function OrderProcessing1CPage() {
             {t.heroBody}
           </p>
           <div className="flex flex-wrap gap-2">
-            {t.tags.map((tag) => (
-              <Tag key={tag}>{tag}</Tag>
-            ))}
+            {t.tags.map((tag) => <Tag key={tag}>{tag}</Tag>)}
           </div>
         </div>
 
@@ -615,31 +860,18 @@ export function OrderProcessing1CPage() {
             {t.challengeCallout}
           </div>
           <ul className="space-y-3">
-            {t.challenge.map((item) => (
-              <BulletItem key={item}>{item}</BulletItem>
-            ))}
+            {t.challenge.map((item) => <BulletItem key={item}>{item}</BulletItem>)}
           </ul>
         </Section>
 
         {/* Process flow */}
-        <ProcessFlow
-          title={t.processTitle}
-          subtitle={t.processSubtitle}
-          steps={t.process}
-        />
+        <ProcessFlow title={t.processTitle} subtitle={t.processSubtitle} steps={t.process} />
 
         {/* 6 Layers */}
         <Section title={t.layersTitle}>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {t.layers.map((layer, i) => (
-              <LayerCard
-                key={layer.tag}
-                tag={layer.tag}
-                title={layer.title}
-                body={layer.body}
-                alt={layer.alt}
-                delay={i * 50}
-              />
+              <LayerCard key={layer.tag} tag={layer.tag} title={layer.title} body={layer.body} alt={layer.alt} delay={i * 50} />
             ))}
           </div>
         </Section>
@@ -669,28 +901,22 @@ export function OrderProcessing1CPage() {
           afterItems={t.afterItems}
         />
 
+        {/* ROI Calculator */}
+        <RoiCalculator key={locale} t={t} isRu={locale === "ru"} />
+
         {/* Key features */}
         <Section title={t.featuresTitle}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            {t.features.map((item) => (
-              <FeaturePill key={item}>{item}</FeaturePill>
-            ))}
+            {t.features.map((item) => <FeaturePill key={item}>{item}</FeaturePill>)}
           </div>
         </Section>
 
         {/* Tech & Timeline */}
-        <div
-          className="flex flex-col sm:flex-row gap-4 sm:gap-8 pt-4 pb-8"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
-        >
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 pt-4 pb-8" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
           <div className="flex-1">
             <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-xs uppercase tracking-widest mb-1.5">{t.technology}</p>
-            <p className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-sm leading-relaxed mb-2">
-              {t.technologyValue}
-            </p>
-            <p className="[font-family:'Geologica',Helvetica] font-light text-white/30 text-xs leading-relaxed">
-              {t.techNote}
-            </p>
+            <p className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-sm leading-relaxed mb-2">{t.technologyValue}</p>
+            <p className="[font-family:'Geologica',Helvetica] font-light text-white/30 text-xs leading-relaxed">{t.techNote}</p>
           </div>
           <div className="sm:border-l sm:border-white/10 sm:pl-8 shrink-0">
             <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-xs uppercase tracking-widest mb-1.5">{t.timeline}</p>
