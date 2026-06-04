@@ -505,7 +505,7 @@ export function OrderProcessing1CPage() {
   const base = import.meta.env.BASE_URL;
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroVisible, setHeroVisible] = useState(false);
-  const [locale, setLocale] = useState<Locale>("ru");
+  const [locale, setLocale] = useState<Locale>("en");
   const t = content[locale];
 
   useEffect(() => {
