@@ -7,113 +7,155 @@ const GREEN_06 = "rgba(8, 208, 112, 0.06)";
 const GREEN_20 = "rgba(8, 208, 112, 0.20)";
 const GREEN_13 = "rgba(8, 208, 112, 0.13)";
 const GREEN_90 = "rgba(8, 208, 112, 0.90)";
+const RED_10 = "rgba(255, 80, 80, 0.10)";
+const RED_30 = "rgba(255, 80, 80, 0.30)";
 
 const content = {
   ru: {
-    pageTitle: "AI-обработка заказов с интеграцией 1С — Кейс | AIHUB Works",
+    pageTitle: "Умный конвейер закупок — Кейс | AIHUB Works",
     backToCases: "Назад к кейсам",
     brand: "AIHUB Works",
     languageLabel: "Язык",
     caseStudy: "Кейс",
-    heroTitle: "AI-система обработки заказов с интеграцией в 1С",
-    heroLead:
-      "Автоматизируем обработку входящих заказов, чтобы finance и ops-команды работали быстрее, точнее и с полным audit trail, без изменений в формате документов со стороны партнеров.",
-    heroBody:
-      "Система сама распознает входящий документ, сверяет позиции, проводит тендер по списку доверенных поставщиков и подставляет в итоговое коммерческое предложение наиболее выгодный вариант.",
-    tags: ["Опт и дистрибуция", "Обработка заказов", "Автоматизация 1С"],
+    heroTitle: "Умный конвейер закупок: от хаоса прайсов к готовому заказу за 10 минут",
+    heroLead: "Помогаем закупкам и продажам быстрее обрабатывать сложные заказы с большим количеством SKU, меньше ошибаться в номенклатуре и не терять клиентов из-за ручной рутины.",
+    heroBody: "NDA — крупный импортёр ветеринарных препаратов. 500+ позиций в каждом заказе. 20+ поставщиков из Китая, Европы и России. До внедрения: 10 000+ строк сравнений вручную каждый раз.",
+    tags: ["Опт и дистрибуция", "Ветеринарные препараты", "Автоматизация закупок"],
     kpis: [
-      { value: "1 день → 10 мин", label: "От заказа клиента до КП" },
-      { value: "15-40 сек", label: "Обработка одного документа" },
-      { value: "98%", label: "Точность OCR на сканах" },
+      { value: "×3", label: "Рост пропускной способности отдела" },
+      { value: "10 мин", label: "Цикл обработки заказа (было: весь день)" },
+      { value: "98%", label: "Точность распознавания на сканах" },
       { value: "70 дней", label: "Срок внедрения" },
     ],
     challengeTitle: "Проблема",
+    challengeCallout: "500+ позиций × 20+ поставщиков из трёх стран = 10 000+ строк сравнений каждый раз вручную",
     challenge: [
-      "Заказы поступали в разных форматах: сканы PDF, Excel-таблицы, Word-документы. Единого шаблона со стороны клиентов не было.",
-      "Finance и ops-команды вручную разбирали входящие заявки, переносили строки в систему и тратили на это до полного рабочего дня, прежде чем можно было собрать корректное КП.",
-      "Наименования у клиентов часто не совпадали с внутренней номенклатурой и прайсами поставщиков, из-за чего возникали задержки, уточнения и ошибки при подборе позиции.",
-      "По каждой заявке нужно было отдельно сверять цены и наличие у доверенных поставщиков, фактически проводя мини-тендер вручную.",
-      "Не хватало прозрачности: при расхождениях было сложно быстро понять, что именно было в исходном документе, как система интерпретировала строку и почему в КП попала конкретная позиция.",
+      "500+ товарных позиций в каждом заказе нужно было сверить с прайсами 20+ поставщиков — вручную, по-позиционно, каждый раз заново.",
+      "Поставщики из Китая, Европы и России присылали прайсы на разных языках в несовместимых форматах: PDF-сканы, Excel, Word, email-вложения.",
+      "Одна позиция встречалась под разными названиями: «Амоксициллин 10%» у одного поставщика — это «Amoxicillin sol. 100mg/ml» у другого. Сверить без ручной проверки невозможно.",
+      "Байер открывал 20+ прайсов параллельно и строил сводную таблицу сравнения вручную по каждому заказу. Один заказ — весь рабочий день.",
     ],
-    builtTitle: "Что мы внедрили",
-    built: [
-      "Универсальный прием документов через email, Telegram-бота или веб-форму с поддержкой PDF, XLSX, XLS и DOCX, автоматическим определением формата и передачей в нужный сценарий обработки.",
-      "OCR-модуль на Azure Document Intelligence для распознавания сканов, рукописных пометок, печатей и таблиц с точностью до 98%.",
-      "LLM-слой извлечения данных, который достает из неструктурированного текста наименование, артикул, количество, единицу измерения и другие параметры позиции, даже если в документе есть сокращения, опечатки и нестандартные обозначения.",
-      "Семантическое сопоставление на базе векторных эмбеддингов, которое связывает клиентские формулировки с внутренней номенклатурой и каталогами поставщиков, даже если отличаются названия, бренды или единицы измерения.",
-      "Автоматический тендер по списку доверенных поставщиков: система сравнивает подходящие позиции, цены, наличие и другие заданные условия, а затем выбирает наиболее выгодный вариант для включения в КП.",
-      "Скоринг уверенности и полный audit trail по каждой строке: видно исходный фрагмент документа, результат распознавания, логику сопоставления, варианты поставщиков и причину выбора итоговой позиции.",
-      "Автоматическое формирование коммерческого предложения в фирменном шаблоне компании с уже подставленными лучшими позициями, ценами и сроками.",
-      "Прямая загрузка подтвержденных заказов и связанных данных в 1С через odata REST API без ручного ввода.",
+    processTitle: "Как это работает",
+    processSubtitle: "От входящего документа до заказа в 1С — автоматически",
+    process: [
+      { icon: "📨", title: "Входящий документ", sub: "PDF / Excel / скан через Telegram или Email" },
+      { icon: "👁️", title: "Распознавание", sub: "Текст и структура через OCR + Document AI" },
+      { icon: "🧠", title: "Сопоставление", sub: "Привязка к номенклатуре через LLM" },
+      { icon: "⚖️", title: "Авто-тендер", sub: "20+ поставщиков одновременно" },
+      { icon: "🔍", title: "Проверка", sub: "Спорные позиции с Audit Trail" },
+      { icon: "✅", title: "Выгрузка в 1С", sub: "Один клик через REST API" },
     ],
-    resultsTitle: "Результат",
-    results: [
-      "Цикл от получения заказа клиента до готового коммерческого предложения сократился с одного дня до 10 минут.",
-      "Один документ теперь проходит полный цикл за 15-40 секунд вне зависимости от формата и сложности.",
-      "Finance и ops-команды перестали тратить время на ручной разбор, сверку и перенос строк между документами, прайсами и 1С.",
-      "Спорные позиции не теряются в процессе: система выносит их на проверку с полным контекстом, а не пропускает молча.",
-      "По каждой позиции сохраняется прозрачная история обработки, поэтому решение можно быстро проверить и объяснить внутри команды или партнеру.",
+    layersTitle: "6 слоёв автоматизации вместо ручного труда",
+    layers: [
+      { tag: "СЛОЙ 1", title: "OCR + Document AI", body: "«Видит» любой документ: скан, PDF, таблицу. Распознаёт текст и структуру даже при плохом качестве скана.", alt: "↪ Tesseract, PaddleOCR, Yandex Vision" },
+      { tag: "СЛОЙ 2", title: "LLM — языковая модель", body: "Понимает смысл: «Амоксициллин 10%» и «Amoxicillin sol.» — одна позиция. Работает с опечатками и сокращениями.", alt: "↪ GigaChat (Сбер), YandexGPT, LLaMA" },
+      { tag: "СЛОЙ 3", title: "Авто-тендерный движок", body: "По каждой позиции опрашивает всех 20+ поставщиков одновременно, сравнивает цены и сроки, выбирает оптимальный вариант.", alt: "↪ Python, собственная логика ранжирования" },
+      { tag: "СЛОЙ 4", title: "Audit Trail", body: "Каждое решение ИИ задокументировано: откуда взяли позицию, почему выбрали поставщика, что было альтернативой.", alt: "↪ Собственная БД логов, интеграция с ERP" },
+      { tag: "СЛОЙ 5", title: "REST API → 1С", body: "Подтверждённые заказы выгружаются в 1С в один клик — никакого ручного ввода данных.", alt: "↪ SAP, Bitrix, любая система с API" },
+      { tag: "СЛОЙ 6", title: "Telegram-бот + Email", body: "Менеджер пересылает документ в Telegram или на почту. Никаких новых интерфейсов — работа там, где привыкли.", alt: "↪ WhatsApp, веб-форма, корп. портал" },
+    ],
+    screenshotsTitle: "Система в работе",
+    screenshots: [
+      { file: "screenshot-2.png", figNum: "Рис. 2", caption: "Система нашла позицию в 1С по CAS-номеру и автоматически подобрала донора из каталога поставщиков" },
+      { file: "screenshot-3.png", figNum: "Рис. 3", caption: "CAS в документе отсутствует: система самостоятельно обогатила данные через GPT и только после этого выполнила запрос в 1С и к поставщикам" },
+    ],
+    beforeAfterTitle: "Бизнес-результат",
+    beforeAfterSubtitle: "Тот же отдел. В три раза больше заказов.",
+    beforeTitle: "До автоматизации",
+    afterTitle: "После внедрения",
+    beforeItems: [
+      "1 заказ (500+ позиций) — весь рабочий день",
+      "Ручная сверка 20+ прайсов из трёх стран",
+      "Ошибки из-за усталости и человеческого фактора",
+      "Объём ограничен пропускной способностью команды",
+    ],
+    afterItems: [
+      "1 заказ — 10 минут, точность 98%",
+      "Авто-тендер по всем поставщикам одновременно",
+      "Каждое решение задокументировано и прозрачно",
+      "Тот же отдел обрабатывает в ×3 больше заказов",
     ],
     featuresTitle: "Ключевые функции",
     features: [
-      "Прием документов в разных форматах",
+      "Приём документов в любом формате",
       "98% OCR на сканах и рукописных пометках",
       "LLM-извлечение товарных позиций",
       "Семантическое сопоставление с номенклатурой",
-      "Автотендер по доверенным поставщикам",
-      "Скоринг уверенности и audit trail",
+      "Авто-тендер по 20+ поставщикам",
+      "Скоринг уверенности и Audit Trail",
       "Автогенерация коммерческих предложений",
-      "Прямая загрузка в 1С по REST API",
+      "Прямая выгрузка в 1С по REST API",
       "Полный журнал обработки",
     ],
     technology: "Технологии",
-    technologyValue:
-      "Python · Azure Document Intelligence · OpenAI API · 1С odata REST API · векторная база данных",
+    technologyValue: "Python · Azure Document Intelligence · OpenAI API · 1С odata REST API · векторная база данных",
+    techNote: "У каждого компонента есть российский или open-source аналог — система не зависит от западных облаков.",
     timeline: "Срок",
     timelineValue: "70 рабочих дней",
   },
   en: {
-    pageTitle: "AI Order Processing with 1C Integration — Case Study | AIHUB Works",
+    pageTitle: "Smart Procurement Pipeline — Case Study | AIHUB Works",
     backToCases: "Back to cases",
     brand: "AIHUB Works",
     languageLabel: "Language",
     caseStudy: "Case Study",
-    heroTitle: "AI order processing system with 1C integration",
-    heroLead:
-      "3–4 hours of manual data entry per day, down to 20 minutes — without changing how suppliers send orders.",
-    heroBody:
-      "Intelligent document intake, line-item extraction, and automated ERP sync for a wholesale distributor",
-    tags: ["Wholesale / Distribution", "Document intelligence", "ERP automation"],
+    heroTitle: "Smart procurement pipeline: from price-list chaos to a ready order in 10 minutes",
+    heroLead: "We help procurement and sales teams handle complex high-SKU orders faster, reduce nomenclature errors, and stop losing clients to manual routine.",
+    heroBody: "NDA — a major veterinary drug importer. 500+ line items per order. 20+ suppliers across China, Europe, and Russia. Before automation: 10,000+ manual comparison rows every single time.",
+    tags: ["Wholesale / Distribution", "Veterinary drugs", "Procurement automation"],
     kpis: [
-      { value: "3–4 hrs → 20 min", label: "Daily order processing time" },
-      { value: "15–40 sec", label: "Per-document processing time" },
+      { value: "×3", label: "Department throughput increase" },
+      { value: "10 min", label: "Order processing cycle (was: full day)" },
       { value: "98%", label: "OCR accuracy on scanned docs" },
-      { value: "70 days", label: "Implementation time" },
+      { value: "70 days", label: "Implementation timeline" },
     ],
     challengeTitle: "The challenge",
+    challengeCallout: "500+ items × 20+ suppliers from 3 countries = 10,000+ comparison rows every time — manually",
     challenge: [
-      "Incoming purchase orders arrived in incompatible formats — scanned PDFs, Excel tables, Word documents — with no consistent structure across buyers",
-      "Managers manually re-keyed every line item into 1C, spending 3–4 hours per day on a task that added no value and introduced regular errors in SKUs and quantities",
-      "Product names used by buyers rarely matched internal catalogue terminology, causing delays, back-and-forth clarifications, and occasional shipment conflicts",
-      "No audit trail: when errors occurred, there was no record of what the original document said versus what was entered",
-      "Handwritten annotations, stamps, and non-standard abbreviations were processed inconsistently or missed entirely",
+      "500+ line items per order had to be cross-checked against 20+ supplier price lists — manually, line by line, every time.",
+      "Suppliers from China, Europe, and Russia sent price lists in different languages and incompatible formats: scanned PDFs, Excel files, Word documents, email attachments.",
+      "The same product appeared under different names across suppliers: 'Amoxicillin 10%' from one is 'Amoxicillin sol. 100mg/ml' from another. Matching them required manual verification every time.",
+      "A buyer would open 20+ price lists simultaneously and build a comparison table from scratch for every order. One order = one full working day.",
     ],
-    builtTitle: "What we built",
-    built: [
-      "Universal document intake via email, Telegram bot, or web form — supporting PDF, XLSX, XLS, and DOCX with automatic format detection and routing to the correct parser",
-      "OCR module (Azure Document Intelligence) handling scanned documents, handwritten annotations, stamps, and printed tables at 98% accuracy",
-      "LLM extraction layer that pulls product name, SKU, quantity, unit of measure, and price from unstructured text — including abbreviations, typos, and non-standard notation",
-      "Semantic matching engine using vector embeddings to map buyer terminology to internal catalogue entries — finds the right product even when names, brands, or units differ",
-      "Confidence scoring on every line item: low-confidence matches are flagged for manager review with full context — what the system read, what it matched, and why it's uncertain",
-      "Automated quote generation in the company's branded template with live prices, stock levels, and lead times",
-      "Direct 1C sync via odata REST API — confirmed orders written to the ERP with zero manual input",
+    processTitle: "How it works",
+    processSubtitle: "From incoming document to 1C order — automatically",
+    process: [
+      { icon: "📨", title: "Incoming document", sub: "PDF / Excel / scan via Telegram or Email" },
+      { icon: "👁️", title: "Recognition", sub: "Text and structure via OCR + Document AI" },
+      { icon: "🧠", title: "Matching", sub: "Catalogue binding via LLM" },
+      { icon: "⚖️", title: "Auto-tender", sub: "20+ suppliers simultaneously" },
+      { icon: "🔍", title: "Review", sub: "Disputed items with Audit Trail" },
+      { icon: "✅", title: "Export to 1C", sub: "One click via REST API" },
     ],
-    resultsTitle: "Results",
-    results: [
-      "Order processing time cut from 3–4 hours to 20 minutes per day across the full incoming volume",
-      "Each document processed in 15–40 seconds end-to-end, regardless of format or complexity",
-      "Manual re-keying errors eliminated — SKU mismatches and quantity errors no longer reach 1C",
-      "Fallback logic ensures nothing is silently wrong: unresolved items surface as tasks with context, not as gaps in the system",
+    layersTitle: "6 automation layers replacing manual labour",
+    layers: [
+      { tag: "LAYER 1", title: "OCR + Document AI", body: "Reads any document — scan, PDF, table. Recognizes text and structure even with low-quality scans.", alt: "↪ Tesseract, PaddleOCR, Yandex Vision" },
+      { tag: "LAYER 2", title: "LLM understanding", body: "Understands meaning — 'Amoxicillin 10%' and 'Amoxicillin sol.' are the same item. Handles typos and abbreviations.", alt: "↪ GigaChat (Sber), YandexGPT, LLaMA" },
+      { tag: "LAYER 3", title: "Auto-tender engine", body: "Queries all 20+ suppliers simultaneously for each item, compares prices and lead times, selects the optimal option.", alt: "↪ Python, custom ranking logic" },
+      { tag: "LAYER 4", title: "Audit Trail", body: "Every AI decision is documented: source of the line item, why a supplier was chosen, what the alternatives were.", alt: "↪ Custom log DB, ERP integration" },
+      { tag: "LAYER 5", title: "REST API → 1C", body: "Confirmed orders exported to 1C in one click — no manual data entry. Works with SAP, Bitrix, or any API-enabled ERP.", alt: "↪ SAP, Bitrix, any API-enabled system" },
+      { tag: "LAYER 6", title: "Telegram + Email intake", body: "Manager forwards the document via Telegram or email. No new interfaces — work where you're used to.", alt: "↪ WhatsApp, web form, corporate portal" },
+    ],
+    screenshotsTitle: "System in action",
+    screenshots: [
+      { file: "screenshot-2.png", figNum: "Fig. 2", caption: "System found the item in 1C by CAS number and automatically matched a donor from the supplier catalogue" },
+      { file: "screenshot-3.png", figNum: "Fig. 3", caption: "CAS not found in document: system independently enriched data via GPT, then queried 1C and suppliers" },
+    ],
+    beforeAfterTitle: "Business results",
+    beforeAfterSubtitle: "Same team. Three times more orders.",
+    beforeTitle: "Before",
+    afterTitle: "After",
+    beforeItems: [
+      "1 order (500+ items) = full working day",
+      "Manual cross-check of 20+ price lists from 3 countries",
+      "Errors from fatigue and human factor",
+      "Volume capped by team capacity",
+    ],
+    afterItems: [
+      "1 order = 10 minutes, 98% accuracy",
+      "Auto-tender across all suppliers simultaneously",
+      "Every decision documented and transparent",
+      "Same team handles 3× more orders",
     ],
     featuresTitle: "Key features",
     features: [
@@ -121,14 +163,15 @@ const content = {
       "98% OCR on scans and handwriting",
       "LLM line-item extraction",
       "Semantic catalogue matching",
-      "Confidence scoring and flagging",
+      "Auto-tender across 20+ suppliers",
+      "Confidence scoring and Audit Trail",
       "Automated quote generation",
       "Direct 1C sync via REST API",
       "Full processing audit log",
     ],
     technology: "Technology",
-    technologyValue:
-      "Python · Azure Document Intelligence · OpenAI API · 1C odata REST API · vector database",
+    technologyValue: "Python · Azure Document Intelligence · OpenAI API · 1C odata REST API · vector database",
+    techNote: "Every component has a Russian or open-source alternative — the system is independent of Western cloud vendors.",
     timeline: "Timeline",
     timelineValue: "70 working days",
   },
@@ -207,7 +250,7 @@ function Section({ title, children, delay = 0 }: SectionProps) {
       <div
         className="absolute inset-0 p-px rounded-[24px] pointer-events-none"
         style={{
-          background: `linear-gradient(129deg, ${GREEN} 0%, transparent 70%)`,
+          background: `linear-gradient(129deg, ${GREEN_80} 0%, transparent 70%)`,
           WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
           WebkitMaskComposite: "xor",
           maskComposite: "exclude",
@@ -252,16 +295,224 @@ function Tag({ children }: { children: React.ReactNode }) {
   );
 }
 
+interface LayerCardProps { tag: string; title: string; body: string; alt: string; delay?: number; }
+
+function LayerCard({ tag, title, body, alt, delay = 0 }: LayerCardProps) {
+  const { ref, visible } = useReveal();
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-[16px] p-5 bg-[#060c2499] backdrop-blur-[10px] flex flex-col gap-2"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(20px)",
+        transition: `opacity 0.6s cubic-bezier(.22,1,.36,1) ${delay}ms, transform 0.6s cubic-bezier(.22,1,.36,1) ${delay}ms`,
+        border: `1px solid ${GREEN_13}`,
+        boxShadow: `inset 0 0 30px ${GREEN_06}`,
+      }}
+    >
+      <span
+        className="self-start px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-widest [font-family:'Geologica',Helvetica]"
+        style={{ background: GREEN_08, color: GREEN, border: `1px solid ${GREEN_20}` }}
+      >
+        {tag}
+      </span>
+      <h3 className="[font-family:'Geologica',Helvetica] font-semibold text-white text-sm sm:text-base">
+        {title}
+      </h3>
+      <p className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-sm leading-relaxed flex-1">
+        {body}
+      </p>
+      <p className="[font-family:'Geologica',Helvetica] font-light text-white/30 text-xs mt-1">
+        {alt}
+      </p>
+    </div>
+  );
+}
+
+interface ProcessFlowProps {
+  title: string;
+  subtitle: string;
+  steps: readonly { readonly icon: string; readonly title: string; readonly sub: string }[];
+}
+
+function ProcessFlow({ title, subtitle, steps }: ProcessFlowProps) {
+  const { ref, visible } = useReveal();
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-[24px] bg-[#060c2499] backdrop-blur-[10px] p-6 sm:p-8"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(28px)",
+        transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
+        boxShadow: `inset 0 0 40px ${GREEN_06}`,
+      }}
+    >
+      <div
+        className="absolute inset-0 p-px rounded-[24px] pointer-events-none"
+        style={{
+          background: `linear-gradient(129deg, ${GREEN_80} 0%, transparent 70%)`,
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+      <h2 className="[font-family:'Geologica',Helvetica] font-semibold text-white text-xl sm:text-2xl mb-1">
+        {title}
+      </h2>
+      <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm mb-6">
+        {subtitle}
+      </p>
+      <div className="flex flex-col sm:flex-row items-start sm:items-start gap-4 sm:gap-0 overflow-x-auto pb-1">
+        {steps.map((step, i) => (
+          <div key={step.title} className="flex sm:flex-1 items-center sm:items-start gap-3 sm:gap-0 w-full sm:w-auto">
+            <div className="flex flex-row sm:flex-col items-center sm:items-center gap-3 sm:gap-2 sm:w-full sm:text-center">
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
+                style={{ background: GREEN_08, border: `1px solid ${GREEN_20}` }}
+              >
+                {step.icon}
+              </div>
+              <div className="flex flex-col sm:items-center gap-0.5">
+                <span className="[font-family:'Geologica',Helvetica] font-medium text-white text-xs sm:text-[11px] leading-snug sm:text-center">
+                  {step.title}
+                </span>
+                <span className="[font-family:'Geologica',Helvetica] font-light text-white/35 text-[10px] leading-snug sm:text-center">
+                  {step.sub}
+                </span>
+              </div>
+            </div>
+            {i < steps.length - 1 && (
+              <svg
+                className="shrink-0 hidden sm:block mx-1 mt-3"
+                style={{ color: GREEN_20 }}
+                width="14" height="14" viewBox="0 0 14 14" fill="none"
+              >
+                <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface ScreenshotCardProps { src: string; caption: string; figNum: string; delay?: number; }
+
+function ScreenshotCard({ src, caption, figNum, delay = 0 }: ScreenshotCardProps) {
+  const { ref, visible } = useReveal();
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-[20px] overflow-hidden"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(24px)",
+        transition: `opacity 0.7s cubic-bezier(.22,1,.36,1) ${delay}ms, transform 0.7s cubic-bezier(.22,1,.36,1) ${delay}ms`,
+        border: `1px solid ${GREEN_13}`,
+      }}
+    >
+      <div className="w-full bg-[#0a1020] overflow-hidden">
+        <img src={src} alt={caption} className="w-full h-auto block" style={{ maxHeight: "420px", objectFit: "cover", objectPosition: "top" }} />
+      </div>
+      <div className="px-5 py-4 bg-[#060c24e6]" style={{ borderTop: `1px solid ${GREEN_13}` }}>
+        <span
+          className="[font-family:'Geologica',Helvetica] font-medium text-[11px] uppercase tracking-widest mr-3"
+          style={{ color: GREEN }}
+        >
+          {figNum}
+        </span>
+        <span className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-sm leading-relaxed">
+          {caption}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+interface BeforeAfterProps {
+  title: string;
+  subtitle: string;
+  beforeTitle: string;
+  afterTitle: string;
+  beforeItems: readonly string[];
+  afterItems: readonly string[];
+}
+
+function BeforeAfter({ title, subtitle, beforeTitle, afterTitle, beforeItems, afterItems }: BeforeAfterProps) {
+  const { ref, visible } = useReveal();
+  return (
+    <div
+      ref={ref}
+      className="relative rounded-[24px] bg-[#060c2499] backdrop-blur-[10px] p-6 sm:p-8"
+      style={{
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(28px)",
+        transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
+        boxShadow: `inset 0 0 40px ${GREEN_06}`,
+      }}
+    >
+      <div
+        className="absolute inset-0 p-px rounded-[24px] pointer-events-none"
+        style={{
+          background: `linear-gradient(129deg, ${GREEN_80} 0%, transparent 70%)`,
+          WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+        }}
+      />
+      <h2 className="[font-family:'Geologica',Helvetica] font-semibold text-white text-xl sm:text-2xl mb-1">
+        {title}
+      </h2>
+      <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm mb-6">
+        {subtitle}
+      </p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="rounded-[16px] p-5" style={{ background: RED_10, border: `1px solid ${RED_30}` }}>
+          <p className="[font-family:'Geologica',Helvetica] font-medium text-sm uppercase tracking-widest mb-4" style={{ color: "rgba(255,80,80,0.85)" }}>
+            {beforeTitle}
+          </p>
+          <ul className="space-y-3">
+            {beforeItems.map((item) => (
+              <li key={item} className="flex items-start gap-3 [font-family:'Geologica',Helvetica] font-light text-white/70 text-sm leading-relaxed">
+                <span className="mt-[3px] shrink-0 text-[13px]" style={{ color: "rgba(255,80,80,0.7)" }}>✗</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="rounded-[16px] p-5" style={{ background: GREEN_08, border: `1px solid ${GREEN_20}` }}>
+          <p className="[font-family:'Geologica',Helvetica] font-medium text-sm uppercase tracking-widest mb-4" style={{ color: GREEN }}>
+            {afterTitle}
+          </p>
+          <ul className="space-y-3">
+            {afterItems.map((item) => (
+              <li key={item} className="flex items-start gap-3 [font-family:'Geologica',Helvetica] font-light text-white/70 text-sm leading-relaxed">
+                <span className="mt-[3px] shrink-0 text-[13px]" style={{ color: GREEN }}>✓</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function OrderProcessing1CPage() {
   const base = import.meta.env.BASE_URL;
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroVisible, setHeroVisible] = useState(false);
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = useState<Locale>("ru");
   const t = content[locale];
+
   useEffect(() => {
-    const t = setTimeout(() => setHeroVisible(true), 80);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setHeroVisible(true), 80);
+    return () => clearTimeout(timer);
   }, []);
+
   useEffect(() => {
     document.title = t.pageTitle;
     document.documentElement.lang = locale;
@@ -273,17 +524,17 @@ export function OrderProcessing1CPage() {
       <nav className="sticky top-0 z-50 bg-[#060c24cc] backdrop-blur-[12px] border-b border-white/5">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 min-h-14 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0">
-          <a
-            href={`${base}#cases`}
-            className="flex items-center gap-2 [font-family:'Geologica',Helvetica] font-light text-white/60 hover:text-white text-sm transition-colors duration-200"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            {t.backToCases}
-          </a>
-          <span className="text-white/20">·</span>
-          <span className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm">{t.brand}</span>
+            <a
+              href={`${base}#cases`}
+              className="flex items-center gap-2 [font-family:'Geologica',Helvetica] font-light text-white/60 hover:text-white text-sm transition-colors duration-200"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              {t.backToCases}
+            </a>
+            <span className="text-white/20">·</span>
+            <span className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm">{t.brand}</span>
           </div>
           <div
             className="flex items-center gap-1.5 rounded-full px-1.5 py-1 bg-white/[0.04] shrink-0"
@@ -328,17 +579,17 @@ export function OrderProcessing1CPage() {
           </p>
           <h1
             className="[font-family:'Geologica',Helvetica] font-bold text-white leading-tight mb-3"
-            style={{ fontSize: "clamp(26px,5vw,52px)" }}
+            style={{ fontSize: "clamp(24px,4.5vw,50px)" }}
           >
             {t.heroTitle}
           </h1>
           <p
-            className="[font-family:'Geologica',Helvetica] font-semibold mb-2 max-w-[680px]"
+            className="[font-family:'Geologica',Helvetica] font-semibold mb-2 max-w-[720px]"
             style={{ fontSize: "clamp(15px,2vw,18px)", color: GREEN_90 }}
           >
             {t.heroLead}
           </p>
-          <p className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-base sm:text-lg leading-relaxed mb-6 max-w-[680px]">
+          <p className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-base sm:text-lg leading-relaxed mb-6 max-w-[720px]">
             {t.heroBody}
           </p>
           <div className="flex flex-wrap gap-2">
@@ -355,8 +606,14 @@ export function OrderProcessing1CPage() {
           ))}
         </div>
 
-        {/* The Challenge */}
-        <Section title={t.challengeTitle} delay={0}>
+        {/* Challenge */}
+        <Section title={t.challengeTitle}>
+          <div
+            className="rounded-[14px] px-5 py-4 mb-5 [font-family:'Geologica',Helvetica] font-semibold text-sm sm:text-base leading-snug text-center"
+            style={{ background: GREEN_08, border: `1px solid ${GREEN_20}`, color: GREEN_90 }}
+          >
+            {t.challengeCallout}
+          </div>
           <ul className="space-y-3">
             {t.challenge.map((item) => (
               <BulletItem key={item}>{item}</BulletItem>
@@ -364,26 +621,56 @@ export function OrderProcessing1CPage() {
           </ul>
         </Section>
 
-        {/* What we built */}
-        <Section title={t.builtTitle} delay={60}>
-          <ul className="space-y-3">
-            {t.built.map((item) => (
-              <BulletItem key={item}>{item}</BulletItem>
+        {/* Process flow */}
+        <ProcessFlow
+          title={t.processTitle}
+          subtitle={t.processSubtitle}
+          steps={t.process}
+        />
+
+        {/* 6 Layers */}
+        <Section title={t.layersTitle}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {t.layers.map((layer, i) => (
+              <LayerCard
+                key={layer.tag}
+                tag={layer.tag}
+                title={layer.title}
+                body={layer.body}
+                alt={layer.alt}
+                delay={i * 50}
+              />
             ))}
-          </ul>
+          </div>
         </Section>
 
-        {/* Results */}
-        <Section title={t.resultsTitle} delay={120}>
-          <ul className="space-y-3">
-            {t.results.map((item) => (
-              <BulletItem key={item}>{item}</BulletItem>
+        {/* Screenshots */}
+        <Section title={t.screenshotsTitle}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {t.screenshots.map((s, i) => (
+              <ScreenshotCard
+                key={s.file}
+                src={`${base}cases/1c/${s.file}`}
+                figNum={s.figNum}
+                caption={s.caption}
+                delay={i * 100}
+              />
             ))}
-          </ul>
+          </div>
         </Section>
+
+        {/* Before / After */}
+        <BeforeAfter
+          title={t.beforeAfterTitle}
+          subtitle={t.beforeAfterSubtitle}
+          beforeTitle={t.beforeTitle}
+          afterTitle={t.afterTitle}
+          beforeItems={t.beforeItems}
+          afterItems={t.afterItems}
+        />
 
         {/* Key features */}
-        <Section title={t.featuresTitle} delay={180}>
+        <Section title={t.featuresTitle}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
             {t.features.map((item) => (
               <FeaturePill key={item}>{item}</FeaturePill>
@@ -392,11 +679,17 @@ export function OrderProcessing1CPage() {
         </Section>
 
         {/* Tech & Timeline */}
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 pt-2 pb-8" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-          <div>
+        <div
+          className="flex flex-col sm:flex-row gap-4 sm:gap-8 pt-4 pb-8"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
+        >
+          <div className="flex-1">
             <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-xs uppercase tracking-widest mb-1.5">{t.technology}</p>
-            <p className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-sm leading-relaxed">
+            <p className="[font-family:'Geologica',Helvetica] font-light text-white/60 text-sm leading-relaxed mb-2">
               {t.technologyValue}
+            </p>
+            <p className="[font-family:'Geologica',Helvetica] font-light text-white/30 text-xs leading-relaxed">
+              {t.techNote}
             </p>
           </div>
           <div className="sm:border-l sm:border-white/10 sm:pl-8 shrink-0">
