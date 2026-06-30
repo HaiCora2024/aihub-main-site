@@ -163,7 +163,7 @@ export const Home = (): JSX.Element => {
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-tqp2-hy text-lg sm:text-xl tracking-[0] leading-[1.2] break-words",
       role: "Co-Founder AIHUB.WORKS",
       name: "Alexandr Kolyadko",
-      description: "Business Development  | Growth hacking",
+      description: "Product BA | Growth Tech & Agentic Commerce Advisory Senior Manager",
     },
   ];
 
