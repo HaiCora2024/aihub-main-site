@@ -60,15 +60,15 @@ export const Home = (): JSX.Element => {
       imageOverlayClass:
         "opacity-60 absolute top-0 left-0 w-[134px] h-[134px]",
       useImgTag: true,
-      imgSrc: `${import.meta.env.BASE_URL}Danil_Usik.png`,
-      imgAlt: "Danil Usik",
-      imgClass: "absolute top-0 left-0 h-[134px] w-[134px]",
+      imgSrc: `${import.meta.env.BASE_URL}Elvira.jpeg`,
+      imgAlt: "Elvira Anikina",
+      imgClass: "absolute top-0 left-0 h-[134px] w-[134px] object-cover",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-1k-2dej text-xl tracking-[0] leading-[24.0px]",
-      role: "AI Solutions Business Lead",
-      name: "Danil Usik",
+      role: "AI Solutions Business Analyst",
+      name: "Elvira Anikina",
       description:
-        "Custom AI for Sales & Ops | B2B Business Automation | Turning Business Challenges into AI That Works",
+        "Able to find high-impact AI opportunities and transform business requirements into practical AI assistants and automation solutions | Turning Business Challenges into AI That Works",
     },
     {
       id: 3,
