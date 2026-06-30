@@ -89,10 +89,10 @@ export const Home = (): JSX.Element => {
       imgClass: "absolute top-0 left-0 h-[134px] w-[134px]",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-bkb-va5 text-xl tracking-[0] leading-[24.0px]",
-      role: "AI integration",
+      role: "AI solution architect",
       name: "Vladimir Krupiy",
       description:
-        "LLM Specialist | Neural Training Systems Developer for Banks | Online Course Creator",
+        "Neural Training Systems Developer for Banks | Online Course Creator | Enterprise AI Strategy & Implementation | LLM Specialist",
     },
     {
       id: 4,
@@ -140,7 +140,7 @@ export const Home = (): JSX.Element => {
       role: "Co-Founder AIHUB.WORKS",
       name: "Svetlana Galakhova",
       description:
-        "AI Transformation Lead | 50+ Projects Delivered | Voice Agents · Multi-Agent Systems · End-to-End Automation | Middleware Architect",
+        "AI Strategy & Process Transformation Lead | 100+ Projects Delivered | Voice Agents · Multi-Agent Systems · End-to-End Automation | Middleware Architect",
     },
     {
       id: 6,
