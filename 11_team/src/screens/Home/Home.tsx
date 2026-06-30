@@ -62,7 +62,7 @@ export const Home = (): JSX.Element => {
       useImgTag: true,
       imgSrc: `${import.meta.env.BASE_URL}Elvira.jpeg`,
       imgAlt: "Elvira Anikina",
-      imgClass: "absolute top-0 left-0 h-[134px] w-[134px] object-cover",
+      imgClass: "absolute top-0 left-0 h-[134px] w-[134px] object-cover scale-[1.5] origin-top",
       roleClass:
         "relative self-stretch mt-[-1.00px] [font-family:'Geologica',Helvetica] font-medium text-x-1k-2dej text-xl tracking-[0] leading-[24.0px]",
       role: "AI Solutions Business Analyst",
