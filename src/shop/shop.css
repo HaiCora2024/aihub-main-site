@@ -27,6 +27,7 @@ body.shop-body {
 }
 .shop-cart-trigger {
   display: flex;
+  flex: none;
   gap: 12px;
   align-items: center;
   min-height: 48px;
@@ -35,6 +36,7 @@ body.shop-body {
   border-radius: var(--aihub-radius-pill);
   background: #08d0700a;
   cursor: pointer;
+  white-space: nowrap;
   font-size: 14px !important;
   transition:
     transform var(--aihub-duration-action) var(--aihub-ease),
@@ -43,6 +45,22 @@ body.shop-body {
 .shop-cart-trigger:hover {
   transform: translateY(-2px) scale(1.035);
   box-shadow: var(--aihub-shadow-glow-hover);
+}
+.shop-cart-anchor {
+  display: flex;
+  flex: none;
+  min-height: 48px;
+  margin-bottom: 32px;
+}
+.shop-cart-trigger--pinned {
+  position: fixed;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(16px, env(safe-area-inset-right), calc((100vw - 1140px) / 2));
+  z-index: 20;
+  width: max-content;
+  background: #0b1d2b;
+  border-color: #08d070;
+  box-shadow: 0 8px 32px #0008;
 }
 .shop-cart-count {
   min-width: 30px;
@@ -137,6 +155,7 @@ body.shop-body {
   margin-top: 0;
   padding-top: 24px;
   scroll-margin-top: 24px;
+  z-index: 20;
 }
 .shop-catalog-heading {
   display: flex;
@@ -776,10 +795,6 @@ body.shop-body {
   clip-path: inset(50%);
   white-space: nowrap;
 }
-.shop-catalog-heading .shop-cart-trigger {
-  flex: none;
-  margin-bottom: 32px;
-}
 @media (max-width: 639px) {
   .shop-catalog-heading {
     flex-wrap: wrap;
@@ -790,7 +805,7 @@ body.shop-body {
     width: 100%;
     margin-bottom: 16px;
   }
-  .shop-catalog-heading .shop-cart-trigger {
+  .shop-cart-anchor {
     margin-bottom: 0;
   }
 }

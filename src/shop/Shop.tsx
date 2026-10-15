@@ -62,6 +62,8 @@ export default function Shop() {
   const deferredQuery = useDeferredValue(query.trim().toLocaleLowerCase());
   const [dialog, setDialog] = useState<"cart" | null>(null);
   const [announcement, setAnnouncement] = useState("");
+  const [cartPinned, setCartPinned] = useState(false);
+  const cartAnchor = useRef<HTMLDivElement>(null);
   const cartButton = useRef<HTMLButtonElement>(null);
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
   const total = cartTotal(cart);
@@ -115,6 +117,27 @@ export default function Shop() {
     const timer = window.setTimeout(() => setAnnouncement(""), 2400);
     return () => window.clearTimeout(timer);
   }, [announcement]);
+
+  useEffect(() => {
+    const anchor = cartAnchor.current!;
+    const button = cartButton.current!;
+    // Keep the original slot stable when the same button leaves document flow.
+    const resize = new ResizeObserver(([entry]) => {
+      const size = entry.borderBoxSize[0];
+      anchor.style.inlineSize = `${size.inlineSize}px`;
+      anchor.style.blockSize = `${size.blockSize}px`;
+    });
+    const intersection = new IntersectionObserver(
+      ([entry]) => setCartPinned(entry.boundingClientRect.top < 16),
+      { rootMargin: "-16px 0px 0px 0px", threshold: [0, 1] },
+    );
+    resize.observe(button);
+    intersection.observe(anchor);
+    return () => {
+      resize.disconnect();
+      intersection.disconnect();
+    };
+  }, []);
 
   const resetFilters = () => {
     setQuery("");
@@ -198,18 +221,20 @@ export default function Shop() {
           >
             <div className="shop-catalog-heading">
               <SectionHeading id="catalog-title">{t.catalog}</SectionHeading>
-              <button
-                className="shop-cart-trigger"
-                ref={cartButton}
-                type="button"
-                onClick={() => setDialog("cart")}
-                aria-haspopup="dialog"
-                aria-label={`${t.cart}: ${count}`}
-              >
-                <CartGlyph />
-                <span>{t.cart}</span>
-                <span className="shop-cart-count">{count}</span>
-              </button>
+              <div className="shop-cart-anchor" ref={cartAnchor}>
+                <button
+                  className={`shop-cart-trigger${cartPinned ? " shop-cart-trigger--pinned" : ""}`}
+                  ref={cartButton}
+                  type="button"
+                  onClick={() => setDialog("cart")}
+                  aria-haspopup="dialog"
+                  aria-label={`${t.cart}: ${count}`}
+                >
+                  <CartGlyph />
+                  <span>{t.cart}</span>
+                  <span className="shop-cart-count">{count}</span>
+                </button>
+              </div>
             </div>
             <div className="shop-toolbar">
               <div
