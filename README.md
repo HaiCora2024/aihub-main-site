@@ -15,6 +15,16 @@
 
 Каждый блок по-прежнему хранится в собственной папке, чтобы его было удобно редактировать отдельно, но рендерится он внутри общей страницы.
 
+## Инструкции для агентов
+
+Начинать с [AGENTS.md](AGENTS.md). Дальше выбирать профильное руководство:
+
+- [Новые страницы по дизайн-системе](docs/agent-page-guide.md).
+- [Подключение backend к магазину](docs/shop-backend-guide.md).
+- [Проверка агентских путей и discovery URL](docs/agent-paths-audit.md).
+
+Локальная проверка ссылок: `node scripts/check-agent-paths.mjs`.
+
 ## Дизайн-система и новые страницы
 
 Интерактивный каталог на основе всех 12 блоков лендинга: `/design-system.html`.
@@ -286,11 +296,11 @@ VITE_CONTACT_API_URL=https://<amvera-backend-domain>
 
 Если нужно изменить:
 
-- пункты меню: править массив/ссылки в `Home.tsx`;
-- привязку меню к секциям: сверять `href="#..."` с `id` в `src/App.tsx`;
-- hero-текст и typing-эффект: править `Home.tsx`;
-- стиль hover у меню: править `src/styles.css`, класс `.hero-nav-link`;
-- общий hover CTA: править `src/styles.css`, класс `.glow-button`.
+- пункты общего меню и переходы между страницами: [SiteHeader.tsx](src/components/SiteHeader.tsx);
+- привязку меню к секциям: сверять ссылки с `id` в [src/App.tsx](src/App.tsx);
+- hero-текст: `Home.tsx` и переводы; печатание/курсор: [TypewriterText.tsx](src/components/TypewriterText.tsx);
+- hover меню и кнопка консультации в шапке: [site-header.css](src/components/site-header.css);
+- остальные legacy CTA: `src/styles.css`, класс `.glow-button`; новые CTA: [UI-kit](docs/design-system.md).
 
 ### 02. Instant Business Results / Результаты
 

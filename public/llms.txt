@@ -6,8 +6,13 @@
 
 - [Virtual Employees](https://aihub.works/#services) — Voice and text AI assistants embedded in communication channels (web, Telegram, PMS), working 24/7 to handle customer support, bookings, order processing, and feedback at 3x lower cost
 - [Business Process Automation](https://aihub.works/#services) — Automate data processing, content creation, document filling, and reporting; free employees from routine and speed up work by 5–10x
-- [AI Analytics](https://aihub.works/#analytics) — Structured reports, real-time data recognition, forecasts, and custom analytics from text, numbers, voice, and video
+- [AI Analytics](https://aihub.works/#services) — Structured reports, real-time data recognition, forecasts, and custom analytics from text, numbers, voice, and video
 - [Recommendation Systems](https://aihub.works/#services) — Personalization algorithms and smart product selections that increase average order value by 20–30%
+
+## Catalog & Interface Reference
+
+- [AI Solutions Shop](https://aihub.works/shop.html) — Eight solutions with EN/RU descriptions and a local demo cart. Checkout does not submit orders or process payments.
+- [Design System](https://aihub.works/design-system.html) — Interactive UI-kit, tokens, components and page composition examples. Demonstration forms do not submit leads.
 
 ## Results & Cases
 
