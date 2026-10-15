@@ -48,8 +48,9 @@ npx tsc --noEmit -p tsconfig.design-system.json
 главной через пункт «Shop / Магазин». Перевёрстана из предоставленного HTML
 на UI-kit AIHUB: EN/RU, восемь решений, поиск, категории, локальная корзина
 и отдельный `/checkout.html` для необязывающих заявок без оплаты. API, billing ФЛ/B2B,
-очередь писем и RU/EN-документы реализованы локально; production подключается только
-после отдельного согласования. См. [эксплуатацию магазина](docs/shop-operations.md).
+очередь писем и RU/EN-документы опубликованы на тестовой копии GitHub Pages с backend
+в Amvera. Основной домен не обновлялся; реальная доставка писем не проверялась.
+См. [эксплуатацию и отчёт о выпуске](docs/shop-operations.md).
 
 Руководство: [docs/shop.md](docs/shop.md). Набор объёмных иконок Nano Banana 2.1:
 [docs/shop-icons.md](docs/shop-icons.md), интерактивный раздел `/design-system.html#icons`.

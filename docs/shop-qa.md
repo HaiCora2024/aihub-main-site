@@ -13,6 +13,9 @@
   Проверены значения из seller.json, отсутствие overflow, переход и keyboard focus,
   отсутствие JS ошибок и локальных 404. Скрипт `scripts/company-details-smoke.mjs`,
   локальные отчёт и скриншоты `/tmp/aihub-company-qa/`. Автор открыл реальные PNG.
+  После публикации та же матрица прошла на живом форке: 210/210, 0 JS ошибок/404,
+  `/tmp/aihub-company-live/report.json`. Checkout получил живой каталог 200;
+  форма доступна, условия не отмечены, контрольных POST и писем не было.
 - Checkout повторно: 70/70 в production-сборке с `QA_BASE=/aihub-site/`,
   шесть автоматических WCAG A/AA-проверок без нарушений; отчёт
   `/tmp/aihub-checkout-release/report.json`. Только локальный SMTP sink.
