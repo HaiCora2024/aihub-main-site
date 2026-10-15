@@ -40,3 +40,10 @@ pnpm-debug.log*
 Thumbs.db
 .idea/
 .vscode/
+
+# Request database, recovery ledger, encrypted backups and private exports.
+*.sqlite
+*.sqlite-*
+*.sqlite.*
+*.enc
+private-exports/

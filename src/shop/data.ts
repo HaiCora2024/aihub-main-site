@@ -1,6 +1,7 @@
 import { solutionIconSrc } from "../design-system/SolutionIcon";
 import type { SolutionIconName } from "../design-system/SolutionIcon";
 import type { Accent } from "../design-system";
+import commercialCatalog from "../../backend/contact-api/shared/catalog.json";
 
 export type ShopLanguage = "en" | "ru";
 export type CategoryId =
@@ -48,14 +49,11 @@ export const categories: { id: CategoryId; name: Localized; tone: Accent }[] = [
   },
 ];
 
-export const products: Product[] = [
+const productDetails: Omit<Product, "name" | "price" | "unit">[] = [
   {
     id: 1,
     slug: "voice-assistant",
     category: "employees",
-    price: 1490,
-    unit: "setup",
-    name: { en: "AI Voice Assistant", ru: "Голосовой AI-ассистент" },
     description: {
       en: "Answers calls 24/7, books appointments and handles routine requests in your voice channel.",
       ru: "Отвечает на звонки 24/7, записывает клиентов и обрабатывает типовые обращения по телефону.",
@@ -65,9 +63,6 @@ export const products: Product[] = [
     id: 2,
     slug: "chat-assistant",
     category: "employees",
-    price: 990,
-    unit: "setup",
-    name: { en: "AI Chat Assistant", ru: "AI-ассистент в чате" },
     description: {
       en: "Text assistant for web chat, Telegram or WhatsApp that handles bookings, orders and feedback.",
       ru: "Помогает с бронированиями, заказами и обратной связью в чате сайта, Telegram или WhatsApp.",
@@ -77,9 +72,6 @@ export const products: Product[] = [
     id: 3,
     slug: "email-orders",
     category: "automation",
-    price: 1200,
-    unit: "setup",
-    name: { en: "Email → 1C Order Processing", ru: "Заказы из почты → 1С" },
     description: {
       en: "Reads purchase orders from email and creates documents in 1C automatically.",
       ru: "Читает заказы из электронной почты и автоматически создаёт документы в 1С.",
@@ -89,9 +81,6 @@ export const products: Product[] = [
     id: 4,
     slug: "document-autofill",
     category: "automation",
-    price: 690,
-    unit: "setup",
-    name: { en: "Document Auto-fill", ru: "Автозаполнение документов" },
     description: {
       en: "Fills contracts, forms and reports from your data in seconds instead of hours.",
       ru: "Заполняет договоры, формы и отчёты из ваших данных за секунды вместо часов ручной работы.",
@@ -101,9 +90,6 @@ export const products: Product[] = [
     id: 5,
     slug: "kpi-reporting",
     category: "analytics",
-    price: 890,
-    unit: "setup",
-    name: { en: "KPI Reporting Bot", ru: "Бот для KPI-отчётов" },
     description: {
       en: "Collects partner and team metrics and delivers structured reports on schedule.",
       ru: "Собирает показатели партнёров и команды, формирует структурированные отчёты по расписанию.",
@@ -113,9 +99,6 @@ export const products: Product[] = [
     id: 6,
     slug: "sentiment-monitor",
     category: "analytics",
-    price: 790,
-    unit: "setup",
-    name: { en: "Chat Sentiment Monitor", ru: "Анализ тональности чатов" },
     description: {
       en: "Tracks customer mood across Telegram chats and alerts you about negative trends.",
       ru: "Анализирует настроение клиентов в Telegram-чатах и предупреждает о негативных тенденциях.",
@@ -125,9 +108,6 @@ export const products: Product[] = [
     id: 7,
     slug: "recommendations",
     category: "recommendations",
-    price: 1290,
-    unit: "setup",
-    name: { en: "Product Recommendations", ru: "Персональные рекомендации" },
     description: {
       en: "Personalized suggestions that lift average order value by 20–30%.",
       ru: "Персонализированные предложения товаров для увеличения среднего чека на 20–30%.",
@@ -137,15 +117,24 @@ export const products: Product[] = [
     id: 8,
     slug: "discovery-workshop",
     category: "consulting",
-    price: 290,
-    unit: "session",
-    name: { en: "AI Discovery Workshop", ru: "Воркшоп по внедрению AI" },
     description: {
       en: "A 2-hour session to map your processes and find the fastest AI wins.",
       ru: "Двухчасовая сессия: изучаем ваши процессы и находим задачи, где AI даст быстрый результат.",
     },
   },
 ];
+
+export const products: Product[] = productDetails.map((detail) => {
+  const commercial = commercialCatalog.products.find((p) => p.id === detail.id);
+  if (!commercial || !["setup", "session"].includes(commercial.unit))
+    throw new Error("Invalid shared catalog");
+  return {
+    ...detail,
+    name: commercial.name,
+    price: commercial.unitPriceMinor / 100,
+    unit: commercial.unit as Product["unit"],
+  };
+});
 
 export const productIcon = (product: Product) => solutionIconSrc(product.slug);
 export const formatPrice = (price: number, lang: ShopLanguage) =>
@@ -200,24 +189,16 @@ export const copy = {
     cartTitle: "Your AI toolkit",
     close: "Close",
     empty: "Your next upgrade starts here.",
-    emptyText: "Add a solution to try the demo checkout.",
+    emptyText: "Add a solution to request a proposal from our team.",
     keepBrowsing: "Explore solutions",
     remove: "Remove",
     decrease: "Decrease quantity",
     increase: "Increase quantity",
     quantity: "Quantity",
-    total: "Total",
-    checkout: "Create demo order",
+    total: "Indicative estimate",
+    checkout: "Continue to request",
     cartDisclaimer:
-      "Demo only. No payment is collected and no request is sent to the AIHUB team.",
-    successEyebrow: "Local demo",
-    successTitle: "Your demo order\nis ready.",
-    successText:
-      "Nothing has been charged or sent. This preview is stored only in this session. To discuss a real project, contact our team.",
-    order: "Order reference",
-    details: "View order data",
-    continue: "Continue exploring",
-    successContact: "Discuss this project",
+      "No payment or contract at this stage. VAT and final pricing are agreed with our team.",
     skip: "Skip to solutions",
   },
   ru: {
@@ -264,24 +245,16 @@ export const copy = {
     cartTitle: "Ваш набор AI-решений",
     close: "Закрыть",
     empty: "Ваш следующий шаг начинается здесь.",
-    emptyText: "Добавьте решение и попробуйте демо-оформление.",
+    emptyText: "Добавьте решение, чтобы запросить предложение у нашей команды.",
     keepBrowsing: "Смотреть решения",
     remove: "Удалить",
     decrease: "Уменьшить количество",
     increase: "Увеличить количество",
     quantity: "Количество",
-    total: "Итого",
-    checkout: "Создать демо-заказ",
+    total: "Ориентировочная стоимость",
+    checkout: "Перейти к заявке",
     cartDisclaimer:
-      "Только демонстрация. Оплата не взимается, заявка команде AIHUB не отправляется.",
-    successEyebrow: "Локальная демонстрация",
-    successTitle: "Ваш демо-заказ\nготов.",
-    successText:
-      "Ничего не списано и не отправлено. Предпросмотр хранится только в текущей сессии. Для реального проекта свяжитесь с командой.",
-    order: "Номер заказа",
-    details: "Посмотреть данные заказа",
-    continue: "Продолжить просмотр",
-    successContact: "Обсудить проект",
+      "Без оплаты и заключения договора. VAT и окончательная цена согласуются с менеджером.",
     skip: "К решениям",
   },
 } satisfies Record<ShopLanguage, Record<string, string>>;

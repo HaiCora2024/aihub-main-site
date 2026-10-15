@@ -1,89 +1,101 @@
 import { useEffect, useState } from "react";
+import { SiteHeader } from "../components/SiteHeader";
+import { CompanyDetails } from "../components/CompanyDetails";
+import { legalContent } from "./content";
+import seller from "../../backend/contact-api/shared/seller.json";
+import versions from "../../backend/contact-api/shared/legal.json";
 
-export interface LegalSection {
-  heading: string;
-  body: string[];
-}
-
-export interface LegalPageProps {
-  title: string;
-  effectiveDate: string;
-  intro: string;
-  sections: LegalSection[];
-}
-
-export function LegalPage({ title, effectiveDate, intro, sections }: LegalPageProps) {
+export function LegalPage({ kind }: { kind: "privacy" | "terms" }) {
+  const [lang, setLang] = useState<"en" | "ru">(() =>
+    new URLSearchParams(location.search).get("lang") === "ru" ? "ru" : "en",
+  );
   const base = import.meta.env.BASE_URL;
-  const [visible, setVisible] = useState(false);
-  useEffect(() => { const t = setTimeout(() => setVisible(true), 60); return () => clearTimeout(t); }, []);
-
+  const t = legalContent[lang][kind];
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    document.title = `${t.title} | AIHUB WORKS`;
+    const url = new URL(location.href);
+    url.searchParams.set("lang", lang);
+    history.replaceState(null, "", url);
+  }, [lang, t.title]);
   return (
-    <div className="min-h-screen bg-[#060c24] text-white">
-
-      {/* Nav */}
-      <nav className="sticky top-0 z-50 bg-[#060c24cc] backdrop-blur-[12px] border-b border-white/5">
-        <div className="mx-auto max-w-[800px] px-4 sm:px-6 h-14 flex items-center gap-4">
-          <a
-            href={base}
-            className="flex items-center gap-2 [font-family:'Geologica',Helvetica] font-light text-white/60 hover:text-white text-sm transition-colors duration-200"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M10 12L6 8l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            Back to site
+    <div className="aihub-theme legal-page">
+      <a className="legal-skip" href="#legal-content">
+        {lang === "en" ? "Skip to document" : "К документу"}
+      </a>
+      <SiteHeader
+        lang={lang}
+        page="legal"
+        onLanguageChange={() => setLang(lang === "en" ? "ru" : "en")}
+      />
+      <main id="legal-content" className="legal-document">
+        <nav
+          className="legal-links"
+          aria-label={
+            lang === "en" ? "Documents and request" : "Документы и заявка"
+          }
+        >
+          <a href={`${base}checkout.html?lang=${lang}`}>
+            {lang === "en" ? "Return to request" : "Вернуться к заявке"}
           </a>
-          <span className="text-white/20">·</span>
-          <span className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm">AIHUB Works</span>
+          <a
+            href={`${base}legal/${kind === "privacy" ? "terms" : "privacy-policy"}.html?lang=${lang}`}
+          >
+            {legalContent[lang][kind === "privacy" ? "terms" : "privacy"].title}
+          </a>
+        </nav>
+        <p className="legal-eyebrow">
+          AIHUB WORKS / {lang === "en" ? "Legal" : "Документы"}
+        </p>
+        <h1>{t.title}</h1>
+        <p className="legal-version">
+          {lang === "en" ? "Updated" : "Обновлено"}: {versions.effectiveDate} ·{" "}
+          {lang === "en" ? "Version" : "Версия"}:{" "}
+          {kind === "privacy" ? versions.privacyVersion : versions.termsVersion}
+        </p>
+        <p className="legal-intro">{t.intro}</p>
+        <div className="legal-company">
+          <CompanyDetails lang={lang} />
         </div>
-      </nav>
-
-      <main
-        className="mx-auto max-w-[800px] px-4 sm:px-6 py-12 sm:py-16"
-        style={{
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(16px)",
-          transition: "opacity 0.6s cubic-bezier(.22,1,.36,1), transform 0.6s cubic-bezier(.22,1,.36,1)",
-        }}
-      >
-        <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-xs uppercase tracking-widest mb-4">
-          Legal
-        </p>
-        <h1 className="[font-family:'Geologica',Helvetica] font-bold text-white mb-3" style={{ fontSize: "clamp(24px,5vw,42px)" }}>
-          {title}
-        </h1>
-        <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm mb-10">
-          Effective date: {effectiveDate}
-        </p>
-
-        <p className="[font-family:'Geologica',Helvetica] font-light text-white/70 text-base leading-relaxed mb-10">
-          {intro}
-        </p>
-
-        <div className="space-y-10">
-          {sections.map((section, i) => (
-            <div key={i}>
-              <h2 className="[font-family:'Geologica',Helvetica] font-semibold text-white text-lg mb-4">
-                {i + 1}. {section.heading}
-              </h2>
-              <div className="space-y-3">
-                {section.body.map((paragraph, j) => (
-                  <p key={j} className="[font-family:'Geologica',Helvetica] font-light text-white/70 text-sm sm:text-base leading-relaxed">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-14 pt-8 border-t border-white/10">
-          <p className="[font-family:'Geologica',Helvetica] font-light text-white/40 text-sm">
-            Questions? Contact us at{" "}
-            <a href="mailto:techcrew@aihub.works" className="text-white/60 hover:text-white transition-colors duration-200">
-              techcrew@aihub.works
-            </a>
+        {t.sections.map((section, index) => (
+          <section className="legal-section" key={section.heading}>
+            <h2>
+              {index + 1}. {section.heading}
+            </h2>
+            {section.body.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </section>
+        ))}
+        <footer className="legal-contact">
+          <p>
+            {lang === "en"
+              ? "Requests and service questions"
+              : "Заявки и вопросы об услугах"}
+            : <a href={`mailto:${seller.salesEmail}`}>{seller.salesEmail}</a>
           </p>
-        </div>
+          <p>
+            {lang === "en"
+              ? "Personal data and rights"
+              : "Персональные данные и права"}
+            :{" "}
+            <a href={`mailto:${seller.privacyEmail}`}>{seller.privacyEmail}</a>
+          </p>
+          {kind === "privacy" && (
+            <p>
+              <a
+                href="https://uodo.gov.pl/en"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                UODO:{" "}
+                {lang === "en"
+                  ? "Polish supervisory authority"
+                  : "Надзорный орган Польши"}
+              </a>
+            </p>
+          )}
+        </footer>
       </main>
     </div>
   );

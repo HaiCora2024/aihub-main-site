@@ -1,24 +1,34 @@
 import http from "node:http";
 import fs from "node:fs";
 import process from "node:process";
+import { pathToFileURL } from "node:url";
 
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
+import { createShopService } from "./shop/service.js";
 
 const PORT = Number(process.env.PORT || 8080);
 const CONTACT_TO = process.env.CONTACT_TO || "aihubworks@gmail.com";
-const CONTACT_FROM = process.env.CONTACT_FROM || process.env.SMTP_USER || "AIHUB Website <no-reply@aihub.works>";
+const CONTACT_FROM =
+  process.env.CONTACT_FROM ||
+  process.env.SMTP_USER ||
+  "AIHUB Website <no-reply@aihub.works>";
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
-const RATE_LIMIT_WINDOW_MS = Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000);
+const RATE_LIMIT_WINDOW_MS = Number(
+  process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000,
+);
 const RATE_LIMIT_MAX = Number(process.env.RATE_LIMIT_MAX || 5);
 const MAX_BODY_BYTES = 20 * 1024;
-const GOOGLE_SHEETS_SPREADSHEET_ID = process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
+const GOOGLE_SHEETS_SPREADSHEET_ID =
+  process.env.GOOGLE_SHEETS_SPREADSHEET_ID || "";
 const GOOGLE_SHEETS_RANGE = process.env.GOOGLE_SHEETS_RANGE || "Лист1!A:I";
-const GOOGLE_SHEETS_DEFAULT_STATUS = process.env.GOOGLE_SHEETS_DEFAULT_STATUS || "Новый";
-const GOOGLE_SHEETS_DEFAULT_PRIORITY = process.env.GOOGLE_SHEETS_DEFAULT_PRIORITY || "";
+const GOOGLE_SHEETS_DEFAULT_STATUS =
+  process.env.GOOGLE_SHEETS_DEFAULT_STATUS || "Новый";
+const GOOGLE_SHEETS_DEFAULT_PRIORITY =
+  process.env.GOOGLE_SHEETS_DEFAULT_PRIORITY || "";
 
 const rateLimitStore = new Map();
 let sheetsClientPromise;
@@ -98,10 +108,15 @@ function getClientIp(req) {
 
 function validateLead(body) {
   const name = typeof body.name === "string" ? body.name.trim() : "";
-  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+  const email =
+    typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
   const phone = typeof body.phone === "string" ? body.phone.trim() : "";
-  const source = typeof body.source === "string" ? body.source.trim().slice(0, 120) : "aihub-site";
-  const page = typeof body.page === "string" ? body.page.trim().slice(0, 500) : "";
+  const source =
+    typeof body.source === "string"
+      ? body.source.trim().slice(0, 120)
+      : "aihub-site";
+  const page =
+    typeof body.page === "string" ? body.page.trim().slice(0, 500) : "";
   const website = typeof body.website === "string" ? body.website.trim() : "";
 
   if (website) {
@@ -142,6 +157,11 @@ function createTransporter() {
     port,
     secure: String(process.env.SMTP_SECURE ?? "true").toLowerCase() === "true",
     auth: { user, pass },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 30000,
+    disableFileAccess: true,
+    disableUrlAccess: true,
   });
 }
 
@@ -160,12 +180,17 @@ function getGoogleCredentials() {
   }
 
   if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64) {
-    const decoded = Buffer.from(process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64, "base64").toString("utf8");
+    const decoded = Buffer.from(
+      process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64,
+      "base64",
+    ).toString("utf8");
     return JSON.parse(decoded);
   }
 
   if (process.env.GOOGLE_SERVICE_ACCOUNT_FILE) {
-    return JSON.parse(fs.readFileSync(process.env.GOOGLE_SERVICE_ACCOUNT_FILE, "utf8"));
+    return JSON.parse(
+      fs.readFileSync(process.env.GOOGLE_SERVICE_ACCOUNT_FILE, "utf8"),
+    );
   }
 
   return null;
@@ -282,7 +307,13 @@ async function sendLeadEmail(lead) {
   });
 }
 
-async function handleContact(req, res, corsOrigin) {
+async function handleContact(
+  req,
+  res,
+  corsOrigin,
+  contactEmail = sendLeadEmail,
+  contactSheet = appendLeadToSheet,
+) {
   if (!corsOrigin) {
     sendJson(res, 403, { ok: false, error: "ORIGIN_NOT_ALLOWED" }, "null");
     return;
@@ -308,7 +339,10 @@ async function handleContact(req, res, corsOrigin) {
       return;
     }
 
-    await Promise.all([sendLeadEmail(validation.lead), appendLeadToSheet(validation.lead)]);
+    await Promise.all([
+      contactEmail(validation.lead),
+      contactSheet(validation.lead),
+    ]);
     sendJson(res, 200, { ok: true }, corsOrigin);
   } catch (error) {
     const message = error instanceof Error ? error.message : "UNKNOWN_ERROR";
@@ -333,38 +367,116 @@ async function handleContact(req, res, corsOrigin) {
   }
 }
 
-const server = http.createServer(async (req, res) => {
-  const origin = typeof req.headers.origin === "string" ? req.headers.origin : "";
-  const corsOrigin = getCorsOrigin(origin);
-  const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
-
-  if (req.method === "OPTIONS") {
-    sendJson(res, 204, {}, corsOrigin || "null");
-    return;
-  }
-
-  if ((req.method === "GET" || req.method === "HEAD") && url.pathname === "/health") {
-    res.writeHead(200, {
-      "Content-Type": "application/json; charset=utf-8",
-      "Access-Control-Allow-Origin": corsOrigin || "*",
-      "Cache-Control": "no-store",
-    });
-    if (req.method === "HEAD") {
-      res.end();
+export function createServer({
+  shopService = null,
+  contactEmail,
+  contactSheet,
+} = {}) {
+  const server = http.createServer(async (req, res) => {
+    const origin =
+      typeof req.headers.origin === "string" ? req.headers.origin : "";
+    const corsOrigin = getCorsOrigin(origin);
+    let url;
+    try {
+      url = new URL(req.url || "/", "http://localhost");
+    } catch {
+      sendJson(res, 400, { error: { code: "INVALID_REQUEST" } }, corsOrigin);
       return;
     }
-    res.end(JSON.stringify({ ok: true }));
-    return;
+
+    if (url.pathname.startsWith("/api/shop/")) {
+      if (shopService) await shopService.handle(req, res, url.pathname);
+      else
+        sendJson(res, 503, { error: { code: "SHOP_UNAVAILABLE" } }, corsOrigin);
+      return;
+    }
+    if (
+      (req.method === "GET" || req.method === "HEAD") &&
+      url.pathname === "/health/ready"
+    ) {
+      sendJson(
+        res,
+        shopService?.ready() ? 200 : 503,
+        { ready: !!shopService?.ready() },
+        corsOrigin,
+      );
+      return;
+    }
+
+    if (req.method === "OPTIONS") {
+      sendJson(res, 204, {}, corsOrigin || "null");
+      return;
+    }
+
+    if (
+      (req.method === "GET" || req.method === "HEAD") &&
+      url.pathname === "/health"
+    ) {
+      res.writeHead(200, {
+        "Content-Type": "application/json; charset=utf-8",
+        "Access-Control-Allow-Origin": corsOrigin || "*",
+        "Cache-Control": "no-store",
+      });
+      if (req.method === "HEAD") {
+        res.end();
+        return;
+      }
+      res.end(JSON.stringify({ ok: true }));
+      return;
+    }
+
+    if (req.method === "POST" && url.pathname === "/api/contact") {
+      await handleContact(req, res, corsOrigin, contactEmail, contactSheet);
+      return;
+    }
+
+    sendJson(res, 404, { ok: false, error: "NOT_FOUND" }, corsOrigin || "*");
+  });
+  server.requestTimeout = 15000;
+  server.headersTimeout = 10000;
+  return server;
+}
+
+if (
+  process.argv[1] &&
+  import.meta.url === pathToFileURL(process.argv[1]).href
+) {
+  let shopService;
+  if (process.env.SHOP_ENABLED === "true") {
+    try {
+      const transport = createTransporter();
+      if (!ALLOWED_ORIGINS.length) throw new Error("ORIGINS_REQUIRED");
+      if (
+        Buffer.from(process.env.SHOP_BACKUP_KEY || "", "base64").length !== 32
+      )
+        throw new Error("BACKUP_KEY_REQUIRED");
+      shopService = createShopService({
+        filename: process.env.SHOP_DB_PATH || "/data/shop/shop.sqlite",
+        origins: ALLOWED_ORIGINS,
+        sendMail: (mail) => transport.sendMail(mail),
+        from: CONTACT_FROM,
+        salesTo: process.env.SHOP_SALES_TO,
+        siteUrl: process.env.SHOP_SITE_URL || "https://aihub.works/",
+        trustProxyHops: Number(process.env.SHOP_TRUST_PROXY_HOPS || 0),
+        backupKey: process.env.SHOP_BACKUP_KEY,
+        backupDirectory: process.env.SHOP_BACKUP_DIR,
+      });
+      shopService.start();
+    } catch {
+      await shopService?.stop();
+      shopService = null;
+      console.error("shop_initialization_failed; shop endpoints disabled");
+    }
   }
-
-  if (req.method === "POST" && url.pathname === "/api/contact") {
-    await handleContact(req, res, corsOrigin);
-    return;
-  }
-
-  sendJson(res, 404, { ok: false, error: "NOT_FOUND" }, corsOrigin || "*");
-});
-
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`contact-api listening on 0.0.0.0:${PORT}`);
-});
+  const server = createServer({ shopService });
+  server.listen(PORT, "0.0.0.0", () =>
+    console.log(`contact-api listening on 0.0.0.0:${PORT}`),
+  );
+  const shutdown = () =>
+    server.close(async () => {
+      await shopService?.stop();
+      process.exit(0);
+    });
+  process.once("SIGTERM", shutdown);
+  process.once("SIGINT", shutdown);
+}

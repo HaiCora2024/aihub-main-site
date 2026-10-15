@@ -9,6 +9,8 @@ COPY backend/contact-api/package*.json ./
 RUN npm ci --omit=dev
 
 COPY backend/contact-api/server.js ./server.js
+COPY backend/contact-api/shop ./shop
+COPY backend/contact-api/shared ./shared
 
 EXPOSE 8080
 

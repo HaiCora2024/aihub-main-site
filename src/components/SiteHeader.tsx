@@ -12,6 +12,7 @@ const labels = {
     close: "Close menu",
     navigation: "Main navigation",
     language: "Switch to Russian",
+    company: "Company details",
   },
   ru: {
     home: "AIHUB: главная",
@@ -21,6 +22,7 @@ const labels = {
     close: "Закрыть меню",
     navigation: "Главное меню",
     language: "Switch to English",
+    company: "Реквизиты",
   },
 };
 
@@ -54,7 +56,7 @@ export function SiteHeader({
 }: {
   lang: Lang;
   onLanguageChange: () => void;
-  page: "landing" | "shop";
+  page: "landing" | "shop" | "legal";
 }) {
   const t = labels[lang];
   const [open, setOpen] = useState(false);
@@ -111,6 +113,7 @@ export function SiteHeader({
     if (!target) return;
     event.preventDefault();
     history.pushState(null, "", href);
+    if (href === "#company-details") target.focus({ preventScroll: true });
     requestAnimationFrame(() =>
       target.scrollIntoView({
         behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -134,7 +137,16 @@ export function SiteHeader({
       }}
     >
       <div className="site-header__inner">
-        <SiteLogo lang={lang} />
+        <div className="site-header__brand">
+          <SiteLogo lang={lang} />
+          <a
+            className="site-header__company"
+            href="#company-details"
+            onClick={navigate}
+          >
+            {t.company}
+          </a>
+        </div>
         <a
           href={shop}
           className="site-header__quick-shop site-header__link"

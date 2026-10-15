@@ -45,6 +45,8 @@ jobs:
         env:
           VITE_BASE: ${{ vars.VITE_BASE || format('/{0}/', github.event.repository.name) }}
           VITE_CONTACT_API_URL: https://aihub-form-getcher.waw0.amvera.tech
+          # Set only after backend readiness and legal/business release approval.
+          VITE_SHOP_API_URL: ${{ vars.VITE_SHOP_API_URL }}
         run: npm run build
 
       - name: Disable Jekyll

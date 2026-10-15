@@ -142,7 +142,7 @@ Body находится вне `.aihub-theme`, её переменные там 
 ## 4. Общее меню и hero
 
 Не создавать копию [SiteHeader](../src/components/SiteHeader.tsx). Сейчас `page`
-допускает только `"landing" | "shop"`. Следующие шаги являются **будущим изменением
+допускает `"landing" | "shop" | "legal"`. Следующие шаги являются **будущим изменением
 компонента при реализации страницы**, а не уже существующим API:
 
 1. Расширить union нейтральным значением `"content"`.
@@ -192,7 +192,7 @@ Runtime-ссылки: `${base}pages/workshop.html?lang=${lang}`,
 
 `DemoContactForm` не отправляет лиды. Реальная форма требует отдельного контроллера,
 валидации и согласованного endpoint. Магазин имеет отдельный
-[план backend-интеграции](shop-backend-guide.md); не отправлять корзину в Contact API.
+[контракт backend магазина](shop-backend-guide.md); не отправлять корзину в `/api/contact`.
 
 Для индексируемой страницы добавить canonical URL в [sitemap](../public/sitemap.xml)
 и релевантную ссылку в [llms.txt](../public/llms.txt). `docs/` и AGENTS.md не

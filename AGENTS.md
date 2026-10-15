@@ -15,7 +15,7 @@
 | Новая страница в стиле AIHUB | [Агентский гайд по страницам](docs/agent-page-guide.md) |
 | Токены, компоненты, анимации | [Дизайн-система](docs/design-system.md) |
 | Магазин, каталог, локальная корзина | [Устройство магазина](docs/shop.md) |
-| Заказы, оплата, backend магазина | [Гайд по backend](docs/shop-backend-guide.md) |
+| Заявки и backend магазина | [Гайд по backend](docs/shop-backend-guide.md), [эксплуатация](docs/shop-operations.md) |
 | Агентские инструкции, discovery URL и проверки путей | [Аудит путей](docs/agent-paths-audit.md) |
 | Реальная форма консультации | [Contact API](backend/contact-api/README.md) |
 | Деплой | [README](README.md), [workflow](.github/workflows/gh-pages.yml) |
@@ -39,7 +39,9 @@ PageBuilder или новые пакеты ради соответствия с�
 | Язык главной | [src/i18n/LanguageContext.tsx](src/i18n/LanguageContext.tsx) |
 | Экран магазина | [src/shop/Shop.tsx](src/shop/Shop.tsx) |
 | Каталог и тексты магазина | [src/shop/data.ts](src/shop/data.ts) |
-| Корзина и демо-заказ | [src/shop/cart.ts](src/shop/cart.ts) |
+| Локальная корзина | [src/shop/cart.ts](src/shop/cart.ts) |
+| Checkout заявки | [src/shop/Checkout.tsx](src/shop/Checkout.tsx) |
+| Общий коммерческий каталог | [backend/contact-api/shared/catalog.json](backend/contact-api/shared/catalog.json) |
 | Реальная форма | [08_contact_form/src/screens/Home/Home.tsx](08_contact_form/src/screens/Home/Home.tsx) |
 | Сервер консультаций | [backend/contact-api/server.js](backend/contact-api/server.js) |
 
@@ -52,11 +54,13 @@ PageBuilder или новые пакеты ради соответствия с�
 - Сохранять EN/RU, доступные названия, клавиатуру и reduced motion.
 - Внутренние URL строить через `import.meta.env.BASE_URL`; публичный API имеет
   отдельный origin. URL `public/foo` публикуется как `BASE_URL + foo`, без `public/`.
-- Не копировать меню и логотип. У текущего SiteHeader только режимы `landing` и
-  `shop`; расширение для новой страницы описано в гайде, нельзя выдавать её за магазин.
-- Магазин сейчас демонстрационный. `createDemoOrder` не отправляет заявку и не принимает оплату.
+- Не копировать меню и логотип. У SiteHeader режимы `landing`, `shop`, `legal`.
+  Новую независимую страницу нельзя выдавать за магазин ради обхода типов.
+- Магазин реализует необязывающие заявки без оплаты. `VITE_SHOP_API_URL` включает
+  отдельный API; без него checkout закрыт, демо-успеха нет. Production включается отдельно.
 - Contact API отправляет реальные письма и строки в Sheets. Не использовать его
-  для smoke с реальными контактами и не считать сервером заказов.
+  для smoke с реальными контактами. `/api/shop/requests` сохраняет заявки и два письма,
+  не копирует их в Sheets. Локальные тесты используют SMTP sink, а не реальных адресатов.
 - Не добавлять секреты в `VITE_*`, браузерный bundle, `public/`, docs или Git.
 - Commit, push в `main`, обновление форка и production-изменения выполнять только
   в рамках явного запроса. Push в `main` запускает Pages workflow.

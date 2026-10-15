@@ -1,0 +1,63 @@
+{
+  "version": "2026-10-15-v1",
+  "currency": "USD",
+  "products": [
+    {
+      "id": 1,
+      "unitPriceMinor": 149000,
+      "unit": "setup",
+      "name": { "en": "AI Voice Assistant", "ru": "Голосовой AI-ассистент" }
+    },
+    {
+      "id": 2,
+      "unitPriceMinor": 99000,
+      "unit": "setup",
+      "name": { "en": "AI Chat Assistant", "ru": "AI-ассистент в чате" }
+    },
+    {
+      "id": 3,
+      "unitPriceMinor": 120000,
+      "unit": "setup",
+      "name": {
+        "en": "Email → 1C Order Processing",
+        "ru": "Заказы из почты → 1С"
+      }
+    },
+    {
+      "id": 4,
+      "unitPriceMinor": 69000,
+      "unit": "setup",
+      "name": { "en": "Document Auto-fill", "ru": "Автозаполнение документов" }
+    },
+    {
+      "id": 5,
+      "unitPriceMinor": 89000,
+      "unit": "setup",
+      "name": { "en": "KPI Reporting Bot", "ru": "Бот для KPI-отчётов" }
+    },
+    {
+      "id": 6,
+      "unitPriceMinor": 79000,
+      "unit": "setup",
+      "name": {
+        "en": "Chat Sentiment Monitor",
+        "ru": "Анализ тональности чатов"
+      }
+    },
+    {
+      "id": 7,
+      "unitPriceMinor": 129000,
+      "unit": "setup",
+      "name": {
+        "en": "Product Recommendations",
+        "ru": "Персональные рекомендации"
+      }
+    },
+    {
+      "id": 8,
+      "unitPriceMinor": 29000,
+      "unit": "session",
+      "name": { "en": "AI Discovery Workshop", "ru": "Воркшоп по внедрению AI" }
+    }
+  ]
+}

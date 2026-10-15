@@ -17,15 +17,14 @@ import {
   CART_KEY,
   MAX_QUANTITY,
   cartTotal,
-  createDemoOrder,
   readCart,
   updateQuantity,
 } from "./cart";
-import type { DemoOrder } from "./cart";
 import { categories, copy, formatPrice, productIcon, products } from "./data";
 import type { CategoryId, Product, ShopLanguage } from "./data";
 import { ShopDialog } from "./Dialog";
 import { SiteHeader, SiteLogo } from "../components/SiteHeader";
+import { CompanyDetails } from "../components/CompanyDetails";
 import { TypewriterText } from "../components/TypewriterText";
 
 const base = import.meta.env.BASE_URL;
@@ -61,8 +60,7 @@ export default function Shop() {
   const [category, setCategory] = useState<CategoryId | "all">("all");
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query.trim().toLocaleLowerCase());
-  const [dialog, setDialog] = useState<"cart" | "success" | null>(null);
-  const [order, setOrder] = useState<DemoOrder | null>(null);
+  const [dialog, setDialog] = useState<"cart" | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const cartButton = useRef<HTMLButtonElement>(null);
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
@@ -128,9 +126,7 @@ export default function Shop() {
   };
   const checkout = () => {
     if (!cart.length) return;
-    setOrder(createDemoOrder(cart));
-    setCart([]);
-    setDialog("success");
+    location.assign(`${base}checkout.html?lang=${lang}`);
   };
 
   return (
@@ -389,12 +385,15 @@ export default function Shop() {
               techcrew@aihub.works <span aria-hidden="true">→</span>
             </NavLink>
           </div>
+          <CompanyDetails lang={lang} />
           <div className="shop-footer-bottom">
             <span>© {new Date().getFullYear()} AIHUB</span>
-            <NavLink href={`${base}legal/privacy-policy.html`}>
+            <NavLink href={`${base}legal/privacy-policy.html?lang=${lang}`}>
               {t.privacy}
             </NavLink>
-            <NavLink href={`${base}legal/terms.html`}>{t.terms}</NavLink>
+            <NavLink href={`${base}legal/terms.html?lang=${lang}`}>
+              {t.terms}
+            </NavLink>
             <NavLink href="#top">{t.top} ↑</NavLink>
           </div>
         </PageContainer>
@@ -412,145 +411,111 @@ export default function Shop() {
       {dialog && (
         <ShopDialog
           variant={dialog}
-          title={dialog === "cart" ? t.cartTitle : t.successEyebrow}
+          title={t.cartTitle}
           closeLabel={t.close}
           returnFocus={cartButton}
           onDismiss={() => setDialog(null)}
         >
-          {dialog === "cart" ? (
-            cart.length ? (
-              <>
-                <div className="shop-cart-lines">
-                  {cart.map((item) => {
-                    const product = products.find((p) => p.id === item.id)!;
-                    return (
-                      <article key={item.id} className="shop-cart-line">
-                        <img
-                          src={productIcon(product)}
-                          width="88"
-                          height="88"
-                          alt=""
-                        />
-                        <div className="shop-cart-line-content">
-                          <h3>{product.name[lang]}</h3>
-                          <p>
-                            {formatPrice(product.price, lang)} /{" "}
-                            {t[product.unit]}
-                          </p>
-                          <div className="shop-cart-line-controls">
-                            <div
-                              className="shop-stepper"
-                              role="group"
-                              aria-label={`${t.quantity}: ${product.name[lang]}`}
-                            >
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  setCart((current) =>
-                                    updateQuantity(current, item.id, -1),
-                                  )
-                                }
-                                aria-label={`${t.decrease}: ${product.name[lang]}`}
-                              >
-                                −
-                              </button>
-                              <output aria-label={t.quantity}>
-                                {item.qty}
-                              </output>
-                              <button
-                                type="button"
-                                disabled={item.qty >= MAX_QUANTITY}
-                                onClick={() =>
-                                  setCart((current) =>
-                                    updateQuantity(current, item.id, 1),
-                                  )
-                                }
-                                aria-label={`${t.increase}: ${product.name[lang]}`}
-                              >
-                                +
-                              </button>
-                            </div>
+          {cart.length ? (
+            <>
+              <div className="shop-cart-lines">
+                {cart.map((item) => {
+                  const product = products.find((p) => p.id === item.id)!;
+                  return (
+                    <article key={item.id} className="shop-cart-line">
+                      <img
+                        src={productIcon(product)}
+                        width="88"
+                        height="88"
+                        alt=""
+                      />
+                      <div className="shop-cart-line-content">
+                        <h3>{product.name[lang]}</h3>
+                        <p>
+                          {formatPrice(product.price, lang)} / {t[product.unit]}
+                        </p>
+                        <div className="shop-cart-line-controls">
+                          <div
+                            className="shop-stepper"
+                            role="group"
+                            aria-label={`${t.quantity}: ${product.name[lang]}`}
+                          >
                             <button
-                              className="shop-text-button"
                               type="button"
                               onClick={() =>
                                 setCart((current) =>
-                                  current.filter((line) => line.id !== item.id),
+                                  updateQuantity(current, item.id, -1),
                                 )
                               }
-                              aria-label={`${t.remove}: ${product.name[lang]}`}
+                              aria-label={`${t.decrease}: ${product.name[lang]}`}
                             >
-                              {t.remove}
+                              −
+                            </button>
+                            <output aria-label={t.quantity}>{item.qty}</output>
+                            <button
+                              type="button"
+                              disabled={item.qty >= MAX_QUANTITY}
+                              onClick={() =>
+                                setCart((current) =>
+                                  updateQuantity(current, item.id, 1),
+                                )
+                              }
+                              aria-label={`${t.increase}: ${product.name[lang]}`}
+                            >
+                              +
                             </button>
                           </div>
+                          <button
+                            className="shop-text-button"
+                            type="button"
+                            onClick={() =>
+                              setCart((current) =>
+                                current.filter((line) => line.id !== item.id),
+                              )
+                            }
+                            aria-label={`${t.remove}: ${product.name[lang]}`}
+                          >
+                            {t.remove}
+                          </button>
                         </div>
-                        <strong className="shop-line-total">
-                          {formatPrice(product.price * item.qty, lang)}
-                        </strong>
-                      </article>
-                    );
-                  })}
-                </div>
-                <div className="shop-cart-summary">
-                  <div className="shop-total" aria-live="polite">
-                    <span>{t.total}</span>
-                    <strong>{formatPrice(total, lang)}</strong>
-                  </div>
-                  <Button onClick={checkout}>
-                    {t.checkout} <span aria-hidden="true">→</span>
-                  </Button>
-                  <p>{t.cartDisclaimer}</p>
-                </div>
-              </>
-            ) : (
-              <div className="shop-cart-empty">
-                <CartGlyph />
-                <h3>{t.empty}</h3>
-                <p>{t.emptyText}</p>
-                <Button
-                  onClick={() => {
-                    setDialog(null);
-                    document.getElementById("solutions")?.scrollIntoView({
-                      behavior: matchMedia("(prefers-reduced-motion: reduce)")
-                        .matches
-                        ? "instant"
-                        : "smooth",
-                    });
-                  }}
-                >
-                  {t.keepBrowsing} →
-                </Button>
+                      </div>
+                      <strong className="shop-line-total">
+                        {formatPrice(product.price * item.qty, lang)}
+                      </strong>
+                    </article>
+                  );
+                })}
               </div>
-            )
+              <div className="shop-cart-summary">
+                <div className="shop-total" aria-live="polite">
+                  <span>{t.total}</span>
+                  <strong>{formatPrice(total, lang)}</strong>
+                </div>
+                <Button onClick={checkout}>
+                  {t.checkout} <span aria-hidden="true">→</span>
+                </Button>
+                <p>{t.cartDisclaimer}</p>
+              </div>
+            </>
           ) : (
-            order && (
-              <div className="shop-order-success">
-                <span className="shop-success-mark" aria-hidden="true">
-                  ✓
-                </span>
-                <h3>{t.successTitle}</h3>
-                <p>{t.successText}</p>
-                <div className="shop-order-reference">
-                  <span>{t.order}</span>
-                  <strong>{order.id}</strong>
-                  <span>{formatPrice(order.total, lang)}</span>
-                </div>
-                <details>
-                  <summary>{t.details}</summary>
-                  <pre>{JSON.stringify(order, null, 2)}</pre>
-                </details>
-                <Button href={`${base}?lang=${lang}#contact`}>
-                  {t.successContact} →
-                </Button>
-                <button
-                  className="shop-text-button"
-                  type="button"
-                  onClick={() => setDialog(null)}
-                >
-                  {t.continue} →
-                </button>
-              </div>
-            )
+            <div className="shop-cart-empty">
+              <CartGlyph />
+              <h3>{t.empty}</h3>
+              <p>{t.emptyText}</p>
+              <Button
+                onClick={() => {
+                  setDialog(null);
+                  document.getElementById("solutions")?.scrollIntoView({
+                    behavior: matchMedia("(prefers-reduced-motion: reduce)")
+                      .matches
+                      ? "instant"
+                      : "smooth",
+                  });
+                }}
+              >
+                {t.keepBrowsing} →
+              </Button>
+            </div>
           )}
         </ShopDialog>
       )}

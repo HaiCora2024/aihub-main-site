@@ -6,14 +6,6 @@ export interface CartItem {
   id: number;
   qty: number;
 }
-export interface DemoOrder {
-  id: string;
-  createdAt: string;
-  items: { id: number; name: string; qty: number; price: number }[];
-  total: number;
-  currency: "USD";
-  mode: "demo";
-}
 
 export function readCart(): CartItem[] {
   try {
@@ -59,26 +51,3 @@ export const cartTotal = (cart: CartItem[]) =>
       total + (products.find((p) => p.id === item.id)?.price ?? 0) * item.qty,
     0,
   );
-
-export function createDemoOrder(cart: CartItem[]): DemoOrder {
-  return {
-    id: `DEMO-${crypto.randomUUID().slice(0, 8).toUpperCase()}`,
-    createdAt: new Date().toISOString(),
-    items: cart.flatMap((item) => {
-      const product = products.find((p) => p.id === item.id);
-      return product
-        ? [
-            {
-              id: item.id,
-              name: product.name.en,
-              qty: item.qty,
-              price: product.price,
-            },
-          ]
-        : [];
-    }),
-    total: cartTotal(cart),
-    currency: "USD",
-    mode: "demo",
-  };
-}

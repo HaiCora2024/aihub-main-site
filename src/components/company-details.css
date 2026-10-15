@@ -1,0 +1,54 @@
+.company-details {
+  box-sizing: border-box;
+  width: 100%;
+  padding-block: 28px;
+  border-top: 1px solid #ffffff24;
+  color: #b9c4d8;
+  font:
+    400 13px/1.65 "Geologica",
+    sans-serif;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 24px;
+}
+.company-details h2 {
+  margin: 0 0 16px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+}
+.company-details p {
+  margin: 6px 0;
+}
+.company-details__name {
+  color: #fff;
+}
+.company-details__ids {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+.company-details a,
+.company-footer nav a {
+  color: #80dfb2;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.company-details :focus-visible,
+.company-details:focus-visible,
+.company-footer nav a:focus-visible {
+  outline: 2px solid #63e6e1;
+  outline-offset: 4px;
+}
+.company-footer {
+  box-sizing: border-box;
+  padding: 0 max(16px, calc((100% - 1140px) / 2)) 28px;
+  background: #060c24;
+}
+.company-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  font:
+    400 13px/1.6 "Geologica",
+    sans-serif;
+}

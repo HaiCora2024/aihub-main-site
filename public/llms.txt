@@ -11,7 +11,7 @@
 
 ## Catalog & Interface Reference
 
-- [AI Solutions Shop](https://aihub.works/shop.html) — Eight solutions with EN/RU descriptions and a local demo cart. Checkout does not submit orders or process payments.
+- [AI Solutions Shop](https://aihub.works/shop.html) — Eight solutions with EN/RU descriptions and a local cart. Checkout requests a non-binding proposal when the request API is enabled; it does not take payment or conclude a service contract.
 - [Design System](https://aihub.works/design-system.html) — Interactive UI-kit, tokens, components and page composition examples. Demonstration forms do not submit leads.
 
 ## Results & Cases

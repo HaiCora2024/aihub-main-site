@@ -3,5 +3,5 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.shop.tsbuildinfo"
   },
-  "include": ["src/shop", "src/design-system", "src/vite-env.d.ts"]
+  "include": ["src/shop", "src/legal", "src/design-system", "src/vite-env.d.ts"]
 }

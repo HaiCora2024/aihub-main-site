@@ -4,13 +4,15 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "node --test test/*.test.js",
+    "shop:admin": "node shop/admin.js"
   },
   "dependencies": {
     "googleapis": "^171.4.0",
-    "nodemailer": "^8.0.5"
+    "nodemailer": "^10.1.1"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22.16"
   }
 }

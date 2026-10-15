@@ -24,3 +24,7 @@ tmp
 .stignore
 .stignore_sync
 .sync-conflict-*.stignore_sync
+**/node_modules
+*.sqlite*
+*.enc
+private-exports

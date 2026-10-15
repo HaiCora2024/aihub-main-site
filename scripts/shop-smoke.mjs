@@ -221,33 +221,18 @@ try {
   check("Backdrop closes cart", (await page.locator("dialog").count()) === 0);
   await cart().click();
   await page
-    .getByRole("button", { name: "Create demo order", exact: false })
+    .getByRole("button", { name: "Continue to request", exact: false })
     .click();
-  check(
-    "Local demo confirmation",
-    await page.locator(".shop-order-success").isVisible(),
-  );
-  await page.getByText("View order data", { exact: true }).click();
-  const order = JSON.parse(
-    await page.locator(".shop-order-success pre").innerText(),
-  );
-  check(
-    "Demo order has correct total, items, currency and explicit mode",
-    order.mode === "demo" &&
-      order.total === 1490 &&
-      order.currency === "USD" &&
-      order.items[0].qty === 1,
-  );
-  await page.screenshot({ path: `${output}/confirmation.png` });
-  await closeDialog();
-  check(
-    "Successful demo clears cart",
-    (await cart().getAttribute("aria-label")) === "Cart: 0",
-  );
+  await page.waitForURL(/checkout\.html/);
+  check("Cart navigates to a separate request page", page.url().startsWith(`${base}checkout.html`));
+  check("Navigation does not clear unsubmitted cart", (await page.evaluate(() => JSON.parse(localStorage.getItem("aihub_cart"))))[0].qty === 1);
+  await open();
+  await page.evaluate(() => localStorage.removeItem("aihub_cart"));
+  await page.reload({ waitUntil: "networkidle" });
   await cart().click();
   check(
     "Empty cart has no checkout action",
-    (await page.getByRole("button", { name: /Create demo order/ }).count()) ===
+    (await page.getByRole("button", { name: /Continue to request/ }).count()) ===
       0,
   );
   await closeDialog();

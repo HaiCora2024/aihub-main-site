@@ -47,7 +47,9 @@ npx tsc --noEmit -p tsconfig.design-system.json
 `/shop.html` — отдельная React-страница в общей multipage-сборке, связанная с
 главной через пункт «Shop / Магазин». Перевёрстана из предоставленного HTML
 на UI-kit AIHUB: EN/RU, восемь решений, поиск, категории, локальная корзина
-и демонстрационное оформление. Реальные платежи и отправка заказов не подключены.
+и отдельный `/checkout.html` для необязывающих заявок без оплаты. API, billing ФЛ/B2B,
+очередь писем и RU/EN-документы реализованы локально; production подключается только
+после отдельного согласования. См. [эксплуатацию магазина](docs/shop-operations.md).
 
 Руководство: [docs/shop.md](docs/shop.md). Набор объёмных иконок Nano Banana 2.1:
 [docs/shop-icons.md](docs/shop-icons.md), интерактивный раздел `/design-system.html#icons`.

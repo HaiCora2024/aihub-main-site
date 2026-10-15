@@ -3,6 +3,24 @@
 .site-logo {
   box-sizing: border-box;
 }
+.site-header__brand {
+  display: grid;
+  flex: none;
+  gap: 2px;
+}
+.site-header .site-header__company {
+  width: fit-content;
+  padding: 4px 0;
+  color: #b9c4d8;
+  font:
+    400 12px/1.4 "Geologica",
+    sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.site-header .site-header__company:hover {
+  color: #08d070;
+}
 .site-header {
   position: relative;
   z-index: 30;
@@ -199,7 +217,7 @@
     height: 100%;
     border-radius: 999px;
     background: #08d070;
-    color: #fff !important;
+    color: #060c24 !important;
     font:
       600 16px/1.1 "Geologica",
       sans-serif;
