@@ -1,0 +1,49 @@
+.site-typewriter {
+  display: block;
+  position: relative;
+}
+.site-typewriter__accessible {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.site-typewriter__size {
+  display: block;
+  visibility: hidden;
+  pointer-events: none;
+}
+.site-typewriter__size > span,
+.site-typewriter__ink > span {
+  display: block;
+  min-height: 1.2em;
+}
+.site-typewriter__ink {
+  position: absolute;
+  inset: 0;
+}
+.site-typewriter__cursor {
+  display: inline-block;
+  width: 0.045em;
+  min-width: 3px;
+  height: 0.85em;
+  margin-left: 0.035em;
+  vertical-align: -0.04em;
+  background: currentColor;
+  animation: site-cursor-blink 900ms step-end infinite;
+}
+@keyframes site-cursor-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-typewriter__cursor {
+    display: none;
+    animation: none;
+  }
+}

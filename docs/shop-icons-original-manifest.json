@@ -1,0 +1,68 @@
+{
+  "model": "gemini-nano-banana-2.1",
+  "imageId": "5bb4153c-fc0c-4bf7-85f6-b9ae603dbe7b",
+  "source": {
+    "width": 5504,
+    "height": 3072,
+    "sha256": "ce965092dd8712d215d9e7acf20156c4a4102e66d92e446f7c9c604612db2265"
+  },
+  "processing": "4x2 equal cells, centered square crop with 32px edge inset, 640px WebP quality 88",
+  "files": [
+    {
+      "file": "public/shop/icons/voice-assistant.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 11010,
+      "sha256": "2685d11d938c42974ebb11a5ec6e4d024eb610d7a70fc76de89277c2d9bc51c9"
+    },
+    {
+      "file": "public/shop/icons/chat-assistant.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 16064,
+      "sha256": "cb6d997496ed8c4c54d55601db54f9bc5543294857f3ab5c6d675f347cfbe1d1"
+    },
+    {
+      "file": "public/shop/icons/email-orders.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 20410,
+      "sha256": "181198cb4e7ebf892be4278c1f4c8863a3857596913d89144600ae89e07ba035"
+    },
+    {
+      "file": "public/shop/icons/document-autofill.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 17240,
+      "sha256": "a3f993016f3123b6bd06c18d2d4dc78ebad73376968007587d023af325f62450"
+    },
+    {
+      "file": "public/shop/icons/kpi-reporting.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 16480,
+      "sha256": "549cb53f9030e793988288efdc35b811be66a1c862e9bcb62ed4c17aae931480"
+    },
+    {
+      "file": "public/shop/icons/sentiment-monitor.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 17784,
+      "sha256": "0683a7ce314efe00b0144bddc87e37e98a99bd84c58de139bb6c73254b659952"
+    },
+    {
+      "file": "public/shop/icons/recommendations.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 17248,
+      "sha256": "2d758ab1a216eae7a8e7bcf1a0a11fc1ec11d6c41d905729b5f2e5f0646d9fee"
+    },
+    {
+      "file": "public/shop/icons/discovery-workshop.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 16410,
+      "sha256": "10ce8ffd361a752793cd761029748ad64a06ccef3e513e741f3ce33961e46b0d"
+    }
+  ]
+}

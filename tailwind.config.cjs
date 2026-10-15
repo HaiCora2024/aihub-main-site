@@ -17,6 +17,9 @@ module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{html,js,ts,jsx,tsx}",
+    // The isolated UI-kit uses plain scoped CSS, not legacy Tailwind utilities.
+    "!./src/design-system/**",
+    "!./src/shop/**",
     ...sectionDirs.map((dir) => `./${dir}/src/**/*.{html,js,ts,jsx,tsx}`),
   ],
   theme: {

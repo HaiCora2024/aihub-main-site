@@ -1,0 +1,151 @@
+.aihub-theme .aihub-wordmark {
+  font-size: 29px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.07em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.aihub-theme .aihub-wordmark span {
+  font-size: 10px;
+  vertical-align: top;
+  margin-left: 4px;
+  line-height: 2;
+  letter-spacing: 0;
+}
+.aihub-theme .aihub-demo-disclaimer {
+  font-size: var(--aihub-text-caption);
+  color: var(--aihub-color-muted);
+}
+.aihub-theme .aihub-pattern-action {
+  margin-top: var(--aihub-space-40);
+  text-align: center;
+}
+.aihub-theme .aihub-client-tile {
+  display: grid;
+  place-content: center;
+  text-align: center;
+  min-height: 180px;
+}
+.aihub-theme .aihub-client-tile > span {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.aihub-theme .aihub-client-tile > small {
+  font-size: 12px;
+  color: var(--aihub-color-muted);
+  margin-top: 12px;
+}
+.aihub-theme .aihub-tool-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ffffff15;
+}
+.aihub-theme .aihub-tool-row > span:last-child {
+  margin-left: auto;
+  color: var(--aihub-color-green);
+}
+.aihub-theme .aihub-team-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: start;
+}
+.aihub-theme .aihub-team-card > img {
+  object-fit: cover;
+  object-position: top;
+  border-radius: var(--aihub-radius-inset);
+}
+.aihub-theme .aihub-team-card > div {
+  flex: 1 1 210px;
+}
+.aihub-theme .aihub-demo-banner {
+  position: relative;
+  isolation: isolate;
+  text-align: center;
+  padding-block: 40px;
+}
+.aihub-theme .aihub-demo-banner .aihub-heading {
+  max-width: 900px;
+  margin-inline: auto;
+}
+.aihub-theme .aihub-demo-banner .aihub-decorative-glow {
+  left: 30%;
+}
+.aihub-theme .aihub-template-nav {
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ffffff18;
+}
+.aihub-theme .aihub-orb-stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 460px;
+}
+.aihub-theme .aihub-orb {
+  position: relative;
+  width: 280px;
+  height: 365px;
+  border: 1px solid color-mix(in srgb, var(--aihub-accent) 25%, transparent);
+  border-radius: 49% 51% 51% 49% / 62% 63% 37% 38%;
+  transform: rotate(17deg);
+  background: radial-gradient(
+    ellipse at 28% 18%,
+    color-mix(in srgb, var(--aihub-accent) 85%, #ffffff),
+    #1b363a 35%,
+    #070d24 75%
+  );
+  box-shadow:
+    inset -24px -20px 70px #000000,
+    inset 3px 4px 25px #ffffff20,
+    0 0 100px color-mix(in srgb, var(--aihub-accent) 12%, transparent);
+}
+.aihub-theme .aihub-orb span {
+  position: absolute;
+  top: 45%;
+  left: 32%;
+  font: 500 76px/1 var(--aihub-font-ui);
+  transform: rotate(-17deg);
+  letter-spacing: -0.08em;
+  color: #d8efe3;
+  text-shadow: 0 2px 20px #000000;
+}
+.aihub-theme .aihub-orb-orbit {
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  height: 52%;
+  border: 1px solid color-mix(in srgb, var(--aihub-accent) 18%, transparent);
+  border-radius: 50%;
+  transform: rotate(-27deg);
+}
+.aihub-theme .aihub-orb-stage .aihub-decorative-glow {
+  top: 0;
+  height: 100%;
+  width: 100%;
+}
+.aihub-theme .aihub-reveal > .aihub-card {
+  height: 100%;
+}
+@media (max-width: 767px) {
+  .aihub-theme .aihub-orb-stage {
+    min-height: 360px;
+  }
+  .aihub-theme .aihub-orb {
+    width: 220px;
+    height: 290px;
+  }
+  .aihub-theme .aihub-orb span {
+    font-size: 60px;
+  }
+  .aihub-theme .aihub-client-tile {
+    min-height: 140px;
+  }
+}

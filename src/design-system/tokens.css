@@ -1,0 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
+
+/* Scope the contract to new pages. Never override the legacy landing's :root. */
+.aihub-theme {
+  --aihub-color-bg: #060c24;
+  --aihub-color-surface: #060c2499;
+  --aihub-color-text: #ffffff;
+  --aihub-color-muted: #b4bdd1;
+  --aihub-color-green: #08d070;
+  --aihub-color-blue: #0385ff;
+  --aihub-color-yellow: #ffd409;
+  --aihub-color-orange: #fe8a04;
+  --aihub-color-purple: #bf5bf3;
+  --aihub-color-cyan: #63e6e1;
+  --aihub-color-red: #ff463a;
+  --aihub-color-error-text: #ff8c83;
+  --aihub-color-line: #ffffff24;
+  --aihub-font-ui: "Geologica", sans-serif;
+  --aihub-font-metric: "Manrope", sans-serif;
+  --aihub-text-hero: 86px;
+  --aihub-text-section: 64px;
+  --aihub-text-title: 32px;
+  --aihub-text-subtitle: 24px;
+  --aihub-text-lead: 20px;
+  --aihub-text-body: 16px;
+  --aihub-text-small: 14px;
+  --aihub-text-caption: 12px;
+  --aihub-text-hero-mobile: 42px;
+  --aihub-text-section-mobile: 36px;
+  --aihub-text-title-mobile: 28px;
+  --aihub-text-subtitle-mobile: 22px;
+  --aihub-text-lead-mobile: 18px;
+  --aihub-leading-display: 1.08;
+  --aihub-leading-title: 1.2;
+  --aihub-leading-body: 1.6;
+  --aihub-weight-regular: 400;
+  --aihub-weight-medium: 500;
+  --aihub-weight-bold: 700;
+  --aihub-weight-metric: 600;
+  --aihub-container: 1140px;
+  --aihub-breakpoint-desktop: 1200px;
+  --aihub-gutter-mobile: 16px;
+  --aihub-gutter-tablet: 24px;
+  --aihub-space-4: 4px;
+  --aihub-space-8: 8px;
+  --aihub-space-12: 12px;
+  --aihub-space-16: 16px;
+  --aihub-space-20: 20px;
+  --aihub-space-24: 24px;
+  --aihub-space-32: 32px;
+  --aihub-space-40: 40px;
+  --aihub-space-48: 48px;
+  --aihub-space-64: 64px;
+  --aihub-space-80: 80px;
+  --aihub-section-gap-mobile: 24px;
+  --aihub-section-gap-tablet: 32px;
+  --aihub-section-gap-desktop: 40px;
+  --aihub-section-padding-mobile: 32px;
+  --aihub-section-padding-desktop: 64px;
+  --aihub-radius-badge: 12px;
+  --aihub-radius-inset: 20px;
+  --aihub-radius-card: 30px;
+  --aihub-radius-pill: 999px;
+  --aihub-button-height: 64px;
+  --aihub-button-height-compact: 48px;
+  --aihub-field-height: 72px;
+  --aihub-metric-size: 64px;
+  --aihub-progress-size: 112px;
+  --aihub-cta-frame-width: 350px;
+  --aihub-duration-action: 320ms;
+  --aihub-duration-field: 280ms;
+  --aihub-duration-reveal: 720ms;
+  --aihub-duration-metric: 1400ms;
+  --aihub-stagger: 150ms;
+  --aihub-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --aihub-hover-scale: 1.035;
+  --aihub-hover-lift: -2px;
+  --aihub-glass-blur: 10px;
+  --aihub-accent: var(--aihub-color-green);
+  color: var(--aihub-color-text);
+  background: var(--aihub-color-bg);
+  font-family: var(--aihub-font-ui);
+  font-size: var(--aihub-text-body);
+  line-height: var(--aihub-leading-body);
+  font-weight: var(--aihub-weight-regular);
+  color-scheme: dark;
+}
+
+/* Resolve dependent tokens on each tone, not only on the theme ancestor. */
+.aihub-theme,
+.aihub-theme [data-tone] {
+  --aihub-shadow-glow: 0 0 32px
+    color-mix(in srgb, var(--aihub-accent) 24%, transparent);
+  --aihub-shadow-glow-hover:
+    0 8px 34px color-mix(in srgb, var(--aihub-accent) 58%, transparent),
+    0 0 72px color-mix(in srgb, var(--aihub-accent) 34%, transparent),
+    inset 0 8px 12px #ffffff5c;
+  --aihub-shadow-inset: inset 0 0 32px
+    color-mix(in srgb, var(--aihub-accent) 14%, transparent);
+}
+
+.aihub-theme [data-tone="green"] {
+  --aihub-accent: var(--aihub-color-green);
+}
+.aihub-theme [data-tone="blue"] {
+  --aihub-accent: var(--aihub-color-blue);
+}
+.aihub-theme [data-tone="yellow"] {
+  --aihub-accent: var(--aihub-color-yellow);
+}
+.aihub-theme [data-tone="orange"] {
+  --aihub-accent: var(--aihub-color-orange);
+}
+.aihub-theme [data-tone="purple"] {
+  --aihub-accent: var(--aihub-color-purple);
+}
+.aihub-theme [data-tone="cyan"] {
+  --aihub-accent: var(--aihub-color-cyan);
+}
+.aihub-theme [data-tone="red"] {
+  --aihub-accent: var(--aihub-color-red);
+}

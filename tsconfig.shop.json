@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.shop.tsbuildinfo"
+  },
+  "include": ["src/shop", "src/design-system", "src/vite-env.d.ts"]
+}

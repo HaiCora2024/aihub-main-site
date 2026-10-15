@@ -1,5 +1,8 @@
+import { useLanguage } from "../../../../src/i18n/LanguageContext";
+
 export const Home = (): JSX.Element => {
   const base = import.meta.env.BASE_URL;
+  const { lang } = useLanguage();
   return (
     <div className="w-full" data-model-id="316:6850">
       <div className="mx-auto flex w-full max-w-[1200px] min-h-[20vh] flex-col items-center gap-8 px-4 py-8 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-12 sm:px-6 md:gap-16 min-[1200px]:justify-between min-[1200px]:px-8 min-[1200px]:py-16">
@@ -33,7 +36,10 @@ export const Home = (): JSX.Element => {
 
       {/* Legal links */}
       <div className="border-t border-white/5">
-        <div className="mx-auto flex w-full max-w-[1200px] items-center justify-center gap-6 px-4 py-4 sm:px-6 min-[1200px]:px-8">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-wrap items-center justify-center gap-6 px-4 py-4 sm:px-6 min-[1200px]:px-8">
+          <a href={`${base}shop.html?lang=${lang}`} className="hero-nav-link [font-family:'Geologica',Helvetica] text-sm text-[#08d070]">
+            {lang === "ru" ? "Магазин AI-решений" : "AI solutions shop"} →
+          </a>
           <a
             href={`${base}legal/privacy-policy.html`}
             className="[font-family:'Geologica',Helvetica] font-light text-white/30 hover:text-white/60 text-xs transition-colors duration-200"

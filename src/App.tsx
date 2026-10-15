@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Home as HeroSection } from "../01_hero_custom_ai_assistant/src/screens/Home";
 import { Home as ResultsSection } from "../02_instant_business_results/src/screens/Home";
 import { Home as ClientsSection } from "../03_clients_logos/src/screens/Home";
@@ -27,6 +28,24 @@ const sections = [
 ];
 
 export function App(): JSX.Element {
+  useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    let active = true;
+    // Cross-page anchors can resolve before React has mounted the sections.
+    void document.fonts.ready.then(() => {
+      if (active && location.hash === hash && window.scrollY === 0) {
+        document.getElementById(hash.slice(1))?.scrollIntoView({
+          behavior: "instant",
+          block: "start",
+        });
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   return (
     <main aria-label="AIHub Works" className="relative overflow-x-hidden overflow-y-visible bg-[#060c24] text-white">
       {sections.map(({ id, Component, label }, index) => (

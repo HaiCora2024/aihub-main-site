@@ -1,0 +1,73 @@
+{
+  "model": "gemini-nano-banana-2.1",
+  "imageId": "5bb4153c-fc0c-4bf7-85f6-b9ae603dbe7b",
+  "backgroundRemoval": {
+    "model": "fal-bria-rmbg",
+    "imageId": "51be7937-fd0e-4911-b366-79d965f7f064",
+    "inputSha256": "975b53c70217965e83efae6939179fb0879e1fae8d496edb5598f980169b5b44"
+  },
+  "source": {
+    "width": 4096,
+    "height": 2286,
+    "sha256": "760cdc013088705565a4783d64870534efc0aea7b194c94566a04c3ca01d655f"
+  },
+  "processing": "4x2 equal cells, centered square crop with 32px edge inset, 640px WebP quality 88",
+  "files": [
+    {
+      "file": "public/shop/icons/voice-assistant.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 18088,
+      "sha256": "280b35a8cbaeb213c4a984f77d580b9963423ee579849ad00d8ce89f50ac02f0"
+    },
+    {
+      "file": "public/shop/icons/chat-assistant.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 24178,
+      "sha256": "60270d9bc0cdf525ebbdcdae023ed4787e226ff809d313a17aa4eeced10e9220"
+    },
+    {
+      "file": "public/shop/icons/email-orders.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 27004,
+      "sha256": "bcbe539ecea3539c4339ca416fc2a5f93dde4e67f77ce7d2d6b497bce0bc8aaa"
+    },
+    {
+      "file": "public/shop/icons/document-autofill.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 24796,
+      "sha256": "f0a167d3f99233df365ca21de67dbab7b76e9a5c5b140633db24b4a76afdaa24"
+    },
+    {
+      "file": "public/shop/icons/kpi-reporting.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 23138,
+      "sha256": "4e10884afd0f6b9f802fdf458086de6e341d62027ddfa9b0b61f93f1c622bb34"
+    },
+    {
+      "file": "public/shop/icons/sentiment-monitor.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 25394,
+      "sha256": "92cfaa2a7d1d4d8620442952fa176737903174876f1ce79849fc1a8b4b302472"
+    },
+    {
+      "file": "public/shop/icons/recommendations.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 26728,
+      "sha256": "0dacccfa82d0a9a1f28a16b921107263ab0284a98aeca9b26e86909db66d8540"
+    },
+    {
+      "file": "public/shop/icons/discovery-workshop.webp",
+      "width": 640,
+      "height": 640,
+      "bytes": 29866,
+      "sha256": "9662cf904e5f4548d5617d1bc35e297c56878e07d4a11502b0499dee7e8c7f00"
+    }
+  ]
+}

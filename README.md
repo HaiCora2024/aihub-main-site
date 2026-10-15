@@ -15,6 +15,40 @@
 
 Каждый блок по-прежнему хранится в собственной папке, чтобы его было удобно редактировать отдельно, но рендерится он внутри общей страницы.
 
+## Дизайн-система и новые страницы
+
+Интерактивный каталог на основе всех 12 блоков лендинга: `/design-system.html`.
+Содержит семантические CSS-токены, типизированный React UI-kit, атлас секций,
+адаптивные preview-фреймы и шаблоны страницы услуги и кейса.
+
+Подробное руководство: [docs/design-system.md](docs/design-system.md).
+Исходники: `src/design-system/`. Стили изолированы от текущего лендинга;
+его массовая миграция не выполнялась. Формы каталога демонстрационные и не вызывают backend.
+
+```bash
+npm run build
+npm run preview -- --port 4173 --strictPort
+# http://localhost:4173/design-system.html
+npx tsc --noEmit -p tsconfig.design-system.json
+```
+
+## Магазин AI-решений
+
+`/shop.html` — отдельная React-страница в общей multipage-сборке, связанная с
+главной через пункт «Shop / Магазин». Перевёрстана из предоставленного HTML
+на UI-kit AIHUB: EN/RU, восемь решений, поиск, категории, локальная корзина
+и демонстрационное оформление. Реальные платежи и отправка заказов не подключены.
+
+Руководство: [docs/shop.md](docs/shop.md). Набор объёмных иконок Nano Banana 2.1:
+[docs/shop-icons.md](docs/shop-icons.md), интерактивный раздел `/design-system.html#icons`.
+
+```bash
+npx tsc --noEmit -p tsconfig.shop.json
+npm run build
+npm run preview -- --port 4173 --strictPort
+# http://localhost:4173/shop.html
+```
+
 ## Стек
 
 - `React 18`
