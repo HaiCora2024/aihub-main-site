@@ -1,0 +1,60 @@
+/* Checkout page: AIHUB layout around the Ecwid cart/checkout widget. */
+.checkout-page .checkout-hero {
+  position: relative;
+  display: grid;
+  gap: var(--aihub-space-24, 24px);
+  padding-block: 56px 32px;
+}
+.checkout-page .checkout-body {
+  display: grid;
+  gap: 20px;
+  padding-bottom: 96px;
+}
+
+/* Ecwid renders a light storefront, so it sits on a light card. */
+.checkout-panel {
+  position: relative;
+  min-height: 480px;
+  padding: 40px;
+  border-radius: var(--aihub-radius-card);
+  background: #ffffff;
+  color: #0b1020;
+  box-shadow: 0 30px 80px -40px #08d07066;
+}
+.checkout-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  font: 400 var(--aihub-text-body) / 1.6 var(--aihub-font-ui);
+  color: #5b647a;
+}
+
+.checkout-note {
+  margin: 0;
+  padding: 20px 24px;
+  border: 1px solid var(--aihub-color-line);
+  border-radius: var(--aihub-radius-inset);
+  color: var(--aihub-color-muted);
+  font-size: var(--aihub-text-body);
+  line-height: var(--aihub-leading-body);
+}
+.checkout-note--success {
+  border-color: #08d07066;
+  color: var(--aihub-color-green);
+}
+.checkout-note--error {
+  border-color: #ff463a66;
+  color: var(--aihub-color-error-text);
+}
+
+@media (max-width: 767px) {
+  .checkout-page .checkout-hero {
+    padding-block: 32px 24px;
+  }
+  .checkout-panel {
+    padding: 16px;
+    border-radius: var(--aihub-radius-inset);
+  }
+}

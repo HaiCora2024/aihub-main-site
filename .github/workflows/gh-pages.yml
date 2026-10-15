@@ -45,6 +45,8 @@ jobs:
         env:
           VITE_BASE: ${{ vars.VITE_BASE || format('/{0}/', github.event.repository.name) }}
           VITE_CONTACT_API_URL: https://aihub-form-getcher.waw0.amvera.tech
+          # Public Ecwid store ID (repo Settings → Variables). Empty = demo shop.
+          VITE_ECWID_STORE_ID: ${{ vars.ECWID_STORE_ID }}
         run: npm run build
 
       - name: Disable Jekyll

@@ -25,6 +25,7 @@ import type { DemoOrder } from "./cart";
 import { categories, copy, formatPrice, productIcon, products } from "./data";
 import type { CategoryId, Product, ShopLanguage } from "./data";
 import { ShopDialog } from "./Dialog";
+import { ecwidCheckoutUrl, isEcwidEnabled } from "./ecwid";
 import { SiteHeader, SiteLogo } from "../components/SiteHeader";
 import { TypewriterText } from "../components/TypewriterText";
 
@@ -128,6 +129,11 @@ export default function Shop() {
   };
   const checkout = () => {
     if (!cart.length) return;
+    if (isEcwidEnabled) {
+      // The local cart is kept until Ecwid confirms the order on checkout.html.
+      location.assign(ecwidCheckoutUrl(cart, lang));
+      return;
+    }
     setOrder(createDemoOrder(cart));
     setCart([]);
     setDialog("success");
@@ -497,16 +503,19 @@ export default function Shop() {
                     <strong>{formatPrice(total, lang)}</strong>
                   </div>
                   <Button onClick={checkout}>
-                    {t.checkout} <span aria-hidden="true">→</span>
+                    {isEcwidEnabled ? t.checkoutLive : t.checkout}{" "}
+                    <span aria-hidden="true">→</span>
                   </Button>
-                  <p>{t.cartDisclaimer}</p>
+                  <p>
+                    {isEcwidEnabled ? t.cartDisclaimerLive : t.cartDisclaimer}
+                  </p>
                 </div>
               </>
             ) : (
               <div className="shop-cart-empty">
                 <CartGlyph />
                 <h3>{t.empty}</h3>
-                <p>{t.emptyText}</p>
+                <p>{isEcwidEnabled ? t.emptyTextLive : t.emptyText}</p>
                 <Button
                   onClick={() => {
                     setDialog(null);

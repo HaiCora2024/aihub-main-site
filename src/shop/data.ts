@@ -207,6 +207,21 @@ export const copy = {
     increase: "Increase quantity",
     quantity: "Quantity",
     total: "Total",
+    emptyTextLive: "Add a solution to place an order.",
+    checkoutLive: "Proceed to checkout",
+    cartDisclaimerLive:
+      "Secure checkout and payment by Ecwid. You'll confirm the order on the next step.",
+    checkoutTitle: "Checkout",
+    checkoutIntro:
+      "Confirm your contact details and pay securely. After the order, our team will reach out to plan the integration.",
+    checkoutBack: "Back to the store",
+    checkoutLoading: "Loading secure checkout…",
+    checkoutError:
+      "Checkout is temporarily unavailable. Please try again later or contact us.",
+    checkoutDisabled:
+      "Online checkout is not enabled yet. You can place a demo order in the store or contact our team.",
+    checkoutDone:
+      "Thank you! Your order is confirmed. We'll contact you shortly.",
     checkout: "Create demo order",
     cartDisclaimer:
       "Demo only. No payment is collected and no request is sent to the AIHUB team.",
@@ -271,6 +286,21 @@ export const copy = {
     increase: "Увеличить количество",
     quantity: "Количество",
     total: "Итого",
+    emptyTextLive: "Добавьте решение, чтобы оформить заказ.",
+    checkoutLive: "Перейти к оформлению",
+    cartDisclaimerLive:
+      "Безопасное оформление и оплата через Ecwid. Заказ подтверждается на следующем шаге.",
+    checkoutTitle: "Оформление заказа",
+    checkoutIntro:
+      "Укажите контакты и оплатите заказ. После оформления команда свяжется с вами, чтобы спланировать внедрение.",
+    checkoutBack: "Вернуться в магазин",
+    checkoutLoading: "Загружаем безопасное оформление…",
+    checkoutError:
+      "Оформление временно недоступно. Попробуйте позже или свяжитесь с нами.",
+    checkoutDisabled:
+      "Онлайн-оформление пока не подключено. Можно создать демо-заказ в магазине или связаться с командой.",
+    checkoutDone:
+      "Спасибо! Заказ подтверждён. Мы скоро свяжемся с вами.",
     checkout: "Создать демо-заказ",
     cartDisclaimer:
       "Только демонстрация. Оплата не взимается, заявка команде AIHUB не отправляется.",

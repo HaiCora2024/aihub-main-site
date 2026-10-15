@@ -20,6 +20,7 @@ export default defineConfig({
         main: path.resolve(__dirname, "index.html"),
         designSystem: path.resolve(__dirname, "design-system.html"),
         shop: path.resolve(__dirname, "shop.html"),
+        checkout: path.resolve(__dirname, "checkout.html"),
         hotelConcierge: path.resolve(__dirname, "cases/hotel-concierge.html"),
         realEstate: path.resolve(__dirname, "cases/real-estate.html"),
         orderProcessing1c: path.resolve(__dirname, "cases/order-processing-1c.html"),

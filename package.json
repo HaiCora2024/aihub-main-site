@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ecwid:sync": "node scripts/ecwid-sync.mjs"
   },
   "dependencies": {
     "react": "^18.2.0",
