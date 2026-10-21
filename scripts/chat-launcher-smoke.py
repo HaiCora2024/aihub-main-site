@@ -18,10 +18,12 @@ with sync_playwright() as p:
     if not LIVE:
         cases += [("classic", 1440, "no-preference"), ("unknown", 390, "no-preference"),
                   ("api-fail", 1440, "no-preference"), ("asset-fail", 1440, "no-preference"),
-                  ("frame-fail", 390, "no-preference"), ("delayed", 390, "no-preference")]
+                  ("frame-fail", 390, "no-preference"), ("delayed", 390, "no-preference"),
+                  ("slow-frame", 390, "no-preference")]
     for variant, width, motion in cases:
         ctx = browser.new_context(viewport={"width": width, "height": 844}, reduced_motion=motion)
         errors, conversations, bootstrap, pending, legacy_requests = [], [], [], [], []
+        slow_frames = []
         ctx.on("request", lambda request: legacy_requests.append(request.url)
                if "/brand/chat-egg.svg" in request.url else None)
         if not LIVE:
@@ -34,10 +36,10 @@ with sync_playwright() as p:
             if path == "/api/knowledge/widget_launcher":
                 bootstrap.append({"method":route.request.method,"cookie":route.request.headers.get("cookie")})
                 if not LIVE:
-                    if variant == "delayed":
+                    if variant == "delayed" and len(bootstrap) == 1:
                         pending.append(route)
                         return
-                    skin = "aihub" if variant in {"aihub", "asset-fail", "frame-fail"} else variant
+                    skin = "aihub" if variant in {"aihub", "asset-fail", "frame-fail", "delayed", "slow-frame"} else variant
                     route.fulfill(status=503 if variant == "api-fail" else 200,
                         content_type="application/json", body=json.dumps({"launcher_skin":skin}),
                         headers={"Access-Control-Allow-Origin":"*", "Cache-Control":"no-store"})
@@ -55,6 +57,12 @@ with sync_playwright() as p:
                 return
             if variant == "frame-fail" and path == "/chats/chat/":
                 route.abort()
+                return
+            if variant == "slow-frame" and path == "/chats/chat/" and not slow_frames:
+                slow_frames.append(route.request.url)
+                route.fulfill(content_type="text/html", body='''<script>
+                    setTimeout(()=>parent.postMessage({type:"aihub-chat-ready"},"https://aihub.works"),7000);
+                    </script>''')
                 return
             if path.startswith("/api/") and path not in {"/api/knowledge/widget_launcher", "/api/knowledge/bot_info"}:
                 route.fulfill(status=503, body="{}")
@@ -100,7 +108,7 @@ with sync_playwright() as p:
         else:
             art = button.locator(".crm-launcher-art")
             art.wait_for(timeout=15000)
-            selected = "aihub" if variant in {"aihub", "frame-fail", "delayed"} else "classic"
+            selected = "aihub" if variant in {"aihub", "frame-fail", "delayed", "slow-frame"} else "classic"
             assert art.get_attribute("data-launcher-skin") == selected
             if selected == "aihub" and motion != "reduce":
                 names = art.evaluate("el => el.getAnimations().map(a => a.animationName)")
@@ -146,6 +154,20 @@ with sync_playwright() as p:
         page.screenshot(path=str(OUT / f"{variant}-{width}-{motion}.png"))
         button.focus()
         page.keyboard.press("Enter")
+        if variant == "slow-frame":
+            shell = page.locator(".aihub-chat-loading")
+            shell.wait_for(state="visible", timeout=500)
+            assert shell.evaluate("el => getComputedStyle(el).borderRadius") == "0px"
+            assert shell.get_by_role("button", name="Закрыть чат").evaluate("el => el === document.activeElement")
+            loading_visitor = page.locator(".aihub-chat-frame").get_attribute("src")
+            page.wait_for_timeout(250)
+            assert slow_frames and not conversations
+            shell.screenshot(path=str(OUT / "instant-loading.png"))
+            page.keyboard.press("Escape")
+            shell.wait_for(state="detached")
+            assert page.locator(".aihub-chat-frame").count() == 0 and button.is_visible()
+            page.keyboard.press("Enter")
+            assert page.locator(".aihub-chat-frame").get_attribute("src") == loading_visitor
         if variant == "frame-fail":
             page.locator(".aihub-chat-activate--unavailable").wait_for(timeout=12000)
             assert not button.is_disabled()
@@ -154,6 +176,7 @@ with sync_playwright() as p:
         else:
             iframe = page.locator(".aihub-chat-frame")
             iframe.wait_for(state="visible", timeout=20000)
+            assert page.locator(".aihub-chat-loading").count() == 0
             frame = page.frame_locator(".aihub-chat-frame")
             frame.locator(".aihub-header").wait_for()
             assert iframe.evaluate("el => getComputedStyle(el).borderRadius") == ("30px" if width >= 768 else "0px")

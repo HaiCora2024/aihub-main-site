@@ -94,12 +94,43 @@ function mountActivationButton() {
       "allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox",
     );
 
+    const russian = button.getAttribute("aria-label") === "Чат с AIHUB";
+    const loading = document.createElement("section");
+    loading.className = "aihub-chat-loading";
+    loading.setAttribute("role", "dialog");
+    loading.setAttribute("aria-label", russian ? "Чат с AIHUB" : "Chat with AIHUB");
+    const header = document.createElement("header");
+    header.className = "aihub-chat-loading__header";
+    const title = document.createElement("strong");
+    title.textContent = russian ? "Чат с AIHUB" : "Chat with AIHUB";
+    const cancel = document.createElement("button");
+    cancel.type = "button";
+    cancel.className = "aihub-chat-loading__close";
+    cancel.setAttribute("aria-label", russian ? "Закрыть чат" : "Close chat");
+    cancel.textContent = "\u00d7";
+    header.append(title, cancel);
+    const progress = document.createElement("div");
+    progress.className = "aihub-chat-loading__progress";
+    progress.setAttribute("role", "status");
+    const spinner = document.createElement("span");
+    spinner.className = "aihub-chat-loading__spinner";
+    spinner.setAttribute("aria-hidden", "true");
+    const message = document.createElement("span");
+    message.textContent = russian ? "Загружаем чат..." : "Loading chat...";
+    progress.append(spinner, message);
+    loading.append(header, progress);
+
     let ready = false;
-    const closeChat = () => {
+    let closed = false;
+    const closeChat = (failed = false) => {
+      if (closed) return;
+      closed = true;
       clearTimeout(timeout);
       window.removeEventListener("message", onMessage);
       frame.remove();
+      loading.remove();
       button.disabled = false;
+      unavailable = failed;
       document.body.appendChild(button);
       window.addEventListener("resize", updateLabel);
       observer.observe(document.documentElement, {
@@ -110,14 +141,12 @@ function mountActivationButton() {
       button.focus();
     };
     const onMessage = (event: MessageEvent) => {
-      if (event.origin !== CHAT_ORIGIN || event.source !== frame.contentWindow) return;
-      if (event.data?.type === "aihub-chat-ready") {
+      if (closed || event.origin !== CHAT_ORIGIN || event.source !== frame.contentWindow) return;
+      if (event.data?.type === "aihub-chat-ready" && !ready) {
         ready = true;
         clearTimeout(timeout);
+        loading.remove();
         frame.hidden = false;
-        observer.disconnect();
-        window.removeEventListener("resize", updateLabel);
-        button.remove();
         frame.focus();
       } else if (event.data?.type === "bgSize" && typeof event.data.showChat === "boolean") {
         if (!event.data.showChat && ready) {
@@ -127,15 +156,17 @@ function mountActivationButton() {
     };
     window.addEventListener("message", onMessage);
     const timeout = window.setTimeout(() => {
-      if (ready) return;
-      window.removeEventListener("message", onMessage);
-      frame.remove();
-      unavailable = true;
-      button.disabled = false;
-      updateLabel();
+      if (!ready) closeChat(true);
     }, 10000);
-
-    document.body.appendChild(frame);
+    cancel.addEventListener("click", () => closeChat());
+    loading.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeChat();
+    });
+    observer.disconnect();
+    window.removeEventListener("resize", updateLabel);
+    button.remove();
+    document.body.append(frame, loading);
+    cancel.focus();
   });
   document.body.appendChild(button);
   const updateMotion = () => button.toggleAttribute("data-launcher-paused", document.hidden);

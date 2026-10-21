@@ -4,9 +4,11 @@ The AIHUB Pages build injects the first-party adapter in `src/chat/embed.ts` int
 all public HTML entries except the design-system preview. The adapter shows a
 floating, click-to-load chat button, creates a 128-bit random visitor ID in tab-scoped
 `sessionStorage`, and opens `https://aihubworks.com/chats/chat/` with that ID.
-On `aihub.works` and `getcher123.github.io`, a ready message from the exact
-iframe and CRM origin reveals the embedded panel; otherwise the button offers
-retry after 10 seconds. Closing it restores the button without changing the
+On click, a correctly sized loading panel appears immediately without waiting
+for network requests. Its Close button and Escape cancel loading and restore
+focus. A ready message from the exact iframe and CRM origin replaces that panel
+with the chat; otherwise the button offers retry after 10 seconds. Closing it
+restores the button without changing the
 tab's visitor ID. No CRM credentials or API keys belong in the site bundle.
 
 The independent `launcher_skin` setting is read on page load from the public
@@ -23,6 +25,8 @@ changes one second apart followed by three up/down waves at half-second steps,
 repeating every seven seconds. An independent 3.6-second ease-in-out animation
 gently sways the character by +/-3 degrees. Reduced motion disables both loops
 and uses a static smiling frame.
+The chat server precompresses public assets with gzip/Brotli to reduce cold-load
+transfer size. A visible loading panel does not imply the chat is already ready.
 Changing the launcher in CRM requires Save Draft, Apply Settings and a website
 refresh; it does not change the chat window skin or visitor identity.
 
