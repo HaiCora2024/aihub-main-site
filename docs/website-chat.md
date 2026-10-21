@@ -9,6 +9,11 @@ iframe and CRM origin reveals the embedded panel; otherwise the button offers
 retry after 10 seconds. Closing it restores the button without changing the
 tab's visitor ID. No CRM credentials or API keys belong in the site bundle.
 
+The iframe uses the legacy 420x700 desktop dimensions with a 20px inset and
+fills the screen on mobile. Its validated `avatar_path` points to the retained
+legacy portrait when the active bot has no configured avatar. Both Aura theme
+directories, including their fonts, must be exposed by the CRM gateway.
+
 This deployment depends on coordinated changes to Universal CRM Core and CEP:
 
 1. Core gateway must expose only `/chats/chat` and `/chats/chat/` from the

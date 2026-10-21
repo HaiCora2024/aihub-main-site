@@ -26,6 +26,7 @@ function chatUrl() {
   const url = new URL("/chats/chat/", CHAT_ORIGIN);
   url.searchParams.set("site_visitor_id", visitorId());
   url.searchParams.set("open", "1");
+  url.searchParams.set("avatar_path", "/media/20260411_173204.png");
   const language = new URLSearchParams(window.location.search).get("lang") ||
     document.documentElement.lang;
   url.searchParams.set("lang", language.toLowerCase().startsWith("ru") ? "ru" : "en");

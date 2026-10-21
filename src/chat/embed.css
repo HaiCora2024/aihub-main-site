@@ -10,8 +10,10 @@
 }
 
 .aihub-chat-frame--expanded {
-  width: min(460px, 100vw);
-  height: min(720px, 100dvh);
+  right: 20px;
+  bottom: 20px;
+  width: min(420px, 90vw);
+  height: min(700px, 90dvh);
 }
 
 .aihub-chat-frame[hidden] {
@@ -87,6 +89,8 @@
 
 @media (max-width: 767px) {
   .aihub-chat-frame--expanded {
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100dvh;
   }
