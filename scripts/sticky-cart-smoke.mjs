@@ -35,12 +35,15 @@ const scroll = async (y, pinned) => {
       .classList.contains("shop-cart-trigger--pinned") === expected,
     pinned,
   );
+  if (pinned || y === 0)
+    await page.locator(`.site-header[data-compact="${pinned}"]`).waitFor();
 };
 const geometry = () => page.locator(".shop-cart-trigger").evaluate((button) => {
   const box = button.getBoundingClientRect();
   const target = document.elementFromPoint(box.x + box.width / 2, box.y + box.height / 2);
   return {
     top: box.top,
+    headerBottom: document.querySelector(".site-header__inner").getBoundingClientRect().bottom,
     visible: box.top >= 0 && box.bottom <= innerHeight && box.left >= 0 && box.right <= innerWidth,
     clickable: button.contains(target),
     overflow: document.documentElement.scrollWidth > innerWidth,
@@ -63,7 +66,7 @@ try {
       check(`${label}: original button remains in flow`, (await geometry()).visible);
       await scroll(layout.top + 60, true);
       let box = await geometry();
-      check(`${label}: pins at 16px without overflow`, box.visible && box.clickable && !box.overflow && Math.abs(box.top - 16) < 1);
+      check(`${label}: pins below the menu without overflow`, box.visible && box.clickable && !box.overflow && Math.abs(box.top - box.headerBottom - 16) < 1);
       check(`${label}: pinning preserves page height`, await page.evaluate(
         (height) => Math.abs(document.documentElement.scrollHeight - height) < 1,
         layout.height,

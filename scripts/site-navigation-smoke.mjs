@@ -139,7 +139,11 @@ try {
     await caseLink.click();
     await page.waitForURL(/#cases$/);
     await page.waitForFunction(
-      () => document.getElementById("cases")?.getBoundingClientRect().top < 100,
+      () => {
+        const top = document.getElementById("cases")?.getBoundingClientRect().top;
+        const bottom = document.querySelector(".site-header__inner")?.getBoundingClientRect().bottom;
+        return top >= bottom && top < bottom + 72;
+      },
     );
     check(
       `${lang}: shop menu opens correct landing section`,
@@ -148,14 +152,28 @@ try {
     await open("", lang);
     await page.locator('.site-header a[href="#roadmap"]:visible').click();
     await page.waitForFunction(
-      () =>
-        Math.abs(
-          document.getElementById("roadmap").getBoundingClientRect().top,
-        ) < 100,
+      () => {
+        const top = document.getElementById("roadmap").getBoundingClientRect().top;
+        const bottom = document.querySelector(".site-header__inner").getBoundingClientRect().bottom;
+        return top >= bottom && top < bottom + 72;
+      },
     );
     check(
       `${lang}: landing navigation scrolls to section`,
       new URL(page.url()).hash === "#roadmap",
+    );
+    check(
+      `${lang}: scrolling docks a compact navigation ribbon`,
+      await page.locator(".site-header__inner").evaluate((el) => {
+        const box = el.getBoundingClientRect();
+        return getComputedStyle(el).position === "fixed" && Math.abs(box.top) < 1 && box.height <= 64;
+      }),
+    );
+    await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+    await page.locator('.site-header[data-compact="false"]').waitFor();
+    check(
+      `${lang}: the full header returns at the top`,
+      await page.locator(".site-header__company").isVisible(),
     );
   }
 

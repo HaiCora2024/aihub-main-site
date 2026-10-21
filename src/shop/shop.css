@@ -62,6 +62,9 @@ body.shop-body {
   border-color: #08d070;
   box-shadow: 0 8px 32px #0008;
 }
+.shop-page:has(.site-header[data-compact="true"]) .shop-cart-trigger--pinned {
+  top: calc(72px + env(safe-area-inset-top));
+}
 .shop-cart-count {
   min-width: 30px;
   height: 30px;

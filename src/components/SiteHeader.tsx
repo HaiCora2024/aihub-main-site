@@ -13,6 +13,7 @@ const labels = {
     navigation: "Main navigation",
     language: "Switch to Russian",
     company: "Company details",
+    contact: "Contact",
   },
   ru: {
     home: "AIHUB: главная",
@@ -23,6 +24,7 @@ const labels = {
     navigation: "Главное меню",
     language: "Switch to English",
     company: "Реквизиты",
+    contact: "Связаться",
   },
 };
 
@@ -60,6 +62,7 @@ export function SiteHeader({
 }) {
   const t = labels[lang];
   const [open, setOpen] = useState(false);
+  const [compact, setCompact] = useState(false);
   const menuId = useId();
   const menuButton = useRef<HTMLButtonElement>(null);
   const root = useRef<HTMLElement>(null);
@@ -74,6 +77,34 @@ export function SiteHeader({
     current: false,
   }));
   links.push({ label: t.links[4], href: shop, current: page === "shop" });
+
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      setCompact((current) => window.scrollY > (current ? 24 : 96));
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (compact) {
+      setOpen(false);
+    } else if (
+      matchMedia("(max-width: 767px)").matches &&
+      root.current?.querySelector("nav")?.contains(document.activeElement)
+    ) {
+      menuButton.current?.focus({ preventScroll: true });
+    }
+  }, [compact]);
 
   useEffect(() => {
     if (!open) return;
@@ -129,6 +160,7 @@ export function SiteHeader({
       ref={root}
       className={`site-header site-header--${page}`}
       data-menu-open={open}
+      data-compact={compact}
       onKeyDown={(event) => {
         if (event.key === "Escape" && open) {
           setOpen(false);
@@ -175,7 +207,7 @@ export function SiteHeader({
             className="site-header__mobile-contact site-header__link"
             onClick={navigate}
           >
-            {t.cta.join(" ")}
+            {compact ? t.contact : t.cta.join(" ")}
           </a>
         </nav>
         <div className="site-header__actions">
