@@ -152,8 +152,21 @@ with sync_playwright() as p:
         box = button.bounding_box()
         assert box and box["x"] >= 0 and box["y"] >= 0 and box["x"] + box["width"] <= width
         page.screenshot(path=str(OUT / f"{variant}-{width}-{motion}.png"))
+        button.evaluate("""el => el.addEventListener('click', () => {
+            const started=performance.now();
+            const observer=new MutationObserver(() => {
+                if (document.querySelector('.aihub-chat-loading')) {
+                    window.__launcherShownMs=performance.now()-started;
+                    observer.disconnect();
+                }
+            });
+            observer.observe(document.body,{childList:true});
+        }, {capture:true,once:true})""")
         button.focus()
         page.keyboard.press("Enter")
+        page.wait_for_function("typeof window.__launcherShownMs === 'number'", timeout=1000)
+        shown_ms = page.evaluate("window.__launcherShownMs")
+        assert shown_ms < 500, shown_ms
         if variant == "slow-frame":
             shell = page.locator(".aihub-chat-loading")
             shell.wait_for(state="visible", timeout=500)
@@ -189,7 +202,7 @@ with sync_playwright() as p:
             assert iframe.get_attribute("src") == visitor
             frame.locator("button:has(.pi-times)").click()
         assert len(ctx.pages) == 1 and not errors, errors
-        reports.append({"variant":variant,"width":width,"motion":motion,"passed":True})
+        reports.append({"variant":variant,"width":width,"motion":motion,"shown_ms":round(shown_ms, 1),"passed":True})
         print("LAUNCHER_SITE_OK " + json.dumps(reports[-1]), flush=True)
         ctx.unroute_all(behavior="wait")
         ctx.close()
