@@ -54,6 +54,20 @@
   display: none;
 }
 
+.aihub-chat-activate--skinned {
+  height: 130px;
+  transition: none;
+}
+
+.aihub-chat-activate--skinned:hover {
+  transform: none;
+}
+
+.aihub-chat-activate.aihub-chat-activate--classic:not(.aihub-chat-activate--unavailable) {
+  width: 64px;
+  height: 64px;
+}
+
 @keyframes aihub-chat-float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-7px); }
@@ -81,7 +95,8 @@
   box-shadow: 0 8px 30px #001b14a6;
 }
 
-.aihub-chat-activate--unavailable .aihub-chat-activate__egg {
+.aihub-chat-activate--unavailable .aihub-chat-activate__egg,
+.aihub-chat-activate--unavailable .crm-launcher-art {
   display: none;
 }
 
@@ -108,6 +123,10 @@
   .aihub-chat-activate--unavailable {
     width: auto;
     height: auto;
+  }
+
+  .aihub-chat-activate--skinned:not(.aihub-chat-activate--classic):not(.aihub-chat-activate--unavailable) {
+    height: 102px;
   }
 }
 

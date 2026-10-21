@@ -1,4 +1,5 @@
 import "./embed.css";
+import { loadLauncher } from "./launcher";
 
 const CHAT_ORIGIN = "https://aihubworks.com";
 const VISITOR_KEY = "aihub-site-chat-visitor-v1";
@@ -136,6 +137,16 @@ function mountActivationButton() {
     document.body.appendChild(frame);
   });
   document.body.appendChild(button);
+  const updateMotion = () => button.toggleAttribute("data-launcher-paused", document.hidden);
+  document.addEventListener("visibilitychange", updateMotion);
+  updateMotion();
+  void loadLauncher(CHAT_ORIGIN).then((launcher) => {
+    if (!launcher) return;
+    egg.replaceWith(launcher.art);
+    button.classList.add("aihub-chat-activate--skinned");
+    button.classList.toggle("aihub-chat-activate--classic", launcher.skin === "classic");
+    button.dataset.launcherSkin = launcher.skin;
+  });
 }
 
 if (document.readyState === "loading") {

@@ -9,6 +9,25 @@ iframe and CRM origin reveals the embedded panel; otherwise the button offers
 retry after 10 seconds. Closing it restores the button without changing the
 tab's visitor ID. No CRM credentials or API keys belong in the site bundle.
 
+The independent `launcher_skin` setting is read on page load from the public
+`/api/knowledge/widget_launcher` selector with credentials omitted and a five-
+second timeout. Only `classic` and `aihub` are accepted. Style and image assets
+come from the fixed `/widget-launcher/v1/` directory on the CRM origin, which
+is explicitly allowed for CSS/images by the homepage CSP. A failed selector or
+asset request preserves the bundled SVG launcher, so the chat remains usable.
+
+AIHUB is a transparent four-frame PNG animated entirely by shared CSS: four eye
+changes one second apart followed by three up/down waves at half-second steps,
+repeating every seven seconds. Reduced motion uses a static smiling frame.
+Changing the launcher in CRM requires Save Draft, Apply Settings and a website
+refresh; it does not change the chat window skin or visitor identity.
+
+`scripts/chat-launcher-smoke.py` verifies the selector/asset fallback, keyboard
+open/close, preserved visitor id, mobile layout, reduced motion and all timed
+sprite states. It uses a local site preview on 4188 and CRM on 18089, intercepts
+conversation traffic and never sends a real message. `LIVE=1` checks the actual
+published assets while still stubbing every conversation endpoint/WebSocket.
+
 The iframe uses the legacy 420x700 desktop dimensions with a 20px inset and
 the design-system card radius (30px). The host iframe clips its contents so
 opaque chat skins cannot paint square corners outside that radius. Fullscreen
