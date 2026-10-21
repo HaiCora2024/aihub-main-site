@@ -10,8 +10,11 @@ retry after 10 seconds. Closing it restores the button without changing the
 tab's visitor ID. No CRM credentials or API keys belong in the site bundle.
 
 The iframe uses the legacy 420x700 desktop dimensions with a 20px inset and
-fills the screen on mobile. Its validated `avatar_path` points to the retained
-legacy portrait when the active bot has no configured avatar. Both Aura theme
+the design-system card radius (30px). The host iframe clips its contents so
+opaque chat skins cannot paint square corners outside that radius. Fullscreen
+mobile mode deliberately has no corner radius. Its validated `avatar_path`
+points to the retained legacy portrait when the active bot has no configured
+avatar. Both Aura theme
 directories, including their fonts, must be exposed by the CRM gateway.
 
 This deployment depends on coordinated changes to Universal CRM Core and CEP:
