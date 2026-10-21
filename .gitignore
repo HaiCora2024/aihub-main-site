@@ -4,6 +4,7 @@ build/
 out/
 .cache/
 .vite/
+__pycache__/
 coverage/
 playwright-report/
 test-results/

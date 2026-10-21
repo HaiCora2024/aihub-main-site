@@ -2,7 +2,7 @@
 
 The AIHUB Pages build injects the first-party adapter in `src/chat/embed.ts` into
 all public HTML entries except the design-system preview. The adapter shows a
-floating egg-shaped, click-to-load chat button, creates a 128-bit random visitor ID in tab-scoped
+floating, click-to-load chat button, creates a 128-bit random visitor ID in tab-scoped
 `sessionStorage`, and opens `https://aihubworks.com/chats/chat/` with that ID.
 On `aihub.works` and `getcher123.github.io`, a ready message from the exact
 iframe and CRM origin reveals the embedded panel; otherwise the button offers
@@ -14,17 +14,22 @@ The independent `launcher_skin` setting is read on page load from the public
 second timeout. Only `classic` and `aihub` are accepted. Style and image assets
 come from the fixed `/widget-launcher/v1/` directory on the CRM origin, which
 is explicitly allowed for CSS/images by the homepage CSP. A failed selector or
-asset request preserves the bundled SVG launcher, so the chat remains usable.
+asset request preserves the bundled neutral Classic SVG button, so the chat
+remains usable. This same compact button appears during initial loading; the
+superseded `chat-egg.svg` is not loaded or briefly displayed before the new skin.
 
 AIHUB is a transparent four-frame PNG animated entirely by shared CSS: four eye
 changes one second apart followed by three up/down waves at half-second steps,
-repeating every seven seconds. Reduced motion uses a static smiling frame.
+repeating every seven seconds. An independent 3.6-second ease-in-out animation
+gently sways the character by +/-3 degrees. Reduced motion disables both loops
+and uses a static smiling frame.
 Changing the launcher in CRM requires Save Draft, Apply Settings and a website
 refresh; it does not change the chat window skin or visitor identity.
 
 `scripts/chat-launcher-smoke.py` verifies the selector/asset fallback, keyboard
 open/close, preserved visitor id, mobile layout, reduced motion and all timed
-sprite states. It uses a local site preview on 4188 and CRM on 18089, intercepts
+sprite states, smooth sway, shared pause behavior and delayed loading without
+an old-character flash. It uses a local site preview on 4188 and CRM on 18089, intercepts
 conversation traffic and never sends a real message. `LIVE=1` checks the actual
 published assets while still stubbing every conversation endpoint/WebSocket.
 

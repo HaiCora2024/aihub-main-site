@@ -8,7 +8,7 @@ from playwright.sync_api import sync_playwright
 
 LIVE = os.environ.get("LIVE") == "1"
 OUT = Path(os.environ.get("LAUNCHER_SMOKE_OUTPUT", "/tmp/aihub-launcher-smoke")) / ("live-browser" if LIVE else "local-browser")
-OUT.mkdir(exist_ok=True)
+OUT.mkdir(parents=True, exist_ok=True)
 reports = []
 
 with sync_playwright() as p:
@@ -18,10 +18,12 @@ with sync_playwright() as p:
     if not LIVE:
         cases += [("classic", 1440, "no-preference"), ("unknown", 390, "no-preference"),
                   ("api-fail", 1440, "no-preference"), ("asset-fail", 1440, "no-preference"),
-                  ("frame-fail", 390, "no-preference")]
+                  ("frame-fail", 390, "no-preference"), ("delayed", 390, "no-preference")]
     for variant, width, motion in cases:
         ctx = browser.new_context(viewport={"width": width, "height": 844}, reduced_motion=motion)
-        errors, conversations, bootstrap = [], [], []
+        errors, conversations, bootstrap, pending, legacy_requests = [], [], [], [], []
+        ctx.on("request", lambda request: legacy_requests.append(request.url)
+               if "/brand/chat-egg.svg" in request.url else None)
         if not LIVE:
             def site(route):
                 parts = urlsplit(route.request.url)
@@ -32,6 +34,9 @@ with sync_playwright() as p:
             if path == "/api/knowledge/widget_launcher":
                 bootstrap.append({"method":route.request.method,"cookie":route.request.headers.get("cookie")})
                 if not LIVE:
+                    if variant == "delayed":
+                        pending.append(route)
+                        return
                     skin = "aihub" if variant in {"aihub", "asset-fail", "frame-fail"} else variant
                     route.fulfill(status=503 if variant == "api-fail" else 200,
                         content_type="application/json", body=json.dumps({"launcher_skin":skin}),
@@ -76,25 +81,64 @@ with sync_playwright() as p:
         page.goto("https://aihub.works/?lang=ru#services", wait_until="domcontentloaded")
         button = page.locator(".aihub-chat-activate")
         button.wait_for()
+        if variant == "delayed":
+            page.wait_for_function("document.querySelector('.aihub-chat-activate')?.dataset.launcherState === 'loading'")
+            assert button.locator(".aihub-chat-activate__fallback").is_visible()
+            assert button.locator("img").get_attribute("src").endswith("/brand/chat-launcher-classic.svg")
+            assert not button.is_disabled() and not legacy_requests
+            assert button.bounding_box()["width"] == 64
+            page.wait_for_timeout(500)
+            assert pending
+            pending[0].fulfill(status=200, content_type="application/json", body='{"launcher_skin":"aihub"}',
+                               headers={"Access-Control-Allow-Origin":"*", "Cache-Control":"no-store"})
         fallback = variant in {"api-fail", "asset-fail"}
         if fallback:
             page.wait_for_timeout(5500)
-            assert button.locator(".aihub-chat-activate__egg").count() == 1
+            assert button.locator(".aihub-chat-activate__fallback").is_visible()
+            assert button.get_attribute("data-launcher-state") == "fallback"
+            assert button.bounding_box()["width"] == 64
         else:
             art = button.locator(".crm-launcher-art")
             art.wait_for(timeout=15000)
-            selected = "aihub" if variant in {"aihub", "frame-fail"} else "classic"
+            selected = "aihub" if variant in {"aihub", "frame-fail", "delayed"} else "classic"
             assert art.get_attribute("data-launcher-skin") == selected
             if selected == "aihub" and motion != "reduce":
+                names = art.evaluate("el => el.getAnimations().map(a => a.animationName)")
+                assert names == ["crm-egg-launcher", "crm-egg-sway"], names
+                button.evaluate("el => el.setAttribute('data-launcher-paused', '')")
+                assert art.evaluate("el => el.getAnimations().every(a => a.playState === 'paused')")
+                button.evaluate("el => el.removeAttribute('data-launcher-paused')")
+                assert art.evaluate("el => el.getAnimations().every(a => a.playState === 'running')")
+                angles = []
+                for t in range(0, 3601, 450):
+                    state = art.evaluate("""(el,t) => {
+                        const a=el.getAnimations().find(a=>a.animationName==='crm-egg-sway');
+                        a.pause(); a.currentTime=t;
+                        const m=new DOMMatrixReadOnly(getComputedStyle(el).transform);
+                        const r=el.getBoundingClientRect();
+                        return {angle:Math.atan2(m.b,m.a)*180/Math.PI, duration:a.effect.getTiming().duration,
+                                left:r.left,right:r.right,top:r.top,bottom:r.bottom};
+                    }""", t)
+                    assert state["duration"] == 3600
+                    assert 0 <= state["left"] < state["right"] <= width
+                    assert 0 <= state["top"] < state["bottom"] <= 844
+                    angles.append(state["angle"])
+                assert abs(angles[0] + 3) < .01 and abs(angles[4] - 3) < .01
+                assert abs(angles[-1] - angles[0]) < .01
+                assert all(a < b for a, b in zip(angles[:4], angles[1:5])), angles
+                assert all(a > b for a, b in zip(angles[4:8], angles[5:])), angles
                 expected = [1,0,1,0,3,2,3,2,3,2,1]
                 times = [150,1150,2150,3150,4150,4650,5150,5650,6150,6650,7150]
                 for t, frame in zip(times, expected):
-                    position = art.evaluate("(el,t)=>{const a=el.getAnimations()[0];a.pause();a.currentTime=t;return parseFloat(getComputedStyle(el).backgroundPositionX);}", t)
+                    position = art.evaluate("(el,t)=>{const a=el.getAnimations().find(a=>a.animationName==='crm-egg-launcher');a.pause();a.currentTime=t;return parseFloat(getComputedStyle(el).backgroundPositionX);}", t)
                     assert abs(position - frame * 100/3) < .01, (t,position,frame)
                     if width == 1440 and t in {150,1150,4150,4650}:
                         button.screenshot(path=str(OUT / f"frame-{t}.png"))
-            elif selected == "aihub":
+                art.evaluate("el => el.getAnimations().forEach(a => a.play())")
+            else:
                 assert art.evaluate("el => getComputedStyle(el).animationName") == "none"
+                assert art.evaluate("el => getComputedStyle(el).transform") == "none"
+        assert not legacy_requests, legacy_requests
         assert bootstrap and all(row["method"] == "GET" and not row["cookie"] for row in bootstrap)
         assert not conversations, "The launcher must not create a conversation before click"
         box = button.bounding_box()
@@ -124,6 +168,7 @@ with sync_playwright() as p:
         assert len(ctx.pages) == 1 and not errors, errors
         reports.append({"variant":variant,"width":width,"motion":motion,"passed":True})
         print("LAUNCHER_SITE_OK " + json.dumps(reports[-1]), flush=True)
+        ctx.unroute_all(behavior="wait")
         ctx.close()
     browser.close()
 (OUT / "report.json").write_text(json.dumps(reports,indent=2)+"\n")

@@ -37,14 +37,15 @@ function chatUrl() {
 function mountActivationButton() {
   const button = document.createElement("button");
   button.type = "button";
-  button.className = "aihub-chat-activate";
-  const egg = document.createElement("img");
-  egg.src = `${import.meta.env.BASE_URL}brand/chat-egg.svg`;
-  egg.alt = "";
-  egg.className = "aihub-chat-activate__egg";
+  button.className = "aihub-chat-activate aihub-chat-activate--skinned aihub-chat-activate--classic";
+  button.dataset.launcherState = "loading";
+  const fallback = document.createElement("img");
+  fallback.src = `${import.meta.env.BASE_URL}brand/chat-launcher-classic.svg`;
+  fallback.alt = "";
+  fallback.className = "aihub-chat-activate__fallback";
   const status = document.createElement("span");
   status.className = "aihub-chat-activate__status";
-  button.append(egg, status);
+  button.append(fallback, status);
   let unavailable = false;
 
   const updateLabel = () => {
@@ -141,9 +142,9 @@ function mountActivationButton() {
   document.addEventListener("visibilitychange", updateMotion);
   updateMotion();
   void loadLauncher(CHAT_ORIGIN).then((launcher) => {
+    button.dataset.launcherState = launcher ? "ready" : "fallback";
     if (!launcher) return;
-    egg.replaceWith(launcher.art);
-    button.classList.add("aihub-chat-activate--skinned");
+    fallback.replaceWith(launcher.art);
     button.classList.toggle("aihub-chat-activate--classic", launcher.skin === "classic");
     button.dataset.launcherSkin = launcher.skin;
   });

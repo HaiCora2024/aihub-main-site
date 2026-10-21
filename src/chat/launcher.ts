@@ -39,7 +39,7 @@ export async function loadLauncher(origin: string): Promise<{ skin: LauncherSkin
     return {skin, art};
   } catch {
     controller.abort();
-    return null; // Keep the existing local launcher functional during an outage.
+    return null; // Keep the neutral local launcher functional during an outage.
   } finally {
     clearTimeout(timeout);
   }
