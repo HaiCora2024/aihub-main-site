@@ -1,13 +1,35 @@
 import react from "@vitejs/plugin-react";
 import path from "path";
 import tailwind from "tailwindcss";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 
 const repoName = process.env.GITHUB_REPOSITORY?.split("/")[1];
 const pagesBase = process.env.VITE_BASE ?? (repoName ? `/${repoName}/` : "/");
 
+function chatEmbedPlugin(): Plugin {
+  return {
+    name: "aihub-chat-embed",
+    transformIndexHtml: {
+      order: "pre",
+      handler(html, context) {
+        if (context.path.endsWith("/design-system.html")) return html;
+        return {
+          html,
+          tags: [
+            {
+              tag: "script",
+              attrs: { type: "module", src: "/src/chat/embed.ts" },
+              injectTo: "body",
+            },
+          ],
+        };
+      },
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), chatEmbedPlugin()],
   base: pagesBase,
   css: {
     postcss: {

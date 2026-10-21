@@ -1,0 +1,74 @@
+.aihub-chat-frame {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 182px;
+  height: 82px;
+  z-index: 11000;
+  border: 0;
+  background: transparent;
+}
+
+.aihub-chat-frame--expanded {
+  width: min(460px, 100vw);
+  height: min(720px, 100dvh);
+}
+
+.aihub-chat-frame[hidden] {
+  display: none;
+}
+
+.aihub-chat-activate {
+  position: fixed;
+  right: 24px;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  z-index: 11000;
+  min-height: 52px;
+  padding: 0 22px;
+  border: 1px solid #08d070;
+  border-radius: 999px;
+  background: #08d070;
+  box-shadow: 0 8px 30px #001b14a6;
+  color: #06172a;
+  cursor: pointer;
+  font: 700 15px/1.2 "Geologica", sans-serif;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.aihub-chat-activate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px #001b14c2;
+}
+
+.aihub-chat-activate:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+
+.aihub-chat-activate:disabled {
+  cursor: wait;
+  opacity: 0.8;
+}
+
+@media (max-width: 767px) {
+  .aihub-chat-frame--expanded {
+    width: 100vw;
+    height: 100dvh;
+  }
+
+  .aihub-chat-activate {
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    padding: 0 17px;
+  }
+
+  .aihub-chat-activate--unavailable {
+    padding: 0 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aihub-chat-activate {
+    transition: none;
+  }
+}
