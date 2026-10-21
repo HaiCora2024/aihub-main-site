@@ -3,6 +3,7 @@ import "./embed.css";
 const CHAT_ORIGIN = "https://aihubworks.com";
 const VISITOR_KEY = "aihub-site-chat-visitor-v1";
 const VISITOR_PATTERN = /^[a-f0-9]{32}$/;
+const TAB_ONLY_HOSTS = new Set(["aihub.works", "www.aihub.works"]);
 
 function visitorId() {
   try {
@@ -68,6 +69,10 @@ function mountActivationButton() {
 
   button.addEventListener("click", () => {
     if (button.disabled) return;
+    if (TAB_ONLY_HOSTS.has(window.location.hostname)) {
+      window.open(chatUrl(), "_blank", "noopener,noreferrer");
+      return;
+    }
     button.disabled = true;
     unavailable = false;
     updateLabel();
