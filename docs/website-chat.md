@@ -2,7 +2,7 @@
 
 The AIHUB Pages build injects the first-party adapter in `src/chat/embed.ts` into
 all public HTML entries except the design-system preview. The adapter shows a
-click-to-load chat button, creates a 128-bit random visitor ID in tab-scoped
+floating egg-shaped, click-to-load chat button, creates a 128-bit random visitor ID in tab-scoped
 `sessionStorage`, and opens `https://aihubworks.com/chats/chat/` with that ID.
 Only a ready message from the exact iframe and CRM origin reveals the panel;
 otherwise the button offers retry after 10 seconds. Closing the chat removes
@@ -13,7 +13,7 @@ This deployment depends on coordinated changes to Universal CRM Core and CEP:
 
 1. Core gateway must expose only `/chats/chat` and `/chats/chat/` from the
    client Nuxt app, in addition to its existing Mini App and static assets.
-2. CEP must allow `https://getcher123.github.io` as a frame ancestor for only
+2. CEP must allow `https://getcher123.github.io` and `https://aihub.works` as frame ancestors for only
    that page, identify website chats by the validated visitor ID in HTTP and
    WebSocket, and ignore CRM JWTs for this public channel.
 3. Release Core/CEP before pushing the site. Confirm HTTP 200 and the exact

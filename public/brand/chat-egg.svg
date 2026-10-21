@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 202" role="img" aria-labelledby="title">
+  <title id="title">AIHUB chat</title>
+  <defs>
+    <radialGradient id="shell" cx="42%" cy="29%" r="79%">
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="0.55" stop-color="#e9dcc4"/>
+      <stop offset="1" stop-color="#597d78"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17e8ed"/>
+      <stop offset="0.54" stop-color="#006e78"/>
+      <stop offset="1" stop-color="#12e8ed"/>
+    </linearGradient>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#07343b"/>
+      <stop offset="1" stop-color="#00191f"/>
+    </linearGradient>
+  </defs>
+  <path d="M82 3C39 3 9 52 5 105c-3 39 15 68 51 76l-2 17 15-13h10c46 0 77-26 77-73C156 61 124 3 82 3Z" fill="#042f36" stroke="#26e9ee" stroke-width="4"/>
+  <path d="M82 10c-38 0-67 46-70 96-3 42 20 69 67 69 44 0 70-25 70-67 0-51-30-98-67-98Z" fill="url(#shell)" stroke="url(#rim)" stroke-width="4"/>
+  <path d="M79 176c-2 7-8 15-15 19l-1-17" fill="#076b74" stroke="#26e9ee" stroke-width="3" stroke-linejoin="round"/>
+  <rect x="71" y="143" width="96" height="42" rx="11" fill="url(#plate)" stroke="#25e8ee" stroke-width="4"/>
+  <path d="M91 164a9 9 0 1 1 8 9l-4 4v-5a9 9 0 0 1-4-8Z" fill="none" stroke="#25e8ee" stroke-width="2.5" stroke-linejoin="round"/>
+  <text x="107" y="169" fill="#27eaf0" font-family="Geologica, Verdana, sans-serif" font-size="16" font-weight="700">AI Chat</text>
+</svg>

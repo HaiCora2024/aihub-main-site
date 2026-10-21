@@ -36,17 +36,26 @@ function mountActivationButton() {
   const button = document.createElement("button");
   button.type = "button";
   button.className = "aihub-chat-activate";
+  const egg = document.createElement("img");
+  egg.src = `${import.meta.env.BASE_URL}brand/chat-egg.svg`;
+  egg.alt = "";
+  egg.className = "aihub-chat-activate__egg";
+  const status = document.createElement("span");
+  status.className = "aihub-chat-activate__status";
+  button.append(egg, status);
   let unavailable = false;
 
   const updateLabel = () => {
     const language = new URLSearchParams(window.location.search).get("lang") ||
       document.documentElement.lang;
     const russian = language.toLowerCase().startsWith("ru");
-    const compact = window.matchMedia("(max-width: 767px)").matches;
     button.classList.toggle("aihub-chat-activate--unavailable", unavailable);
-    button.textContent = unavailable
+    button.setAttribute("aria-label", unavailable
       ? (russian ? "Чат недоступен. Повторить" : "Chat unavailable. Retry")
-      : (compact ? (russian ? "Чат" : "Chat") : (russian ? "Чат с AIHUB" : "Chat with AIHUB"));
+      : (russian ? "Чат с AIHUB" : "Chat with AIHUB"));
+    status.textContent = unavailable
+      ? (russian ? "Чат недоступен. Повторить" : "Chat unavailable. Retry")
+      : "";
   };
   updateLabel();
   window.addEventListener("resize", updateLabel);
