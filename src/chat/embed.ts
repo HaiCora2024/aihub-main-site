@@ -3,7 +3,6 @@ import "./embed.css";
 const CHAT_ORIGIN = "https://aihubworks.com";
 const VISITOR_KEY = "aihub-site-chat-visitor-v1";
 const VISITOR_PATTERN = /^[a-f0-9]{32}$/;
-const TAB_ONLY_HOSTS = new Set(["aihub.works", "www.aihub.works"]);
 
 function visitorId() {
   try {
@@ -69,10 +68,6 @@ function mountActivationButton() {
 
   button.addEventListener("click", () => {
     if (button.disabled) return;
-    if (TAB_ONLY_HOSTS.has(window.location.hostname)) {
-      window.open(chatUrl(), "_blank", "noopener,noreferrer");
-      return;
-    }
     button.disabled = true;
     unavailable = false;
     updateLabel();
@@ -97,6 +92,20 @@ function mountActivationButton() {
     );
 
     let ready = false;
+    const closeChat = () => {
+      clearTimeout(timeout);
+      window.removeEventListener("message", onMessage);
+      frame.remove();
+      button.disabled = false;
+      document.body.appendChild(button);
+      window.addEventListener("resize", updateLabel);
+      observer.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["lang"],
+      });
+      updateLabel();
+      button.focus();
+    };
     const onMessage = (event: MessageEvent) => {
       if (event.origin !== CHAT_ORIGIN || event.source !== frame.contentWindow) return;
       if (event.data?.type === "aihub-chat-ready") {
@@ -106,19 +115,10 @@ function mountActivationButton() {
         observer.disconnect();
         window.removeEventListener("resize", updateLabel);
         button.remove();
+        frame.focus();
       } else if (event.data?.type === "bgSize" && typeof event.data.showChat === "boolean") {
         if (!event.data.showChat && ready) {
-          window.removeEventListener("message", onMessage);
-          frame.remove();
-          button.disabled = false;
-          button.classList.remove("aihub-chat-activate--unavailable");
-          document.body.appendChild(button);
-          window.addEventListener("resize", updateLabel);
-          observer.observe(document.documentElement, {
-            attributes: true,
-            attributeFilter: ["lang"],
-          });
-          updateLabel();
+          closeChat();
         }
       }
     };
