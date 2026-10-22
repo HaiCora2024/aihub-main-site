@@ -16,6 +16,8 @@ export interface Product {
   slug: SolutionIconName;
   category: CategoryId;
   price: number;
+  priceFrom: number;
+  openEnded: boolean;
   unit: "setup" | "session";
   name: Localized;
   description: Localized;
@@ -49,7 +51,10 @@ export const categories: { id: CategoryId; name: Localized; tone: Accent }[] = [
   },
 ];
 
-const productDetails: Omit<Product, "name" | "price" | "unit">[] = [
+const productDetails: Omit<
+  Product,
+  "name" | "price" | "priceFrom" | "openEnded" | "unit"
+>[] = [
   {
     id: 1,
     slug: "voice-assistant",
@@ -132,6 +137,8 @@ export const products: Product[] = productDetails.map((detail) => {
     ...detail,
     name: commercial.name,
     price: commercial.unitPriceMinor / 100,
+    priceFrom: commercial.priceFromMinor / 100,
+    openEnded: commercial.openEnded,
     unit: commercial.unit as Product["unit"],
   };
 });
@@ -140,9 +147,17 @@ export const productIcon = (product: Product) => solutionIconSrc(product.slug);
 export const formatPrice = (price: number, lang: ShopLanguage) =>
   new Intl.NumberFormat(lang === "ru" ? "ru-RU" : "en-US", {
     style: "currency",
-    currency: "USD",
+    currency: "EUR",
     maximumFractionDigits: 0,
   }).format(price);
+// Card shows the range; the cart and request use the upper bound.
+export const formatPriceRange = (product: Product, lang: ShopLanguage) => {
+  const amount = new Intl.NumberFormat(lang === "ru" ? "ru-RU" : "en-US", {
+    maximumFractionDigits: 0,
+  });
+  const range = `${amount.format(product.priceFrom)}–${amount.format(product.price)}${product.openEnded ? "+" : ""}`;
+  return lang === "ru" ? `${range}\u00a0€` : `€${range}`;
+};
 
 export const copy = {
   en: {
@@ -197,6 +212,7 @@ export const copy = {
     quantity: "Quantity",
     total: "Indicative estimate",
     checkout: "Continue to request",
+    rangeNote: "Estimates use the upper end of each range.",
     cartDisclaimer:
       "No payment or contract at this stage. VAT and final pricing are agreed with our team.",
     skip: "Skip to solutions",
@@ -253,6 +269,7 @@ export const copy = {
     quantity: "Количество",
     total: "Ориентировочная стоимость",
     checkout: "Перейти к заявке",
+    rangeNote: "Оценка считается по верхней границе диапазона.",
     cartDisclaimer:
       "Без оплаты и заключения договора. VAT и окончательная цена согласуются с менеджером.",
     skip: "К решениям",

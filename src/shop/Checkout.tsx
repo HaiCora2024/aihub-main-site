@@ -89,7 +89,7 @@ export default function Checkout() {
   const price = (minor: number) =>
     new Intl.NumberFormat(lang === "ru" ? "ru-RU" : "en-US", {
       style: "currency",
-      currency: "USD",
+      currency: "EUR",
     }).format(minor / 100);
   const estimate = cart.reduce(
     (sum, item) =>

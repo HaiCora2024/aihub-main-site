@@ -25,7 +25,7 @@ export function shopMail(
       new Date(r.created_at).toISOString(),
       "",
       summary,
-      `Indicative services estimate: ${price}`,
+      `Indicative services estimate (upper end of ranges): ${price}`,
       "VAT: pending manual review",
       "",
       `Contact: ${p.customer.name}`,
@@ -58,7 +58,7 @@ export function shopMail(
       "",
       summary,
       "",
-      `${ru ? "Ориентировочная стоимость услуг" : "Indicative services estimate"}: ${price}`,
+      `${ru ? "Ориентировочная стоимость (по верхней границе)" : "Indicative estimate (upper end of ranges)"}: ${price}`,
       ru
         ? "VAT, окончательная стоимость, договор и сроки согласуются с менеджером. Это не счёт, не подтверждение оплаты и не заключение договора. Услуги автоматически не начинаются."
         : "VAT, final pricing, contract and timing will be agreed with our team. This is not an invoice, payment confirmation or a concluded contract. Services do not start automatically.",
