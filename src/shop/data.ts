@@ -152,6 +152,8 @@ export const formatPrice = (price: number, lang: ShopLanguage) =>
   }).format(price);
 // Card shows the range; the cart and request use the upper bound.
 export const formatPriceRange = (product: Product, lang: ShopLanguage) => {
+  if (product.priceFrom === product.price && !product.openEnded)
+    return formatPrice(product.price, lang);
   const amount = new Intl.NumberFormat(lang === "ru" ? "ru-RU" : "en-US", {
     maximumFractionDigits: 0,
   });

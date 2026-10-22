@@ -16,7 +16,7 @@
     {
       "id": 2,
       "priceFromMinor": 150000,
-      "unitPriceMinor": 400000,
+      "unitPriceMinor": 150000,
       "openEnded": false,
       "unit": "setup",
       "name": {

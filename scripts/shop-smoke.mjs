@@ -171,7 +171,7 @@ try {
   );
   check(
     "Correct mixed-product total",
-    (await page.locator(".shop-total strong").innerText()) === "€12,000",
+    (await page.locator(".shop-total strong").innerText()) === "€9,500",
   );
   await page
     .getByRole("button", {
@@ -181,7 +181,7 @@ try {
     .click();
   check(
     "Decrease recalculates total",
-    (await page.locator(".shop-total strong").innerText()) === "€8,000",
+    (await page.locator(".shop-total strong").innerText()) === "€5,500",
   );
   await page
     .getByRole("button", {
@@ -191,7 +191,7 @@ try {
     .click();
   check(
     "Increase recalculates total",
-    (await page.locator(".shop-total strong").innerText()) === "€12,000",
+    (await page.locator(".shop-total strong").innerText()) === "€7,000",
   );
   await page
     .getByRole("button", { name: "Remove: AI Chat Assistant", exact: true })
