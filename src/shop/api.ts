@@ -59,7 +59,7 @@ export async function loadCatalog(): Promise<ShopCatalog> {
   const c = data as unknown as ShopCatalog;
   if (
     typeof c.version !== "string" ||
-    c.currency !== "USD" ||
+    c.currency !== "EUR" ||
     !c.legal ||
     typeof c.legal.termsVersion !== "string" ||
     typeof c.legal.privacyVersion !== "string" ||
@@ -91,7 +91,7 @@ function receipt(data: Record<string, unknown>): Receipt {
     !Number.isFinite(Date.parse(r.createdAt)) ||
     r.status !== "received" ||
     r.mode !== "request" ||
-    r.currency !== "USD" ||
+    r.currency !== "EUR" ||
     !Number.isSafeInteger(r.estimatedTotalMinor) ||
     r.estimatedTotalMinor < 0 ||
     r.vatStatus !== "pending_review"

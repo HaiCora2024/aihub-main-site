@@ -87,12 +87,12 @@ test("request is durable, priced on server, and produces two distinct notificati
   const result = await f.submit({
     ...payload(),
     totalMinor: 1,
-    currency: "EUR",
+    currency: "USD",
     items: [{ id: 1, qty: 2, unitPriceMinor: 1 }],
   });
   assert.equal(result.response.status, 201);
-  assert.equal(result.body.request.estimatedTotalMinor, 298000);
-  assert.equal(result.body.request.currency, "USD");
+  assert.equal(result.body.request.estimatedTotalMinor, 800000);
+  assert.equal(result.body.request.currency, "EUR");
   assert.equal(result.body.request.vatStatus, "pending_review");
   await new Promise((resolve) => setTimeout(resolve, 20));
   assert.equal(f.messages.length, 2);

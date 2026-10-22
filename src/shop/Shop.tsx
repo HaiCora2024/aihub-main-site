@@ -20,7 +20,14 @@ import {
   readCart,
   updateQuantity,
 } from "./cart";
-import { categories, copy, formatPrice, productIcon, products } from "./data";
+import {
+  categories,
+  copy,
+  formatPrice,
+  formatPriceRange,
+  productIcon,
+  products,
+} from "./data";
 import type { CategoryId, Product, ShopLanguage } from "./data";
 import { ShopDialog } from "./Dialog";
 import { SiteHeader, SiteLogo } from "../components/SiteHeader";
@@ -324,7 +331,7 @@ export default function Shop() {
                           </h3>
                           <p>{product.description[lang]}</p>
                           <div className="shop-product-price">
-                            <strong>{formatPrice(product.price, lang)}</strong>
+                            <strong>{formatPriceRange(product, lang)}</strong>
                             <span>{t[product.unit]}</span>
                           </div>
                           <Button
@@ -516,6 +523,7 @@ export default function Shop() {
                   <span>{t.total}</span>
                   <strong>{formatPrice(total, lang)}</strong>
                 </div>
+                <p>{t.rangeNote}</p>
                 <Button onClick={checkout}>
                   {t.checkout} <span aria-hidden="true">→</span>
                 </Button>

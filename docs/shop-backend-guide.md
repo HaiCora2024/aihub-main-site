@@ -32,7 +32,7 @@ SQLite `/data/shop/shop.sqlite`, `node:sqlite`, **один экземпляр** 
 
 Все ответы JSON и `Cache-Control: no-store`. Версии не копировать вручную в интеграцию:
 получать из каталога. Клиент отправляет только ID/qty; переданные клиентом цены
-игнорируются, сервер вычисляет USD minor units из общего каталога.
+игнорируются, сервер вычисляет EUR minor units из общего каталога.
 
 | Метод | URL | Результат |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ ISO-коды стран и исключения обязательного ин�
 Контактные значения и поля имеют дополнительные лимиты в `contract.js`.
 
 Ответ содержит `request: { id, createdAt, status: received, mode: request,
-currency: USD, estimatedTotalMinor, vatStatus: pending_review }`, `requestId`;
+currency: EUR, estimatedTotalMinor, vatStatus: pending_review }`, `requestId`;
 создание также возвращает `replayed`. Контакты, адрес и содержимое писем не возвращаются.
 201 означает **commit**, а не успешную доставку email.
 

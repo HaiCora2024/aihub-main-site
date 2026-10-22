@@ -5,7 +5,7 @@ export interface RequestItem {
 }
 export interface ShopCatalog {
   version: string;
-  currency: "USD";
+  currency: "EUR";
   products: {
     id: number;
     unitPriceMinor: number;
@@ -48,7 +48,7 @@ export interface Receipt {
   createdAt: string;
   status: "received";
   mode: "request";
-  currency: "USD";
+  currency: "EUR";
   estimatedTotalMinor: number;
   vatStatus: "pending_review";
 }
