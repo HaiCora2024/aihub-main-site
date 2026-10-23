@@ -13,59 +13,31 @@ import {
   SurfaceCard,
   TextField,
 } from "../design-system";
-import {
-  CART_KEY,
-  MAX_QUANTITY,
-  cartTotal,
-  readCart,
-  removeItem,
-  updateQuantity,
-} from "./cart";
+import { MAX_QUANTITY } from "./cart";
+import { CartDrawer, CartGlyph } from "./CartDrawer";
+import { useShopCart } from "./useShopCart";
+import { useShopLanguage } from "./useShopLanguage";
 import { cheapestPackage } from "./pricing";
 import {
   categories,
-  copy,
-  formatPrice,
   formatPriceRange,
   productIcon,
   products,
 } from "./data";
-import type { CategoryId, Product, ShopLanguage } from "./data";
-import { ShopDialog } from "./Dialog";
+import type { CategoryId, Product } from "./data";
 import { SiteHeader, SiteLogo } from "../components/SiteHeader";
 import { CompanyDetails } from "../components/CompanyDetails";
 import { TypewriterText } from "../components/TypewriterText";
 
 const base = import.meta.env.BASE_URL;
-
-function CartGlyph() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden="true"
-    >
-      <path
-        d="M3 4h2l2.5 12h11L21 7H6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="9" cy="20" r="1" />
-      <circle cx="18" cy="20" r="1" />
-    </svg>
-  );
-}
+const titles = {
+  en: "AI solutions store | AIHUB",
+  ru: "Магазин AI-решений | AIHUB",
+};
 
 export default function Shop() {
-  const [lang, setLang] = useState<ShopLanguage>(() =>
-    new URLSearchParams(location.search).get("lang") === "ru" ? "ru" : "en",
-  );
-  const t = copy[lang];
-  const [cart, setCart] = useState(readCart);
+  const { lang, setLang, t } = useShopLanguage(titles);
+  const { cart, setCart, count, add } = useShopCart();
   const [category, setCategory] = useState<CategoryId | "all">("all");
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query.trim().toLocaleLowerCase());
@@ -74,8 +46,6 @@ export default function Shop() {
   const [cartPinned, setCartPinned] = useState(false);
   const cartAnchor = useRef<HTMLDivElement>(null);
   const cartButton = useRef<HTMLButtonElement>(null);
-  const count = cart.reduce((sum, item) => sum + item.qty, 0);
-  const total = cartTotal(cart);
   const visibleProducts = products.filter((product) => {
     const categoryInfo = categories.find(
       (item) => item.id === product.category,
@@ -93,33 +63,6 @@ export default function Shop() {
       searchable.includes(deferredQuery)
     );
   });
-
-  useEffect(() => {
-    document.documentElement.lang = lang;
-    document.title =
-      lang === "ru"
-        ? "Магазин AI-решений | AIHUB"
-        : "AI solutions store | AIHUB";
-    const url = new URL(location.href);
-    url.searchParams.set("lang", lang);
-    history.replaceState(null, "", url);
-  }, [lang]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    } catch {
-      /* The cart remains usable when browser storage is unavailable. */
-    }
-  }, [cart]);
-
-  useEffect(() => {
-    const sync = (event: StorageEvent) => {
-      if (event.key === CART_KEY || event.key === null) setCart(readCart());
-    };
-    window.addEventListener("storage", sync);
-    return () => window.removeEventListener("storage", sync);
-  }, []);
 
   useEffect(() => {
     if (!announcement) return;
@@ -154,13 +97,8 @@ export default function Shop() {
   };
   const addToCart = (product: Product) => {
     // Cards add the entry package until product pages take over (Task 7).
-    const pkg = cheapestPackage(product);
-    setCart((current) => updateQuantity(current, product.id, pkg.id, 1));
+    add(product.id, cheapestPackage(product).id);
     setAnnouncement(`${product.name[lang]}: ${t.added}`);
-  };
-  const checkout = () => {
-    if (!cart.length) return;
-    location.assign(`${base}checkout.html?lang=${lang}`);
   };
 
   return (
@@ -449,133 +387,21 @@ export default function Shop() {
       </div>
 
       {dialog && (
-        <ShopDialog
-          variant={dialog}
-          title={t.cartTitle}
-          closeLabel={t.close}
+        <CartDrawer
+          lang={lang}
+          cart={cart}
+          setCart={setCart}
           returnFocus={cartButton}
-          onDismiss={() => setDialog(null)}
-        >
-          {cart.length ? (
-            <>
-              <div className="shop-cart-lines">
-                {cart.map((item) => {
-                  const product = products.find((p) => p.id === item.id)!;
-                  const pkg = product.packages.find(
-                    (p) => p.id === item.packageId,
-                  )!;
-                  return (
-                    <article
-                      key={`${item.id}:${item.packageId}`}
-                      className="shop-cart-line"
-                    >
-                      <img
-                        src={productIcon(product)}
-                        width="88"
-                        height="88"
-                        alt=""
-                      />
-                      <div className="shop-cart-line-content">
-                        <h3>{product.name[lang]}</h3>
-                        <p>
-                          {formatPrice(pkg.priceMinor / 100, lang)} /{" "}
-                          {t[product.unit]}
-                        </p>
-                        <div className="shop-cart-line-controls">
-                          <div
-                            className="shop-stepper"
-                            role="group"
-                            aria-label={`${t.quantity}: ${product.name[lang]}`}
-                          >
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setCart((current) =>
-                                  updateQuantity(
-                                    current,
-                                    item.id,
-                                    item.packageId,
-                                    -1,
-                                  ),
-                                )
-                              }
-                              aria-label={`${t.decrease}: ${product.name[lang]}`}
-                            >
-                              −
-                            </button>
-                            <output aria-label={t.quantity}>{item.qty}</output>
-                            <button
-                              type="button"
-                              disabled={item.qty >= MAX_QUANTITY}
-                              onClick={() =>
-                                setCart((current) =>
-                                  updateQuantity(
-                                    current,
-                                    item.id,
-                                    item.packageId,
-                                    1,
-                                  ),
-                                )
-                              }
-                              aria-label={`${t.increase}: ${product.name[lang]}`}
-                            >
-                              +
-                            </button>
-                          </div>
-                          <button
-                            className="shop-text-button"
-                            type="button"
-                            onClick={() =>
-                              setCart((current) =>
-                                removeItem(current, item.id, item.packageId),
-                              )
-                            }
-                            aria-label={`${t.remove}: ${product.name[lang]}`}
-                          >
-                            {t.remove}
-                          </button>
-                        </div>
-                      </div>
-                      <strong className="shop-line-total">
-                        {formatPrice((pkg.priceMinor * item.qty) / 100, lang)}
-                      </strong>
-                    </article>
-                  );
-                })}
-              </div>
-              <div className="shop-cart-summary">
-                <div className="shop-total" aria-live="polite">
-                  <span>{t.total}</span>
-                  <strong>{formatPrice(total, lang)}</strong>
-                </div>
-                <p>{t.rangeNote}</p>
-                <Button onClick={checkout}>
-                  {t.checkout} <span aria-hidden="true">→</span>
-                </Button>
-                <p>{t.cartDisclaimer}</p>
-              </div>
-            </>
-          ) : (
-            <div className="shop-cart-empty">
-              <CartGlyph />
-              <h3>{t.empty}</h3>
-              <p>{t.emptyText}</p>
-              <Button
-                onClick={() => {
-                  setDialog(null);
-                  document.getElementById("solutions")?.scrollIntoView({
-                    behavior: matchMedia("(prefers-reduced-motion: reduce)")
-                      .matches
-                      ? "instant"
-                      : "smooth",
-                  });
-                }}
-              >
-                {t.keepBrowsing} →
-              </Button>
-            </div>
-          )}
-        </ShopDialog>
+          onClose={() => setDialog(null)}
+          onBrowse={() => {
+            setDialog(null);
+            document.getElementById("solutions")?.scrollIntoView({
+              behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+                ? "instant"
+                : "smooth",
+            });
+          }}
+        />
       )}
     </div>
   );
