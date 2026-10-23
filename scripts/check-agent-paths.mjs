@@ -1,6 +1,7 @@
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { checkShopPages } from "./check-shop-pages.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const args = process.argv.slice(2);
@@ -137,6 +138,9 @@ if (json.get("public/.well-known/webmcp.json")?.spec) {
   warnings.push("webmcp.json is legacy metadata, not a verified browser WebMCP implementation.");
 }
 
+// Product pages must stay in step with the shared shop catalog.
+const shopPageErrors = await checkShopPages(root);
+check(!shopPageErrors.length, shopPageErrors.join("; "));
 for (const failure of failures) console.error(`FAIL ${failure}`);
 for (const warning of warnings) console.warn(`WARN ${warning}`);
 console.log(`${checks - failures.length}/${checks} local path checks passed; ${documents.size} documents, ${entries.length} HTML inputs.`);
