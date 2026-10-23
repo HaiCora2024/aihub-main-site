@@ -38,7 +38,7 @@ export const checkoutCopy = {
     submit: "Send request",
     sending: "Saving your request…",
     summary: "Your selection",
-    estimate: "Indicative estimate (upper end of ranges)",
+    estimate: "Indicative estimate, net",
     vat: "VAT: determined when preparing the proposal",
     finalPrice:
       "Final pricing, scope and timing will be agreed separately before any contract or payment.",
@@ -120,7 +120,7 @@ export const checkoutCopy = {
     submit: "Отправить заявку",
     sending: "Сохраняем заявку…",
     summary: "Вы выбрали",
-    estimate: "Ориентировочно, по верхней границе",
+    estimate: "Ориентировочно, нетто",
     vat: "VAT определяется при подготовке предложения",
     finalPrice:
       "Окончательная стоимость, объём и сроки согласуются отдельно до заключения договора и оплаты.",

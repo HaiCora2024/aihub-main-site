@@ -84,7 +84,7 @@ export const legalContent: Record<
         {
           heading: "Estimates and VAT",
           body: [
-            "Catalogue amounts are indicative EUR estimates for the stated units, not the final payable total. Where a range is shown, the request estimate uses its upper end. Taxes, implementation scope, third-party subscriptions and additional costs are clarified in the proposal. The final price, taxes and other charges are provided before a service contract is concluded.",
+            "Catalogue amounts are indicative net EUR estimates for the stated units, excluding VAT, and not the final payable total. The price of the selected package is indicative. Taxes, implementation scope, third-party subscriptions and additional costs are clarified in the proposal. The final price, taxes and other charges are provided before a service contract is concluded.",
             "VAT is determined when preparing the proposal using transaction and customer information. Has VAT ID describes registration; it does not select a tax exemption or guarantee reverse charge. We may request clarification. Our NIP is a Polish tax identifier, not confirmation of VAT-UE status.",
           ],
         },
@@ -194,7 +194,7 @@ export const legalContent: Record<
         {
           heading: "Оценка и VAT",
           body: [
-            "Суммы каталога являются ориентировочными оценками в EUR за указанную единицу, а не итогом к оплате. Если указан диапазон, оценка в заявке считается по его верхней границе. Налоги, объём внедрения, сторонние подписки и дополнительные расходы уточняются в предложении. Окончательная цена, налоги и прочие платежи сообщаются до заключения договора.",
+            "Суммы каталога являются ориентировочными оценками в EUR нетто, без VAT, за указанную единицу, а не итогом к оплате. Цена выбранного уровня ориентировочная. Налоги, объём внедрения, сторонние подписки и дополнительные расходы уточняются в предложении. Окончательная цена, налоги и прочие платежи сообщаются до заключения договора.",
             "VAT определяется при подготовке предложения по данным сделки и клиента. «Есть VAT ID» описывает регистрацию, а не освобождение от налога и не гарантию reverse charge. Возможны дополнительные уточнения. Наш NIP указан как польский налоговый идентификатор, не как подтверждение VAT-UE.",
           ],
         },

@@ -137,7 +137,6 @@ export function CartDrawer({
               <span>{t.total}</span>
               <strong>{formatPrice(cartTotal(cart), lang)}</strong>
             </div>
-            <p>{t.rangeNote}</p>
             <Button
               onClick={() =>
                 location.assign(`${base}checkout.html?lang=${lang}`)
