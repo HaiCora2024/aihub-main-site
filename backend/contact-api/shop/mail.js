@@ -14,7 +14,8 @@ export function shopMail(
   const summary = r.items
     .map(
       (i) =>
-        `${i.qty} x ${i.name[p.locale]} (${(i.unitPriceMinor / 100).toFixed(2)} ${r.currency})`,
+        // Requests stored before packages have no packageName.
+        `${i.qty} x ${i.name[p.locale]}${i.packageName ? ` · ${i.packageName[p.locale]}` : ""} (${i.openEnded ? (ru ? "от " : "from ") : ""}${(i.unitPriceMinor / 100).toFixed(2)} ${r.currency})`,
     )
     .join("\n");
   let text;
@@ -25,7 +26,7 @@ export function shopMail(
       new Date(r.created_at).toISOString(),
       "",
       summary,
-      `Indicative services estimate (upper end of ranges): ${price}`,
+      `Indicative estimate, net: ${price}`,
       "VAT: pending manual review",
       "",
       `Contact: ${p.customer.name}`,
@@ -58,7 +59,7 @@ export function shopMail(
       "",
       summary,
       "",
-      `${ru ? "Ориентировочная стоимость (по верхней границе)" : "Indicative estimate (upper end of ranges)"}: ${price}`,
+      `${ru ? "Ориентировочно, нетто" : "Indicative estimate, net"}: ${price}`,
       ru
         ? "VAT, окончательная стоимость, договор и сроки согласуются с менеджером. Это не счёт, не подтверждение оплаты и не заключение договора. Услуги автоматически не начинаются."
         : "VAT, final pricing, contract and timing will be agreed with our team. This is not an invoice, payment confirmation or a concluded contract. Services do not start automatically.",

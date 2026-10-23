@@ -1,94 +1,247 @@
 {
-  "version": "2026-10-22-v2",
+  "version": "2026-10-23-v3",
   "currency": "EUR",
   "products": [
     {
       "id": 1,
-      "priceFromMinor": 180000,
-      "unitPriceMinor": 400000,
-      "openEnded": true,
+      "slug": "voice-assistant",
       "unit": "setup",
       "name": {
         "en": "AI Voice Assistant",
         "ru": "Голосовой AI-ассистент"
-      }
+      },
+      "packages": [
+        {
+          "id": "start",
+          "priceMinor": 180000,
+          "openEnded": false,
+          "name": {
+            "en": "Start",
+            "ru": "Старт"
+          }
+        },
+        {
+          "id": "business",
+          "priceMinor": 280000,
+          "openEnded": false,
+          "name": {
+            "en": "Business",
+            "ru": "Бизнес"
+          }
+        },
+        {
+          "id": "pro",
+          "priceMinor": 400000,
+          "openEnded": true,
+          "name": {
+            "en": "Pro",
+            "ru": "Про"
+          }
+        }
+      ]
     },
     {
       "id": 2,
-      "priceFromMinor": 150000,
-      "unitPriceMinor": 150000,
-      "openEnded": false,
+      "slug": "chat-assistant",
       "unit": "setup",
       "name": {
         "en": "AI Chat Assistant",
         "ru": "AI-ассистент в чате"
-      }
+      },
+      "packages": [
+        {
+          "id": "standard",
+          "priceMinor": 150000,
+          "openEnded": false,
+          "name": {
+            "en": "Standard",
+            "ru": "Стандарт"
+          }
+        }
+      ]
     },
     {
       "id": 3,
-      "priceFromMinor": 90000,
-      "unitPriceMinor": 250000,
-      "openEnded": false,
+      "slug": "email-orders",
       "unit": "setup",
       "name": {
         "en": "Email → 1C Order Processing",
         "ru": "Заказы из почты → 1С"
-      }
+      },
+      "packages": [
+        {
+          "id": "start",
+          "priceMinor": 90000,
+          "openEnded": false,
+          "name": {
+            "en": "Start",
+            "ru": "Старт"
+          }
+        },
+        {
+          "id": "extended",
+          "priceMinor": 250000,
+          "openEnded": false,
+          "name": {
+            "en": "Extended",
+            "ru": "Расширенный"
+          }
+        }
+      ]
     },
     {
       "id": 4,
-      "priceFromMinor": 30000,
-      "unitPriceMinor": 90000,
-      "openEnded": false,
+      "slug": "document-autofill",
       "unit": "setup",
       "name": {
         "en": "Document Auto-fill",
         "ru": "Автозаполнение документов"
-      }
+      },
+      "packages": [
+        {
+          "id": "start",
+          "priceMinor": 30000,
+          "openEnded": false,
+          "name": {
+            "en": "Start",
+            "ru": "Старт"
+          }
+        },
+        {
+          "id": "extended",
+          "priceMinor": 90000,
+          "openEnded": false,
+          "name": {
+            "en": "Extended",
+            "ru": "Расширенный"
+          }
+        }
+      ]
     },
     {
       "id": 5,
-      "priceFromMinor": 30000,
-      "unitPriceMinor": 90000,
-      "openEnded": false,
+      "slug": "kpi-reporting",
       "unit": "setup",
       "name": {
         "en": "KPI Reporting Bot",
         "ru": "Бот для KPI-отчётов"
-      }
+      },
+      "packages": [
+        {
+          "id": "start",
+          "priceMinor": 30000,
+          "openEnded": false,
+          "name": {
+            "en": "Start",
+            "ru": "Старт"
+          }
+        },
+        {
+          "id": "extended",
+          "priceMinor": 90000,
+          "openEnded": false,
+          "name": {
+            "en": "Extended",
+            "ru": "Расширенный"
+          }
+        }
+      ]
     },
     {
       "id": 6,
-      "priceFromMinor": 90000,
-      "unitPriceMinor": 250000,
-      "openEnded": false,
+      "slug": "sentiment-monitor",
       "unit": "setup",
       "name": {
         "en": "Chat Sentiment Monitor",
         "ru": "Анализ тональности чатов"
-      }
+      },
+      "packages": [
+        {
+          "id": "start",
+          "priceMinor": 90000,
+          "openEnded": false,
+          "name": {
+            "en": "Start",
+            "ru": "Старт"
+          }
+        },
+        {
+          "id": "extended",
+          "priceMinor": 250000,
+          "openEnded": false,
+          "name": {
+            "en": "Extended",
+            "ru": "Расширенный"
+          }
+        }
+      ]
     },
     {
       "id": 7,
-      "priceFromMinor": 250000,
-      "unitPriceMinor": 750000,
-      "openEnded": true,
+      "slug": "recommendations",
       "unit": "setup",
       "name": {
         "en": "Product Recommendations",
         "ru": "Персональные рекомендации"
-      }
+      },
+      "packages": [
+        {
+          "id": "start",
+          "priceMinor": 250000,
+          "openEnded": false,
+          "name": {
+            "en": "Start",
+            "ru": "Старт"
+          }
+        },
+        {
+          "id": "business",
+          "priceMinor": 500000,
+          "openEnded": false,
+          "name": {
+            "en": "Business",
+            "ru": "Бизнес"
+          }
+        },
+        {
+          "id": "pro",
+          "priceMinor": 750000,
+          "openEnded": true,
+          "name": {
+            "en": "Pro",
+            "ru": "Про"
+          }
+        }
+      ]
     },
     {
       "id": 8,
-      "priceFromMinor": 40000,
-      "unitPriceMinor": 185000,
-      "openEnded": false,
+      "slug": "discovery-workshop",
       "unit": "session",
       "name": {
         "en": "AI Discovery Workshop",
         "ru": "Воркшоп по внедрению AI"
-      }
+      },
+      "packages": [
+        {
+          "id": "session",
+          "priceMinor": 40000,
+          "openEnded": false,
+          "name": {
+            "en": "Session",
+            "ru": "Сессия"
+          }
+        },
+        {
+          "id": "team",
+          "priceMinor": 185000,
+          "openEnded": false,
+          "name": {
+            "en": "Team",
+            "ru": "Команда"
+          }
+        }
+      ]
     }
   ]
 }

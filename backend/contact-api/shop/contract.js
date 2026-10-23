@@ -6,6 +6,13 @@ const readShared = (name) =>
     fs.readFileSync(new URL(`../shared/${name}.json`, import.meta.url), "utf8"),
   );
 export const catalog = readShared("catalog");
+export const MAX_ITEMS = 8;
+const cheapestPackage = (product) =>
+  product.packages.reduce((min, p) => (p.priceMinor < min.priceMinor ? p : min));
+const findPackage = (id, packageId) =>
+  catalog.products
+    .find((p) => p.id === id)
+    ?.packages.find((p) => p.id === packageId);
 export const legal = readShared("legal");
 export const seller = readShared("seller");
 export const countries = readShared("countries");
@@ -118,28 +125,41 @@ export function validateSubmission(body) {
   if (
     !Array.isArray(body.items) ||
     !body.items.length ||
-    body.items.length > catalog.products.length
+    body.items.length > MAX_ITEMS
   )
     errors.items = "invalid";
   else {
     const seen = new Set();
     for (const item of body.items) {
+      const product =
+        item && catalog.products.find((p) => p.id === item.id);
+      const packageId =
+        item?.packageId === undefined
+          ? product && cheapestPackage(product).id
+          : item.packageId;
+      const key = `${item?.id}:${packageId}`;
       if (
-        !item ||
+        !product ||
         !Number.isSafeInteger(item.id) ||
-        !catalog.products.some((p) => p.id === item.id) ||
+        typeof packageId !== "string" ||
+        !product.packages.some((p) => p.id === packageId) ||
         !Number.isSafeInteger(item.qty) ||
         item.qty < 1 ||
         item.qty > 99 ||
-        seen.has(item.id)
+        seen.has(key)
       ) {
         errors.items = "invalid";
         continue;
       }
-      seen.add(item.id);
-      clean.items.push({ id: item.id, qty: item.qty });
+      seen.add(key);
+      clean.items.push({ id: item.id, packageId, qty: item.qty });
     }
-    clean.items.sort((a, b) => a.id - b.id);
+    clean.items.sort(
+      (a, b) =>
+        a.id - b.id ||
+        findPackage(a.id, a.packageId).priceMinor -
+          findPackage(b.id, b.packageId).priceMinor,
+    );
   }
   if (Object.keys(errors).length)
     throw new ShopError(400, "VALIDATION_ERROR", errors);
@@ -159,11 +179,14 @@ export function checkVersions(body) {
 export function priceItems(items) {
   return items.map((item) => {
     const p = catalog.products.find((product) => product.id === item.id);
+    const pkg = findPackage(item.id, item.packageId);
     return {
       ...item,
       name: p.name,
+      packageName: pkg.name,
       unit: p.unit,
-      unitPriceMinor: p.unitPriceMinor,
+      unitPriceMinor: pkg.priceMinor,
+      openEnded: pkg.openEnded,
     };
   });
 }

@@ -136,9 +136,10 @@ export const products: Product[] = productDetails.map((detail) => {
   return {
     ...detail,
     name: commercial.name,
-    price: commercial.unitPriceMinor / 100,
-    priceFrom: commercial.priceFromMinor / 100,
-    openEnded: commercial.openEnded,
+    // Temporary until pricing.ts: range from the cheapest to the dearest package.
+    price: Math.max(...commercial.packages.map((p) => p.priceMinor)) / 100,
+    priceFrom: Math.min(...commercial.packages.map((p) => p.priceMinor)) / 100,
+    openEnded: commercial.packages.some((p) => p.openEnded),
     unit: commercial.unit as Product["unit"],
   };
 });
