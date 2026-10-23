@@ -137,24 +137,64 @@ try {
   );
   check("Reset restores all products", (await cardCount()) === 8);
 
-  await page
-    .getByRole("button", {
-      name: "Add to cart: AI Voice Assistant",
-      exact: true,
-    })
-    .click();
-  await page
-    .getByRole("button", {
-      name: "Add to cart: AI Voice Assistant",
-      exact: true,
-    })
-    .click();
-  await page
-    .getByRole("button", {
-      name: "Add to cart: AI Chat Assistant",
-      exact: true,
-    })
-    .click();
+  const slugs = [
+    "voice-assistant",
+    "chat-assistant",
+    "email-orders",
+    "document-autofill",
+    "kpi-reporting",
+    "sentiment-monitor",
+    "recommendations",
+    "discovery-workshop",
+  ];
+  const detailLinks = await page
+    .locator(".shop-product-card a.aihub-button")
+    .evaluateAll((links) => links.map((link) => link.getAttribute("href")));
+  check(
+    "Every card links to its product page with the language",
+    detailLinks.length === 8 &&
+      slugs.every((slug, i) => detailLinks[i].endsWith(`shop/${slug}.html?lang=en`)),
+  );
+  for (const slug of slugs) {
+    await open();
+    await page.locator(`.shop-product-card a[href*="shop/${slug}.html"]`).click();
+    await page.waitForURL(new RegExp(`shop/${slug}\\.html\\?lang=en`));
+    check(
+      `Details opens ${slug}`,
+      (await page.locator(".shop-pdp-package").count()) >= 1,
+    );
+  }
+  for (const lang of ["en", "ru"])
+    for (const width of process.env.QA_INTERACTIONS_ONLY
+      ? []
+      : [390, 768, 1200, 1440]) {
+      await page.setViewportSize({ width, height: 1000 });
+      await page.goto(`${base}shop/recommendations.html?lang=${lang}`, {
+        waitUntil: "networkidle",
+      });
+      check(
+        `PDP ${lang}/${width}: no horizontal overflow`,
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth,
+        ),
+      );
+    }
+  await page.setViewportSize({ width: 1440, height: 1000 });
+
+  const choose = async (slug, label) => {
+    await page.goto(`${base}shop/${slug}.html?lang=en`, {
+      waitUntil: "networkidle",
+    });
+    await page
+      .getByRole("button", { name: `Choose and add to cart: ${label}`, exact: true })
+      .click();
+    await page.locator("dialog").waitFor();
+    await page.keyboard.press("Escape");
+  };
+  await choose("voice-assistant", "Start");
+  await choose("voice-assistant", "Start");
+  await choose("chat-assistant", "Standard");
+  await open();
   check(
     "Cart counter sums quantity",
     (await cart().getAttribute("aria-label")) === "Cart: 3",
@@ -170,31 +210,34 @@ try {
     await page.locator("dialog").evaluate((dialog) => dialog.matches(":modal")),
   );
   check(
-    "Correct mixed-product total",
-    (await page.locator(".shop-total strong").innerText()) === "€9,500",
+    "Correct mixed-package total",
+    (await page.locator(".shop-total strong").innerText()) === "€5,100",
   );
   await page
     .getByRole("button", {
-      name: "Decrease quantity: AI Voice Assistant",
+      name: "Decrease quantity: AI Voice Assistant · Start",
       exact: true,
     })
     .click();
   check(
     "Decrease recalculates total",
-    (await page.locator(".shop-total strong").innerText()) === "€5,500",
+    (await page.locator(".shop-total strong").innerText()) === "€3,300",
   );
   await page
     .getByRole("button", {
-      name: "Increase quantity: AI Chat Assistant",
+      name: "Increase quantity: AI Chat Assistant · Standard",
       exact: true,
     })
     .click();
   check(
     "Increase recalculates total",
-    (await page.locator(".shop-total strong").innerText()) === "€7,000",
+    (await page.locator(".shop-total strong").innerText()) === "€4,800",
   );
   await page
-    .getByRole("button", { name: "Remove: AI Chat Assistant", exact: true })
+    .getByRole("button", {
+      name: "Remove: AI Chat Assistant · Standard",
+      exact: true,
+    })
     .click();
   check(
     "Remove product",
@@ -260,15 +303,30 @@ try {
     "Stored items validated, deduplicated and capped",
     (await cart().getAttribute("aria-label")) === "Cart: 99",
   );
+  await page.goto(`${base}shop/voice-assistant.html?lang=en`, {
+    waitUntil: "networkidle",
+  });
   check(
     "Cannot add beyond quantity limit",
     await page
       .getByRole("button", {
-        name: "Add to cart: AI Voice Assistant",
+        name: "Choose and add to cart: Start",
         exact: true,
       })
       .isDisabled(),
   );
+  await open();
+  await page.evaluate(() =>
+    localStorage.setItem("aihub_cart", JSON.stringify([{ id: 1, qty: 1 }])),
+  );
+  await page.reload({ waitUntil: "networkidle" });
+  await cart().click();
+  check(
+    "Legacy cart gets the entry package",
+    (await page.locator(".shop-cart-line h3").innerText()) ===
+      "AI Voice Assistant · Start",
+  );
+  await closeDialog();
   await page.evaluate(() => localStorage.removeItem("aihub_cart"));
   await page.reload({ waitUntil: "networkidle" });
   await page.getByRole("button", { name: "Switch to Russian" }).click();
@@ -279,13 +337,16 @@ try {
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(`${base}shop/voice-assistant.html?lang=ru`, {
+    waitUntil: "networkidle",
+  });
   await page
     .getByRole("button", {
-      name: "В корзину: Голосовой AI-ассистент",
+      name: "Выбрать и добавить в корзину: Старт",
       exact: true,
     })
     .click();
-  await page.getByRole("button", { name: /^Корзина: / }).click();
+  await page.locator("dialog").waitFor();
   check(
     "Mobile cart contained in viewport",
     await page
@@ -298,6 +359,7 @@ try {
   );
   await page.screenshot({ path: `${output}/mobile-cart.png` });
   await page.keyboard.press("Escape");
+  await page.goto(`${base}shop.html?lang=ru`, { waitUntil: "networkidle" });
   check(
     "Reduced motion disables hero float",
     await page
