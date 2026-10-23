@@ -13,18 +13,16 @@ import {
   SurfaceCard,
   TextField,
 } from "../design-system";
-import { MAX_QUANTITY } from "./cart";
 import { CartDrawer, CartGlyph } from "./CartDrawer";
 import { useShopCart } from "./useShopCart";
 import { useShopLanguage } from "./useShopLanguage";
-import { cheapestPackage } from "./pricing";
 import {
   categories,
   formatPriceRange,
   productIcon,
   products,
 } from "./data";
-import type { CategoryId, Product } from "./data";
+import type { CategoryId } from "./data";
 import { SiteHeader } from "../components/SiteHeader";
 import { ShopFooter } from "./ShopFooter";
 import { TypewriterText } from "../components/TypewriterText";
@@ -37,12 +35,11 @@ const titles = {
 
 export default function Shop() {
   const { lang, setLang, t } = useShopLanguage(titles);
-  const { cart, setCart, count, add } = useShopCart();
+  const { cart, setCart, count } = useShopCart();
   const [category, setCategory] = useState<CategoryId | "all">("all");
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query.trim().toLocaleLowerCase());
   const [dialog, setDialog] = useState<"cart" | null>(null);
-  const [announcement, setAnnouncement] = useState("");
   const [cartPinned, setCartPinned] = useState(false);
   const cartAnchor = useRef<HTMLDivElement>(null);
   const cartButton = useRef<HTMLButtonElement>(null);
@@ -63,12 +60,6 @@ export default function Shop() {
       searchable.includes(deferredQuery)
     );
   });
-
-  useEffect(() => {
-    if (!announcement) return;
-    const timer = window.setTimeout(() => setAnnouncement(""), 2400);
-    return () => window.clearTimeout(timer);
-  }, [announcement]);
 
   useEffect(() => {
     const anchor = cartAnchor.current!;
@@ -94,11 +85,6 @@ export default function Shop() {
   const resetFilters = () => {
     setQuery("");
     setCategory("all");
-  };
-  const addToCart = (product: Product) => {
-    // Cards add the entry package until product pages take over (Task 7).
-    add(product.id, cheapestPackage(product).id);
-    setAnnouncement(`${product.name[lang]}: ${t.added}`);
   };
 
   return (
@@ -241,12 +227,6 @@ export default function Shop() {
                   const categoryInfo = categories.find(
                     (item) => item.id === product.category,
                   )!;
-                  const quantity =
-                    cart.find(
-                      (item) =>
-                        item.id === product.id &&
-                        item.packageId === cheapestPackage(product).id,
-                    )?.qty ?? 0;
                   return (
                     <Reveal key={product.id} index={index % 3}>
                       <SurfaceCard
@@ -280,18 +260,18 @@ export default function Shop() {
                             <strong>{formatPriceRange(product, lang)}</strong>
                             <span>{t[product.unit]}</span>
                           </div>
+                          <p className="shop-price-note">{t.priceNote}</p>
                           <Button
                             compact
-                            onClick={() => addToCart(product)}
-                            disabled={quantity >= MAX_QUANTITY}
-                            aria-label={`${t.add}: ${product.name[lang]}`}
+                            href={`${base}shop/${product.slug}.html?lang=${lang}`}
+                            aria-label={`${t.details}: ${product.name[lang]}`}
                           >
-                            {t.add}
+                            {t.details}
                             <span
                               className="shop-add-symbol"
                               aria-hidden="true"
                             >
-                              {quantity ? `(${quantity})` : "+"}
+                              →
                             </span>
                           </Button>
                         </div>
@@ -353,15 +333,6 @@ export default function Shop() {
       </main>
 
       <ShopFooter lang={lang} />
-
-      <div
-        className={`shop-toast${announcement ? " shop-toast--visible" : ""}`}
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {announcement}
-      </div>
 
       {dialog && (
         <CartDrawer

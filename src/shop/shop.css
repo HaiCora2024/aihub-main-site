@@ -450,30 +450,6 @@ body.shop-body {
   font-size: 64px;
   color: var(--aihub-color-green);
 }
-.shop-toast {
-  position: fixed;
-  z-index: 30;
-  bottom: 24px;
-  left: 50%;
-  transform: translate(-50%, 20px);
-  padding: 14px 24px;
-  width: max-content;
-  max-width: calc(100% - 32px);
-  border: 1px solid #08d07066;
-  border-radius: 20px;
-  background: #0a1b2b;
-  box-shadow: 0 8px 40px #0006;
-  font-size: 14px;
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity 280ms,
-    transform 280ms;
-}
-.shop-toast--visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
 .shop-page .shop-dialog {
   position: fixed;
   color: white;
