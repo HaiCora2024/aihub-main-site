@@ -127,3 +127,34 @@ test("sameCart ignores order and compares package lines", async () => {
   assert.equal(sameCart(a, [a[0]]), false);
   assert.equal(sameCart(a, [{ ...a[0], packageId: "pro" }, a[1]]), false);
 });
+
+test("changeQuantity refuses a ninth line but still changes existing ones", async () => {
+  const { MAX_LINES } = await import("../src/shop/pricing.ts");
+  const full = products
+    .flatMap((p) => p.packages.map((pkg) => ({ id: p.id, packageId: pkg.id, qty: 1 })))
+    .slice(0, MAX_LINES);
+  const extra = products
+    .flatMap((p) => p.packages.map((pkg) => ({ id: p.id, packageId: pkg.id })))
+    .find((line) => !full.some((f) => f.id === line.id && f.packageId === line.packageId));
+  assert.equal(changeQuantity(full, products, extra.id, extra.packageId, 1), full);
+  assert.equal(
+    changeQuantity(full, products, full[0].id, full[0].packageId, 1)[0].qty,
+    2,
+  );
+});
+
+test("normalizeCart keeps at most eight lines from storage", async () => {
+  const { MAX_LINES } = await import("../src/shop/pricing.ts");
+  const stored = products.flatMap((p) =>
+    p.packages.map((pkg) => ({ id: p.id, packageId: pkg.id, qty: 1 })),
+  );
+  assert.ok(stored.length > MAX_LINES);
+  assert.equal(normalizeCart(stored, products).length, MAX_LINES);
+});
+
+test("hasOpenEnded flags carts whose total is a lower bound", async () => {
+  const { hasOpenEnded } = await import("../src/shop/pricing.ts");
+  assert.equal(hasOpenEnded([{ id: 1, packageId: "pro", qty: 1 }], products), true);
+  assert.equal(hasOpenEnded([{ id: 1, packageId: "start", qty: 1 }], products), false);
+  assert.equal(hasOpenEnded([{ id: 1, qty: 1 }], products), false);
+});

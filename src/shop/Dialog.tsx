@@ -11,7 +11,7 @@ export function ShopDialog({
 }: {
   children: ReactNode;
   onDismiss: () => void;
-  returnFocus: RefObject<HTMLButtonElement>;
+  returnFocus: RefObject<HTMLElement | null>;
   variant: "cart" | "success";
   title: string;
   closeLabel: string;

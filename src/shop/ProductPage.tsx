@@ -17,23 +17,19 @@ import { CartDrawer, CartGlyph } from "./CartDrawer";
 import {
   categories,
   copy,
-  formatPrice,
+  formatPackagePrice,
   formatPriceRange,
   productIcon,
   products,
 } from "./data";
 import type { Product, ShopLanguage } from "./data";
-import type { ShopPackage } from "./pricing";
+import { MAX_LINES } from "./pricing";
 import { ShopFooter } from "./ShopFooter";
 import { useShopCart } from "./useShopCart";
 import { useShopLanguage } from "./useShopLanguage";
 
 const base = import.meta.env.BASE_URL;
 
-const packagePrice = (pkg: ShopPackage, lang: ShopLanguage) => {
-  const amount = formatPrice(pkg.priceMinor / 100, lang);
-  return pkg.openEnded ? `${copy[lang].from} ${amount}` : amount;
-};
 
 export default function ProductPage({ slug }: { slug: string }) {
   const product = products.find((p) => p.slug === slug);
@@ -48,6 +44,8 @@ export default function ProductPage({ slug }: { slug: string }) {
   const { cart, setCart, count, add } = useShopCart();
   const [cartOpen, setCartOpen] = useState(false);
   const cartButton = useRef<HTMLButtonElement>(null);
+  // Focus goes back to whatever opened the cart: a package button or the cart.
+  const returnTo = useRef<HTMLElement | null>(null);
   const shopHref = `${base}shop.html?lang=${lang}`;
 
   return (
@@ -67,6 +65,7 @@ export default function ProductPage({ slug }: { slug: string }) {
               product={product}
               lang={lang}
               cartCount={count}
+              cartFull={cart.length >= MAX_LINES}
               cartButton={cartButton}
               quantityOf={(packageId) =>
                 cart.find(
@@ -74,8 +73,16 @@ export default function ProductPage({ slug }: { slug: string }) {
                     item.id === product.id && item.packageId === packageId,
                 )?.qty ?? 0
               }
-              onOpenCart={() => setCartOpen(true)}
+              onOpenCart={() => {
+                returnTo.current = cartButton.current;
+                setCartOpen(true);
+              }}
               onChoose={(packageId) => {
+                returnTo.current =
+                  document.activeElement instanceof HTMLElement &&
+                  document.activeElement !== document.body
+                    ? document.activeElement
+                    : cartButton.current;
                 add(product.id, packageId);
                 setCartOpen(true);
               }}
@@ -99,7 +106,7 @@ export default function ProductPage({ slug }: { slug: string }) {
           lang={lang}
           cart={cart}
           setCart={setCart}
-          returnFocus={cartButton}
+          returnFocus={returnTo}
           onClose={() => setCartOpen(false)}
           onBrowse={() => location.assign(shopHref)}
         />
@@ -112,6 +119,7 @@ interface DetailsProps {
   product: Product;
   lang: ShopLanguage;
   cartCount: number;
+  cartFull: boolean;
   cartButton: RefObject<HTMLButtonElement>;
   quantityOf: (packageId: string) => number;
   onOpenCart: () => void;
@@ -122,6 +130,7 @@ function ProductDetails({
   product,
   lang,
   cartCount,
+  cartFull,
   cartButton,
   quantityOf,
   onOpenCart,
@@ -201,7 +210,7 @@ function ProductDetails({
               >
                 <h3 id={`package-${pkg.id}`}>{pkg.name[lang]}</h3>
                 <div className="shop-product-price">
-                  <strong>{packagePrice(pkg, lang)}</strong>
+                  <strong>{formatPackagePrice(pkg, lang)}</strong>
                   <span>{t[product.unit]}</span>
                 </div>
                 <p className="shop-price-note">{t.priceNote}</p>
@@ -213,7 +222,9 @@ function ProductDetails({
                 <Button
                   compact
                   onClick={() => onChoose(pkg.id)}
-                  disabled={quantity >= MAX_QUANTITY}
+                  disabled={
+                    quantity >= MAX_QUANTITY || (!quantity && cartFull)
+                  }
                   aria-label={`${t.choosePackage}: ${pkg.name[lang]}`}
                 >
                   {t.choosePackage}
@@ -225,6 +236,11 @@ function ProductDetails({
             );
           })}
         </div>
+        {cartFull && (
+          <p className="shop-pdp-cart-full" role="status">
+            {t.cartFull}
+          </p>
+        )}
       </Section>
 
       <Section className="shop-pdp-info" aria-label={t.priceFactorsTitle}>

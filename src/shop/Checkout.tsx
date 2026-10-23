@@ -9,6 +9,7 @@ import seller from "../../backend/contact-api/shared/seller.json";
 import { CART_KEY, readCart } from "./cart";
 import {
   cartTotalMinor,
+  hasOpenEnded,
   itemPackage,
   normalizeCart,
   sameCart,
@@ -782,7 +783,11 @@ export default function Checkout() {
                     </ul>
                     <div className="checkout-total">
                       <span>{t.estimate}</span>
-                      <strong>{catalog ? price(estimate) : "…"}</strong>
+                      <strong>
+                        {catalog
+                          ? `${hasOpenEnded(cart, catalog.products) ? `${t.from} ` : ""}${price(estimate)}`
+                          : "…"}
+                      </strong>
                     </div>
                     <p className="checkout-tax">{t.vat}</p>
                     <p>{t.finalPrice}</p>

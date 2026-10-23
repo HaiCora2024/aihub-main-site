@@ -157,6 +157,14 @@ export const formatPrice = (price: number, lang: ShopLanguage) =>
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(price);
+// Open-ended packages and totals that include one are lower bounds ("from").
+export const formatFrom = (minor: number, from: boolean, lang: ShopLanguage) => {
+  const amount = formatPrice(minor / 100, lang);
+  return from ? `${copy[lang].from} ${amount}` : amount;
+};
+export const formatPackagePrice = (pkg: ShopPackage, lang: ShopLanguage) =>
+  formatFrom(pkg.priceMinor, pkg.openEnded, lang);
+
 // Single-package products show one price; open-ended tops get "+".
 export const formatPriceRange = (product: Product, lang: ShopLanguage) => {
   const range = priceRange(product);
@@ -221,6 +229,7 @@ export const copy = {
     total: "Indicative estimate, net",
     checkout: "Continue to request",
     priceNote: "net, + VAT · indicative",
+    cartFull: "A request can hold up to 8 lines. Remove one to add another package.",
     finalPriceNote:
       "Final price and VAT are agreed with our team before any contract.",
     details: "Details",
@@ -292,6 +301,7 @@ export const copy = {
     total: "Ориентировочно, нетто",
     checkout: "Перейти к заявке",
     priceNote: "нетто, + VAT · ориентировочно",
+    cartFull: "В заявке может быть до 8 строк. Удалите одну, чтобы добавить другой уровень.",
     finalPriceNote:
       "Окончательную цену и VAT согласует менеджер до заключения договора.",
     details: "Подробнее",

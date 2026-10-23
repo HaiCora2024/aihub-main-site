@@ -84,6 +84,8 @@ export function normalizeCart(
     const pkg = itemPackage(products, item);
     if (!pkg) continue;
     const key = `${item.id}:${pkg.id}`;
+    // The request accepts at most MAX_LINES lines; extra stored lines are dropped.
+    if (!clean.has(key) && clean.size >= MAX_LINES) continue;
     const qty = Math.min(MAX_QUANTITY, (clean.get(key)?.qty ?? 0) + item.qty);
     clean.set(key, { id: item.id, packageId: pkg.id, qty });
   }
@@ -129,7 +131,8 @@ export function changeQuantity(
   const current = cart.find((item) => sameLine(item, id, packageId));
   const qty = Math.max(0, Math.min(MAX_QUANTITY, (current?.qty ?? 0) + delta));
   if (qty === 0) return removeLine(cart, id, packageId);
-  if (!current) return [...cart, { id, packageId, qty }];
+  if (!current)
+    return cart.length >= MAX_LINES ? cart : [...cart, { id, packageId, qty }];
   return cart.map((item) =>
     sameLine(item, id, packageId) ? { id, packageId, qty } : item,
   );
@@ -166,4 +169,12 @@ export function sameCart(a: CartItem[], b: CartItem[]): boolean {
       ),
     )
   );
+}
+
+// An open-ended package makes the whole estimate a lower bound ("from").
+export function hasOpenEnded(
+  cart: RequestItem[],
+  products: PricedProduct[],
+): boolean {
+  return cart.some((item) => itemPackage(products, item)?.openEnded);
 }

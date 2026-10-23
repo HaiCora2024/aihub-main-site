@@ -191,6 +191,21 @@ try {
     await page.locator("dialog").waitFor();
     await page.keyboard.press("Escape");
   };
+  await page.goto(`${base}shop/voice-assistant.html?lang=en`, {
+    waitUntil: "networkidle",
+  });
+  await page
+    .getByRole("button", { name: "Choose and add to cart: Business", exact: true })
+    .focus();
+  await page.keyboard.press("Enter");
+  await page.locator("dialog").waitFor();
+  await page.keyboard.press("Escape");
+  check(
+    "Closing the cart returns focus to the chosen package",
+    (await page.evaluate(() => document.activeElement?.getAttribute("aria-label"))) ===
+      "Choose and add to cart: Business",
+  );
+  await page.evaluate(() => localStorage.removeItem("aihub_cart"));
   await choose("voice-assistant", "Start");
   await choose("voice-assistant", "Start");
   await choose("chat-assistant", "Standard");

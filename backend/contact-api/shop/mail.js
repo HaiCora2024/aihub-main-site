@@ -11,6 +11,10 @@ export function shopMail(
     style: "currency",
     currency: r.currency,
   }).format(r.total_minor / 100);
+  // An open-ended package makes the total a lower bound.
+  const total = r.items.some((i) => i.openEnded)
+    ? `${ru ? "от" : "from"} ${price}`
+    : price;
   const summary = r.items
     .map(
       (i) =>
@@ -26,7 +30,7 @@ export function shopMail(
       new Date(r.created_at).toISOString(),
       "",
       summary,
-      `Indicative estimate, net: ${price}`,
+      `Indicative estimate, net: ${total}`,
       "VAT: pending manual review",
       "",
       `Contact: ${p.customer.name}`,
@@ -59,7 +63,7 @@ export function shopMail(
       "",
       summary,
       "",
-      `${ru ? "Ориентировочно, нетто" : "Indicative estimate, net"}: ${price}`,
+      `${ru ? "Ориентировочно, нетто" : "Indicative estimate, net"}: ${total}`,
       ru
         ? "VAT, окончательная стоимость, договор и сроки согласуются с менеджером. Это не счёт, не подтверждение оплаты и не заключение договора. Услуги автоматически не начинаются."
         : "VAT, final pricing, contract and timing will be agreed with our team. This is not an invoice, payment confirmation or a concluded contract. Services do not start automatically.",

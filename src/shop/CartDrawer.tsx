@@ -1,8 +1,15 @@
 import type { Dispatch, RefObject, SetStateAction } from "react";
 import { Button } from "../design-system";
 import { MAX_QUANTITY, cartTotal, removeItem, updateQuantity } from "./cart";
+import { hasOpenEnded } from "./pricing";
 import type { CartItem } from "./cart";
-import { copy, formatPrice, productIcon, products } from "./data";
+import {
+  copy,
+  formatFrom,
+  formatPackagePrice,
+  productIcon,
+  products,
+} from "./data";
 import type { ShopLanguage } from "./data";
 import { ShopDialog } from "./Dialog";
 
@@ -34,7 +41,7 @@ interface CartDrawerProps {
   lang: ShopLanguage;
   cart: CartItem[];
   setCart: Dispatch<SetStateAction<CartItem[]>>;
-  returnFocus: RefObject<HTMLButtonElement>;
+  returnFocus: RefObject<HTMLElement | null>;
   onClose: () => void;
   // The empty state sends people back to the solutions on the current page.
   onBrowse: () => void;
@@ -85,7 +92,7 @@ export function CartDrawer({
                   <div className="shop-cart-line-content">
                     <h3>{label}</h3>
                     <p>
-                      {formatPrice(pkg.priceMinor / 100, lang)} /{" "}
+                      {formatPackagePrice(pkg, lang)} /{" "}
                       {t[product.unit]}
                     </p>
                     <div className="shop-cart-line-controls">
@@ -126,7 +133,7 @@ export function CartDrawer({
                     </div>
                   </div>
                   <strong className="shop-line-total">
-                    {formatPrice((pkg.priceMinor * item.qty) / 100, lang)}
+                    {formatFrom(pkg.priceMinor * item.qty, pkg.openEnded, lang)}
                   </strong>
                 </article>
               );
@@ -135,7 +142,13 @@ export function CartDrawer({
           <div className="shop-cart-summary">
             <div className="shop-total" aria-live="polite">
               <span>{t.total}</span>
-              <strong>{formatPrice(cartTotal(cart), lang)}</strong>
+              <strong>
+                {formatFrom(
+                  cartTotal(cart) * 100,
+                  hasOpenEnded(cart, products),
+                  lang,
+                )}
+              </strong>
             </div>
             <Button
               onClick={() =>
