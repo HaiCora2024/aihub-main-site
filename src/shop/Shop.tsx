@@ -18,8 +18,10 @@ import {
   MAX_QUANTITY,
   cartTotal,
   readCart,
+  removeItem,
   updateQuantity,
 } from "./cart";
+import { cheapestPackage } from "./pricing";
 import {
   categories,
   copy,
@@ -151,7 +153,9 @@ export default function Shop() {
     setCategory("all");
   };
   const addToCart = (product: Product) => {
-    setCart((current) => updateQuantity(current, product.id, 1));
+    // Cards add the entry package until product pages take over (Task 7).
+    const pkg = cheapestPackage(product);
+    setCart((current) => updateQuantity(current, product.id, pkg.id, 1));
     setAnnouncement(`${product.name[lang]}: ${t.added}`);
   };
   const checkout = () => {
@@ -300,7 +304,11 @@ export default function Shop() {
                     (item) => item.id === product.category,
                   )!;
                   const quantity =
-                    cart.find((item) => item.id === product.id)?.qty ?? 0;
+                    cart.find(
+                      (item) =>
+                        item.id === product.id &&
+                        item.packageId === cheapestPackage(product).id,
+                    )?.qty ?? 0;
                   return (
                     <Reveal key={product.id} index={index % 3}>
                       <SurfaceCard
@@ -453,8 +461,14 @@ export default function Shop() {
               <div className="shop-cart-lines">
                 {cart.map((item) => {
                   const product = products.find((p) => p.id === item.id)!;
+                  const pkg = product.packages.find(
+                    (p) => p.id === item.packageId,
+                  )!;
                   return (
-                    <article key={item.id} className="shop-cart-line">
+                    <article
+                      key={`${item.id}:${item.packageId}`}
+                      className="shop-cart-line"
+                    >
                       <img
                         src={productIcon(product)}
                         width="88"
@@ -464,7 +478,8 @@ export default function Shop() {
                       <div className="shop-cart-line-content">
                         <h3>{product.name[lang]}</h3>
                         <p>
-                          {formatPrice(product.price, lang)} / {t[product.unit]}
+                          {formatPrice(pkg.priceMinor / 100, lang)} /{" "}
+                          {t[product.unit]}
                         </p>
                         <div className="shop-cart-line-controls">
                           <div
@@ -476,7 +491,12 @@ export default function Shop() {
                               type="button"
                               onClick={() =>
                                 setCart((current) =>
-                                  updateQuantity(current, item.id, -1),
+                                  updateQuantity(
+                                    current,
+                                    item.id,
+                                    item.packageId,
+                                    -1,
+                                  ),
                                 )
                               }
                               aria-label={`${t.decrease}: ${product.name[lang]}`}
@@ -489,7 +509,12 @@ export default function Shop() {
                               disabled={item.qty >= MAX_QUANTITY}
                               onClick={() =>
                                 setCart((current) =>
-                                  updateQuantity(current, item.id, 1),
+                                  updateQuantity(
+                                    current,
+                                    item.id,
+                                    item.packageId,
+                                    1,
+                                  ),
                                 )
                               }
                               aria-label={`${t.increase}: ${product.name[lang]}`}
@@ -502,7 +527,7 @@ export default function Shop() {
                             type="button"
                             onClick={() =>
                               setCart((current) =>
-                                current.filter((line) => line.id !== item.id),
+                                removeItem(current, item.id, item.packageId),
                               )
                             }
                             aria-label={`${t.remove}: ${product.name[lang]}`}
@@ -512,7 +537,7 @@ export default function Shop() {
                         </div>
                       </div>
                       <strong className="shop-line-total">
-                        {formatPrice(product.price * item.qty, lang)}
+                        {formatPrice((pkg.priceMinor * item.qty) / 100, lang)}
                       </strong>
                     </article>
                   );

@@ -2,6 +2,8 @@ import { solutionIconSrc } from "../design-system/SolutionIcon";
 import type { SolutionIconName } from "../design-system/SolutionIcon";
 import type { Accent } from "../design-system";
 import commercialCatalog from "../../backend/contact-api/shared/catalog.json";
+import { priceRange } from "./pricing";
+import type { ShopPackage } from "./pricing";
 
 export type ShopLanguage = "en" | "ru";
 export type CategoryId =
@@ -15,9 +17,7 @@ export interface Product {
   id: number;
   slug: SolutionIconName;
   category: CategoryId;
-  price: number;
-  priceFrom: number;
-  openEnded: boolean;
+  packages: ShopPackage[];
   unit: "setup" | "session";
   name: Localized;
   description: Localized;
@@ -53,7 +53,7 @@ export const categories: { id: CategoryId; name: Localized; tone: Accent }[] = [
 
 const productDetails: Omit<
   Product,
-  "name" | "price" | "priceFrom" | "openEnded" | "unit"
+  "name" | "packages" | "unit"
 >[] = [
   {
     id: 1,
@@ -136,10 +136,7 @@ export const products: Product[] = productDetails.map((detail) => {
   return {
     ...detail,
     name: commercial.name,
-    // Temporary until pricing.ts: range from the cheapest to the dearest package.
-    price: Math.max(...commercial.packages.map((p) => p.priceMinor)) / 100,
-    priceFrom: Math.min(...commercial.packages.map((p) => p.priceMinor)) / 100,
-    openEnded: commercial.packages.some((p) => p.openEnded),
+    packages: commercial.packages,
     unit: commercial.unit as Product["unit"],
   };
 });
@@ -151,15 +148,16 @@ export const formatPrice = (price: number, lang: ShopLanguage) =>
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(price);
-// Card shows the range; the cart and request use the upper bound.
+// Single-package products show one price; open-ended tops get "+".
 export const formatPriceRange = (product: Product, lang: ShopLanguage) => {
-  if (product.priceFrom === product.price && !product.openEnded)
-    return formatPrice(product.price, lang);
+  const range = priceRange(product);
+  if (range.single && !range.openEnded)
+    return formatPrice(range.fromMinor / 100, lang);
   const amount = new Intl.NumberFormat(lang === "ru" ? "ru-RU" : "en-US", {
     maximumFractionDigits: 0,
   });
-  const range = `${amount.format(product.priceFrom)}–${amount.format(product.price)}${product.openEnded ? "+" : ""}`;
-  return lang === "ru" ? `${range}\u00a0€` : `€${range}`;
+  const text = `${amount.format(range.fromMinor / 100)}–${amount.format(range.toMinor / 100)}${range.openEnded ? "+" : ""}`;
+  return lang === "ru" ? `${text}\u00a0€` : `€${text}`;
 };
 
 export const copy = {

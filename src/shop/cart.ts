@@ -1,53 +1,36 @@
 import { products } from "./data";
+import {
+  cartTotalMinor,
+  changeQuantity,
+  normalizeCart,
+  removeLine,
+} from "./pricing";
+import type { CartItem } from "./pricing";
 
+export { MAX_QUANTITY } from "./pricing";
+export type { CartItem } from "./pricing";
 export const CART_KEY = "aihub_cart";
-export const MAX_QUANTITY = 99;
-export interface CartItem {
-  id: number;
-  qty: number;
-}
 
 export function readCart(): CartItem[] {
   try {
-    const value: unknown = JSON.parse(localStorage.getItem(CART_KEY) ?? "[]");
-    if (!Array.isArray(value)) return [];
-    const clean = new Map<number, number>();
-    for (const item of value) {
-      if (
-        !item ||
-        typeof item !== "object" ||
-        !products.some((p) => p.id === item.id)
-      )
-        continue;
-      if (!Number.isSafeInteger(item.qty) || item.qty <= 0) continue;
-      clean.set(
-        item.id,
-        Math.min(MAX_QUANTITY, (clean.get(item.id) ?? 0) + item.qty),
-      );
-    }
-    return [...clean].map(([id, qty]) => ({ id, qty }));
+    return normalizeCart(
+      JSON.parse(localStorage.getItem(CART_KEY) ?? "[]"),
+      products,
+    );
   } catch {
     return [];
   }
 }
 
-export function updateQuantity(
+export const updateQuantity = (
   cart: CartItem[],
   id: number,
+  packageId: string,
   delta: number,
-): CartItem[] {
-  if (!products.some((p) => p.id === id) || !Number.isSafeInteger(delta))
-    return cart;
-  const current = cart.find((item) => item.id === id);
-  const qty = Math.max(0, Math.min(MAX_QUANTITY, (current?.qty ?? 0) + delta));
-  if (qty === 0) return cart.filter((item) => item.id !== id);
-  if (!current) return [...cart, { id, qty }];
-  return cart.map((item) => (item.id === id ? { id, qty } : item));
-}
+) => changeQuantity(cart, products, id, packageId, delta);
+
+export const removeItem = (cart: CartItem[], id: number, packageId: string) =>
+  removeLine(cart, id, packageId);
 
 export const cartTotal = (cart: CartItem[]) =>
-  cart.reduce(
-    (total, item) =>
-      total + (products.find((p) => p.id === item.id)?.price ?? 0) * item.qty,
-    0,
-  );
+  cartTotalMinor(cart, products) / 100;

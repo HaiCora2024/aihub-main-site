@@ -1,40 +1,27 @@
 import { CART_KEY, readCart } from "./cart";
-import type { CartItem } from "./cart";
 import { products } from "./data";
+import { normalizeCart, normalizePending } from "./pricing";
+import type { RequestItem } from "./pricing";
 
 const PENDING_KEY = "aihub_pending_request";
 const CONSUMED_KEY = "aihub_consumed_requests";
 export interface PendingSubmission {
   key: string;
-  items: CartItem[];
+  items: RequestItem[];
   createdAt: number;
 }
 
 export function readPending(): PendingSubmission | null {
   try {
     const value = JSON.parse(sessionStorage.getItem(PENDING_KEY) || "null");
+    const items = normalizePending(value?.items, products);
     if (
-      !value ||
+      !items ||
       !/^[a-f0-9]{64}$/.test(value.key) ||
-      !Number.isFinite(value.createdAt) ||
-      !Array.isArray(value.items) ||
-      !value.items.length ||
-      value.items.length > products.length ||
-      value.items.some(
-        (i: CartItem) =>
-          !i ||
-          !products.some((p) => p.id === i.id) ||
-          !Number.isInteger(i.qty) ||
-          i.qty < 1 ||
-          i.qty > 99,
-      )
+      !Number.isFinite(value.createdAt)
     )
       return null;
-    return {
-      key: value.key,
-      createdAt: value.createdAt,
-      items: value.items.map((i: CartItem) => ({ id: i.id, qty: i.qty })),
-    };
+    return { key: value.key, createdAt: value.createdAt, items };
   } catch {
     return null;
   }
@@ -49,7 +36,7 @@ export function writePending(value: PendingSubmission | null) {
 }
 
 export async function consumeSubmittedCart(
-  snapshot: CartItem[],
+  snapshot: RequestItem[],
   requestId: string,
 ) {
   const consume = () => {
@@ -60,12 +47,16 @@ export async function consumeSubmittedCart(
         : [];
       if (processed.includes(requestId)) return;
       const current = readCart();
+      const submitted = normalizeCart(snapshot, products);
       const remaining = current
         .map((i) => ({
-          id: i.id,
+          ...i,
           qty: Math.max(
             0,
-            i.qty - (snapshot.find((s) => s.id === i.id)?.qty || 0),
+            i.qty -
+              (submitted.find(
+                (s) => s.id === i.id && s.packageId === i.packageId,
+              )?.qty || 0),
           ),
         }))
         .filter((i) => i.qty > 0);
