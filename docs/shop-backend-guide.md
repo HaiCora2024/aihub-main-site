@@ -31,8 +31,10 @@ SQLite `/data/shop/shop.sqlite`, `node:sqlite`, **один экземпляр** 
 ## HTTP-контракт
 
 Все ответы JSON и `Cache-Control: no-store`. Версии не копировать вручную в интеграцию:
-получать из каталога. Клиент отправляет только ID/qty; переданные клиентом цены
-игнорируются, сервер вычисляет EUR minor units из общего каталога.
+получать из каталога. Клиент отправляет только `id`, `packageId` и `qty`; переданные клиентом
+цены игнорируются, сервер вычисляет EUR minor units по уровню из общего каталога.
+Без `packageId` (заявки, начатые до появления уровней) берётся самый дешёвый уровень;
+уровень другого продукта даёт `VALIDATION_ERROR`. Строка уникальна по паре `id + packageId`.
 
 | Метод | URL | Результат |
 | --- | --- | --- |
@@ -47,7 +49,7 @@ SQLite `/data/shop/shop.sqlite`, `node:sqlite`, **один экземпляр** 
 ```json
 {
   "locale": "en",
-  "items": [{ "id": 1, "qty": 1 }],
+  "items": [{ "id": 1, "packageId": "start", "qty": 1 }],
   "customer": { "name": "Test Buyer", "email": "buyer@example.test", "phone": "" },
   "billing": {
     "type": "individual", "country": "PL", "address": "Example Street 1",

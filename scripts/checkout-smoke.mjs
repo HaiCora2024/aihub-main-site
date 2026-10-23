@@ -328,8 +328,8 @@ try {
       "Concurrent cart additions survive acceptance",
       JSON.stringify(remaining) ===
         JSON.stringify([
-          { id: 1, qty: 2 },
-          { id: 2, qty: 1 },
+          { id: 1, packageId: "start", qty: 2 },
+          { id: 2, packageId: "standard", qty: 1 },
         ]),
     );
     await other.close();

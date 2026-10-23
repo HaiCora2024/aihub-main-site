@@ -13,67 +13,36 @@ import {
   SurfaceCard,
   TextField,
 } from "../design-system";
-import {
-  CART_KEY,
-  MAX_QUANTITY,
-  cartTotal,
-  readCart,
-  updateQuantity,
-} from "./cart";
+import { CartDrawer, CartGlyph } from "./CartDrawer";
+import { useShopCart } from "./useShopCart";
+import { useShopLanguage } from "./useShopLanguage";
 import {
   categories,
-  copy,
-  formatPrice,
   formatPriceRange,
   productIcon,
   products,
 } from "./data";
-import type { CategoryId, Product, ShopLanguage } from "./data";
-import { ShopDialog } from "./Dialog";
-import { SiteHeader, SiteLogo } from "../components/SiteHeader";
-import { CompanyDetails } from "../components/CompanyDetails";
+import type { CategoryId } from "./data";
+import { SiteHeader } from "../components/SiteHeader";
+import { ShopFooter } from "./ShopFooter";
 import { TypewriterText } from "../components/TypewriterText";
 
 const base = import.meta.env.BASE_URL;
-
-function CartGlyph() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden="true"
-    >
-      <path
-        d="M3 4h2l2.5 12h11L21 7H6"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-      <circle cx="9" cy="20" r="1" />
-      <circle cx="18" cy="20" r="1" />
-    </svg>
-  );
-}
+const titles = {
+  en: "AI solutions store | AIHUB",
+  ru: "Магазин AI-решений | AIHUB",
+};
 
 export default function Shop() {
-  const [lang, setLang] = useState<ShopLanguage>(() =>
-    new URLSearchParams(location.search).get("lang") === "ru" ? "ru" : "en",
-  );
-  const t = copy[lang];
-  const [cart, setCart] = useState(readCart);
+  const { lang, setLang, t } = useShopLanguage(titles);
+  const { cart, setCart, count } = useShopCart();
   const [category, setCategory] = useState<CategoryId | "all">("all");
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query.trim().toLocaleLowerCase());
   const [dialog, setDialog] = useState<"cart" | null>(null);
-  const [announcement, setAnnouncement] = useState("");
   const [cartPinned, setCartPinned] = useState(false);
   const cartAnchor = useRef<HTMLDivElement>(null);
   const cartButton = useRef<HTMLButtonElement>(null);
-  const count = cart.reduce((sum, item) => sum + item.qty, 0);
-  const total = cartTotal(cart);
   const visibleProducts = products.filter((product) => {
     const categoryInfo = categories.find(
       (item) => item.id === product.category,
@@ -91,39 +60,6 @@ export default function Shop() {
       searchable.includes(deferredQuery)
     );
   });
-
-  useEffect(() => {
-    document.documentElement.lang = lang;
-    document.title =
-      lang === "ru"
-        ? "Магазин AI-решений | AIHUB"
-        : "AI solutions store | AIHUB";
-    const url = new URL(location.href);
-    url.searchParams.set("lang", lang);
-    history.replaceState(null, "", url);
-  }, [lang]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    } catch {
-      /* The cart remains usable when browser storage is unavailable. */
-    }
-  }, [cart]);
-
-  useEffect(() => {
-    const sync = (event: StorageEvent) => {
-      if (event.key === CART_KEY || event.key === null) setCart(readCart());
-    };
-    window.addEventListener("storage", sync);
-    return () => window.removeEventListener("storage", sync);
-  }, []);
-
-  useEffect(() => {
-    if (!announcement) return;
-    const timer = window.setTimeout(() => setAnnouncement(""), 2400);
-    return () => window.clearTimeout(timer);
-  }, [announcement]);
 
   useEffect(() => {
     const anchor = cartAnchor.current!;
@@ -149,14 +85,6 @@ export default function Shop() {
   const resetFilters = () => {
     setQuery("");
     setCategory("all");
-  };
-  const addToCart = (product: Product) => {
-    setCart((current) => updateQuantity(current, product.id, 1));
-    setAnnouncement(`${product.name[lang]}: ${t.added}`);
-  };
-  const checkout = () => {
-    if (!cart.length) return;
-    location.assign(`${base}checkout.html?lang=${lang}`);
   };
 
   return (
@@ -299,8 +227,6 @@ export default function Shop() {
                   const categoryInfo = categories.find(
                     (item) => item.id === product.category,
                   )!;
-                  const quantity =
-                    cart.find((item) => item.id === product.id)?.qty ?? 0;
                   return (
                     <Reveal key={product.id} index={index % 3}>
                       <SurfaceCard
@@ -334,18 +260,18 @@ export default function Shop() {
                             <strong>{formatPriceRange(product, lang)}</strong>
                             <span>{t[product.unit]}</span>
                           </div>
+                          <p className="shop-price-note">{t.priceNote}</p>
                           <Button
                             compact
-                            onClick={() => addToCart(product)}
-                            disabled={quantity >= MAX_QUANTITY}
-                            aria-label={`${t.add}: ${product.name[lang]}`}
+                            href={`${base}shop/${product.slug}.html?lang=${lang}`}
+                            aria-label={`${t.details}: ${product.name[lang]}`}
                           >
-                            {t.add}
+                            {t.details}
                             <span
                               className="shop-add-symbol"
                               aria-hidden="true"
                             >
-                              {quantity ? `(${quantity})` : "+"}
+                              →
                             </span>
                           </Button>
                         </div>
@@ -406,151 +332,24 @@ export default function Shop() {
         </PageContainer>
       </main>
 
-      <footer className="shop-footer">
-        <PageContainer>
-          <div className="shop-footer-top">
-            <div>
-              <SiteLogo lang={lang} />
-              <p>{t.footerLine}</p>
-            </div>
-            <NavLink href="mailto:techcrew@aihub.works">
-              techcrew@aihub.works <span aria-hidden="true">→</span>
-            </NavLink>
-          </div>
-          <CompanyDetails lang={lang} />
-          <div className="shop-footer-bottom">
-            <span>© {new Date().getFullYear()} AIHUB</span>
-            <NavLink href={`${base}legal/privacy-policy.html?lang=${lang}`}>
-              {t.privacy}
-            </NavLink>
-            <NavLink href={`${base}legal/terms.html?lang=${lang}`}>
-              {t.terms}
-            </NavLink>
-            <NavLink href="#top">{t.top} ↑</NavLink>
-          </div>
-        </PageContainer>
-      </footer>
-
-      <div
-        className={`shop-toast${announcement ? " shop-toast--visible" : ""}`}
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-      >
-        {announcement}
-      </div>
+      <ShopFooter lang={lang} />
 
       {dialog && (
-        <ShopDialog
-          variant={dialog}
-          title={t.cartTitle}
-          closeLabel={t.close}
+        <CartDrawer
+          lang={lang}
+          cart={cart}
+          setCart={setCart}
           returnFocus={cartButton}
-          onDismiss={() => setDialog(null)}
-        >
-          {cart.length ? (
-            <>
-              <div className="shop-cart-lines">
-                {cart.map((item) => {
-                  const product = products.find((p) => p.id === item.id)!;
-                  return (
-                    <article key={item.id} className="shop-cart-line">
-                      <img
-                        src={productIcon(product)}
-                        width="88"
-                        height="88"
-                        alt=""
-                      />
-                      <div className="shop-cart-line-content">
-                        <h3>{product.name[lang]}</h3>
-                        <p>
-                          {formatPrice(product.price, lang)} / {t[product.unit]}
-                        </p>
-                        <div className="shop-cart-line-controls">
-                          <div
-                            className="shop-stepper"
-                            role="group"
-                            aria-label={`${t.quantity}: ${product.name[lang]}`}
-                          >
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setCart((current) =>
-                                  updateQuantity(current, item.id, -1),
-                                )
-                              }
-                              aria-label={`${t.decrease}: ${product.name[lang]}`}
-                            >
-                              −
-                            </button>
-                            <output aria-label={t.quantity}>{item.qty}</output>
-                            <button
-                              type="button"
-                              disabled={item.qty >= MAX_QUANTITY}
-                              onClick={() =>
-                                setCart((current) =>
-                                  updateQuantity(current, item.id, 1),
-                                )
-                              }
-                              aria-label={`${t.increase}: ${product.name[lang]}`}
-                            >
-                              +
-                            </button>
-                          </div>
-                          <button
-                            className="shop-text-button"
-                            type="button"
-                            onClick={() =>
-                              setCart((current) =>
-                                current.filter((line) => line.id !== item.id),
-                              )
-                            }
-                            aria-label={`${t.remove}: ${product.name[lang]}`}
-                          >
-                            {t.remove}
-                          </button>
-                        </div>
-                      </div>
-                      <strong className="shop-line-total">
-                        {formatPrice(product.price * item.qty, lang)}
-                      </strong>
-                    </article>
-                  );
-                })}
-              </div>
-              <div className="shop-cart-summary">
-                <div className="shop-total" aria-live="polite">
-                  <span>{t.total}</span>
-                  <strong>{formatPrice(total, lang)}</strong>
-                </div>
-                <p>{t.rangeNote}</p>
-                <Button onClick={checkout}>
-                  {t.checkout} <span aria-hidden="true">→</span>
-                </Button>
-                <p>{t.cartDisclaimer}</p>
-              </div>
-            </>
-          ) : (
-            <div className="shop-cart-empty">
-              <CartGlyph />
-              <h3>{t.empty}</h3>
-              <p>{t.emptyText}</p>
-              <Button
-                onClick={() => {
-                  setDialog(null);
-                  document.getElementById("solutions")?.scrollIntoView({
-                    behavior: matchMedia("(prefers-reduced-motion: reduce)")
-                      .matches
-                      ? "instant"
-                      : "smooth",
-                  });
-                }}
-              >
-                {t.keepBrowsing} →
-              </Button>
-            </div>
-          )}
-        </ShopDialog>
+          onClose={() => setDialog(null)}
+          onBrowse={() => {
+            setDialog(null);
+            document.getElementById("solutions")?.scrollIntoView({
+              behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+                ? "instant"
+                : "smooth",
+            });
+          }}
+        />
       )}
     </div>
   );

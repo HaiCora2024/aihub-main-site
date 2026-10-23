@@ -2,6 +2,10 @@ import { solutionIconSrc } from "../design-system/SolutionIcon";
 import type { SolutionIconName } from "../design-system/SolutionIcon";
 import type { Accent } from "../design-system";
 import commercialCatalog from "../../backend/contact-api/shared/catalog.json";
+import { priceRange } from "./pricing";
+import type { ShopPackage } from "./pricing";
+import { productContent } from "./product-content";
+import type { ProductContent } from "./product-content";
 
 export type ShopLanguage = "en" | "ru";
 export type CategoryId =
@@ -15,9 +19,8 @@ export interface Product {
   id: number;
   slug: SolutionIconName;
   category: CategoryId;
-  price: number;
-  priceFrom: number;
-  openEnded: boolean;
+  packages: ShopPackage[];
+  content: ProductContent;
   unit: "setup" | "session";
   name: Localized;
   description: Localized;
@@ -53,7 +56,7 @@ export const categories: { id: CategoryId; name: Localized; tone: Accent }[] = [
 
 const productDetails: Omit<
   Product,
-  "name" | "price" | "priceFrom" | "openEnded" | "unit"
+  "name" | "packages" | "content" | "unit"
 >[] = [
   {
     id: 1,
@@ -87,8 +90,8 @@ const productDetails: Omit<
     slug: "document-autofill",
     category: "automation",
     description: {
-      en: "Fills contracts, forms and reports from your data in seconds instead of hours.",
-      ru: "Заполняет договоры, формы и отчёты из ваших данных за секунды вместо часов ручной работы.",
+      en: "Fills contracts, forms and reports from your data and reduces manual typing.",
+      ru: "Заполняет договоры, формы и отчёты из ваших данных и сокращает ручное заполнение.",
     },
   },
   {
@@ -114,8 +117,8 @@ const productDetails: Omit<
     slug: "recommendations",
     category: "recommendations",
     description: {
-      en: "Personalized suggestions that lift average order value by 20–30%.",
-      ru: "Персонализированные предложения товаров для увеличения среднего чека на 20–30%.",
+      en: "Personalized product suggestions that help increase average order value.",
+      ru: "Персонализированные предложения товаров, чтобы помочь увеличить средний чек.",
     },
   },
   {
@@ -123,8 +126,8 @@ const productDetails: Omit<
     slug: "discovery-workshop",
     category: "consulting",
     description: {
-      en: "A 2-hour session to map your processes and find the fastest AI wins.",
-      ru: "Двухчасовая сессия: изучаем ваши процессы и находим задачи, где AI даст быстрый результат.",
+      en: "A two-hour session to map your processes and find where AI may help.",
+      ru: "Двухчасовая сессия: разбираем процессы и находим, где AI может помочь.",
     },
   },
 ];
@@ -133,12 +136,16 @@ export const products: Product[] = productDetails.map((detail) => {
   const commercial = commercialCatalog.products.find((p) => p.id === detail.id);
   if (!commercial || !["setup", "session"].includes(commercial.unit))
     throw new Error("Invalid shared catalog");
+  const content = productContent[detail.slug];
+  const textKeys = Object.keys(content?.packages ?? {}).sort().join();
+  const priceKeys = commercial.packages.map((p) => p.id).sort().join();
+  if (commercial.slug !== detail.slug || textKeys !== priceKeys)
+    throw new Error("Shop texts do not match catalog");
   return {
+    content,
     ...detail,
     name: commercial.name,
-    price: commercial.unitPriceMinor / 100,
-    priceFrom: commercial.priceFromMinor / 100,
-    openEnded: commercial.openEnded,
+    packages: commercial.packages,
     unit: commercial.unit as Product["unit"],
   };
 });
@@ -150,13 +157,24 @@ export const formatPrice = (price: number, lang: ShopLanguage) =>
     currency: "EUR",
     maximumFractionDigits: 0,
   }).format(price);
-// Card shows the range; the cart and request use the upper bound.
+// Open-ended packages and totals that include one are lower bounds ("from").
+export const formatFrom = (minor: number, from: boolean, lang: ShopLanguage) => {
+  const amount = formatPrice(minor / 100, lang);
+  return from ? `${copy[lang].from} ${amount}` : amount;
+};
+export const formatPackagePrice = (pkg: ShopPackage, lang: ShopLanguage) =>
+  formatFrom(pkg.priceMinor, pkg.openEnded, lang);
+
+// Single-package products show one price; open-ended tops get "+".
 export const formatPriceRange = (product: Product, lang: ShopLanguage) => {
+  const range = priceRange(product);
+  if (range.single && !range.openEnded)
+    return formatPrice(range.fromMinor / 100, lang);
   const amount = new Intl.NumberFormat(lang === "ru" ? "ru-RU" : "en-US", {
     maximumFractionDigits: 0,
   });
-  const range = `${amount.format(product.priceFrom)}–${amount.format(product.price)}${product.openEnded ? "+" : ""}`;
-  return lang === "ru" ? `${range}\u00a0€` : `€${range}`;
+  const text = `${amount.format(range.fromMinor / 100)}–${amount.format(range.toMinor / 100)}${range.openEnded ? "+" : ""}`;
+  return lang === "ru" ? `${text}\u00a0€` : `€${text}`;
 };
 
 export const copy = {
@@ -168,8 +186,8 @@ export const copy = {
     cart: "Cart",
     language: "Switch to Russian",
     eyebrow: "AIHUB / Solutions store",
-    title: "Ready-made AI.",
-    titleAccent: "Made for you.",
+    title: "AI solutions",
+    titleAccent: "built for your business.",
     intro:
       "Less routine. More room to grow. Choose the assistants and automations your business needs. We'll take care of the integration.",
     browse: "Explore solutions",
@@ -182,8 +200,6 @@ export const copy = {
     clear: "Reset filters",
     noResults: "No match. A fresh start?",
     noResultsText: "Try a different keyword or explore all solutions.",
-    add: "Add to cart",
-    added: "added to cart",
     setup: "one-time setup",
     session: "per session",
     product: "Solution",
@@ -210,9 +226,26 @@ export const copy = {
     decrease: "Decrease quantity",
     increase: "Increase quantity",
     quantity: "Quantity",
-    total: "Indicative estimate",
+    total: "Indicative estimate, net",
     checkout: "Continue to request",
-    rangeNote: "Estimates use the upper end of each range.",
+    priceNote: "net, + VAT · indicative",
+    cartFull: "A request can hold up to 8 lines. Remove one to add another package.",
+    finalPriceNote:
+      "Final price and VAT are agreed with our team before any contract.",
+    details: "Details",
+    choosePackage: "Choose and add to cart",
+    from: "from",
+    packagesTitle: "Packages",
+    priceFactorsTitle: "What affects the price",
+    processTitle: "How we work",
+    processDiscuss: "We discuss your process and goals.",
+    processProposal: "You receive a proposal with scope, price and VAT.",
+    processDelivery: "We implement and launch together with your team.",
+    notFound: "Solution not found",
+    notFoundText: "This page does not match any solution in the store.",
+    backToShop: "Back to the store",
+    breadcrumbShop: "Store",
+    breadcrumbLabel: "Breadcrumbs",
     cartDisclaimer:
       "No payment or contract at this stage. VAT and final pricing are agreed with our team.",
     skip: "Skip to solutions",
@@ -225,8 +258,8 @@ export const copy = {
     cart: "Корзина",
     language: "Switch to English",
     eyebrow: "AIHUB / Магазин решений",
-    title: "Готовый AI.",
-    titleAccent: "Ваш результат.",
+    title: "AI-решения",
+    titleAccent: "под ваш бизнес.",
     intro:
       "Меньше рутины. Больше возможностей. Выберите ассистентов и автоматизации для своего бизнеса. Мы позаботимся об интеграции.",
     browse: "Выбрать решение",
@@ -239,8 +272,6 @@ export const copy = {
     clear: "Сбросить фильтры",
     noResults: "Ничего не найдено. Попробуем ещё?",
     noResultsText: "Измените запрос или посмотрите все решения.",
-    add: "В корзину",
-    added: "добавлено в корзину",
     setup: "разовое внедрение",
     session: "за сессию",
     product: "Решение",
@@ -267,9 +298,26 @@ export const copy = {
     decrease: "Уменьшить количество",
     increase: "Увеличить количество",
     quantity: "Количество",
-    total: "Ориентировочная стоимость",
+    total: "Ориентировочно, нетто",
     checkout: "Перейти к заявке",
-    rangeNote: "Оценка считается по верхней границе диапазона.",
+    priceNote: "нетто, + VAT · ориентировочно",
+    cartFull: "В заявке может быть до 8 строк. Удалите одну, чтобы добавить другой уровень.",
+    finalPriceNote:
+      "Окончательную цену и VAT согласует менеджер до заключения договора.",
+    details: "Подробнее",
+    choosePackage: "Выбрать и добавить в корзину",
+    from: "от",
+    packagesTitle: "Уровни",
+    priceFactorsTitle: "Что влияет на цену",
+    processTitle: "Как проходит работа",
+    processDiscuss: "Обсуждаем ваш процесс и задачи.",
+    processProposal: "Вы получаете предложение с объёмом, ценой и VAT.",
+    processDelivery: "Внедряем и запускаем вместе с вашей командой.",
+    notFound: "Услуга не найдена",
+    notFoundText: "Эта страница не соответствует ни одной услуге магазина.",
+    backToShop: "Вернуться в магазин",
+    breadcrumbShop: "Магазин",
+    breadcrumbLabel: "Навигационная цепочка",
     cartDisclaimer:
       "Без оплаты и заключения договора. VAT и окончательная цена согласуются с менеджером.",
     skip: "К решениям",

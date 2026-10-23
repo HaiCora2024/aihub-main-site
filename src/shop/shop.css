@@ -450,30 +450,6 @@ body.shop-body {
   font-size: 64px;
   color: var(--aihub-color-green);
 }
-.shop-toast {
-  position: fixed;
-  z-index: 30;
-  bottom: 24px;
-  left: 50%;
-  transform: translate(-50%, 20px);
-  padding: 14px 24px;
-  width: max-content;
-  max-width: calc(100% - 32px);
-  border: 1px solid #08d07066;
-  border-radius: 20px;
-  background: #0a1b2b;
-  box-shadow: 0 8px 40px #0006;
-  font-size: 14px;
-  opacity: 0;
-  pointer-events: none;
-  transition:
-    opacity 280ms,
-    transform 280ms;
-}
-.shop-toast--visible {
-  opacity: 1;
-  transform: translate(-50%, 0);
-}
 .shop-page .shop-dialog {
   position: fixed;
   color: white;
@@ -827,4 +803,162 @@ body.shop-body {
     width: 850px;
     font-size: 86px;
   }
+}
+
+/* Product detail pages (shop/<slug>.html) and the shared price note. */
+.shop-price-note {
+  color: var(--aihub-color-muted);
+  font-size: 12px;
+  margin: -12px 0 20px;
+}
+.shop-pdp-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 8px;
+  list-style: none;
+  margin: 0;
+  padding: 24px 0 0;
+  font-size: 12px;
+  color: var(--aihub-color-muted);
+}
+.shop-pdp-breadcrumbs li {
+  display: inline-flex;
+  align-items: center;
+}
+.shop-pdp-breadcrumbs li + li::before {
+  content: "/";
+  margin-right: 8px;
+}
+.shop-pdp-breadcrumbs .aihub-nav-link {
+  font-size: 12px;
+}
+.shop-page .shop-pdp-hero {
+  position: relative;
+  display: grid;
+  gap: 32px;
+  padding-block: 32px 24px;
+}
+.shop-pdp-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+}
+.shop-pdp-copy .aihub-heading {
+  margin: 0;
+}
+.shop-pdp-copy .aihub-hero-title {
+  font-size: clamp(28px, 7.5vw, 56px);
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+.shop-pdp-price {
+  margin: 8px 0 0;
+}
+.shop-pdp-copy .shop-price-note {
+  margin: -8px 0 0;
+}
+.shop-pdp-final {
+  max-width: 560px;
+  font-size: var(--aihub-text-small);
+  color: var(--aihub-color-muted);
+}
+.shop-pdp-visual {
+  display: flex;
+  justify-content: center;
+}
+.shop-pdp-visual img {
+  width: min(280px, 70vw);
+  height: auto;
+}
+.shop-pdp-glow {
+  right: -120px;
+  top: -40px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+.shop-page .shop-pdp-packages {
+  padding-block: 24px;
+  scroll-margin-top: 24px;
+}
+.shop-pdp-package-grid {
+  display: grid;
+  gap: 24px;
+  margin-top: 24px;
+}
+.shop-page .shop-pdp-package {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  height: 100%;
+}
+.shop-page .shop-pdp-package h3 {
+  font-size: var(--aihub-text-subtitle);
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.shop-pdp-package .shop-product-price {
+  margin: 0 0 20px;
+}
+.shop-pdp-package ul,
+.shop-pdp-info ul,
+.shop-pdp-info ol {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 24px;
+  padding-left: 20px;
+  font-size: var(--aihub-text-small);
+  color: var(--aihub-color-muted);
+}
+.shop-pdp-package ul {
+  flex: 1;
+}
+.shop-pdp-package .aihub-button {
+  width: 100%;
+}
+.shop-pdp-package .aihub-button > span {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+.shop-page .shop-pdp-info {
+  display: grid;
+  gap: 32px;
+  padding-block: 40px;
+}
+.shop-pdp-info h2 {
+  font-size: var(--aihub-text-subtitle);
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.shop-pdp-timeline {
+  font-size: var(--aihub-text-small);
+}
+.shop-page .shop-pdp-missing {
+  padding-block: 64px;
+}
+@media (min-width: 768px) {
+  .shop-pdp-package-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .shop-page .shop-pdp-info {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .shop-page .shop-pdp-hero {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    align-items: center;
+  }
+  .shop-pdp-package-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.shop-pdp-cart-full {
+  margin-top: 16px;
+  font-size: var(--aihub-text-small);
+  color: var(--aihub-color-muted);
 }

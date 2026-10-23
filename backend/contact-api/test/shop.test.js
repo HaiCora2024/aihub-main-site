@@ -88,10 +88,10 @@ test("request is durable, priced on server, and produces two distinct notificati
     ...payload(),
     totalMinor: 1,
     currency: "USD",
-    items: [{ id: 1, qty: 2, unitPriceMinor: 1 }],
+    items: [{ id: 1, packageId: "start", qty: 2, unitPriceMinor: 1 }],
   });
   assert.equal(result.response.status, 201);
-  assert.equal(result.body.request.estimatedTotalMinor, 800000);
+  assert.equal(result.body.request.estimatedTotalMinor, 360000);
   assert.equal(result.body.request.currency, "EUR");
   assert.equal(result.body.request.vatStatus, "pending_review");
   await new Promise((resolve) => setTimeout(resolve, 20));
@@ -107,6 +107,89 @@ test("request is durable, priced on server, and produces two distinct notificati
     JSON.stringify(f.logs),
     /buyer@example.test|Example Street/,
   );
+});
+
+const estimate = async (t, items) => {
+  const f = await fixture(t);
+  const result = await f.submit(payload({ items }));
+  return { f, result };
+};
+
+test("prices the selected package on the server", async (t) => {
+  const { result } = await estimate(t, [
+    { id: 1, packageId: "pro", qty: 2, unitPriceMinor: 1 },
+  ]);
+  assert.equal(result.response.status, 201);
+  assert.equal(result.body.request.estimatedTotalMinor, 800000);
+  assert.equal(result.body.request.currency, "EUR");
+});
+
+test("defaults a missing packageId to the cheapest package", async (t) => {
+  const { result } = await estimate(t, [{ id: 1, qty: 1 }]);
+  assert.equal(result.response.status, 201);
+  assert.equal(result.body.request.estimatedTotalMinor, 180000);
+});
+
+test("rejects a package that belongs to another product", async (t) => {
+  const { result } = await estimate(t, [{ id: 4, packageId: "pro", qty: 1 }]);
+  assert.equal(result.response.status, 400);
+  assert.equal(result.body.error.code, "VALIDATION_ERROR");
+  assert.equal(result.body.error.fields.items, "invalid");
+});
+
+test("keeps two packages of one product as two lines", async (t) => {
+  const { result } = await estimate(t, [
+    { id: 1, packageId: "start", qty: 1 },
+    { id: 1, packageId: "pro", qty: 1 },
+  ]);
+  assert.equal(result.response.status, 201);
+  assert.equal(result.body.request.estimatedTotalMinor, 580000);
+});
+
+test("rejects duplicate product and package lines", async (t) => {
+  const { result } = await estimate(t, [
+    { id: 1, packageId: "start", qty: 1 },
+    { id: 1, packageId: "start", qty: 1 },
+  ]);
+  assert.equal(result.response.status, 400);
+  assert.equal(result.body.error.fields.items, "invalid");
+});
+
+test("names the package and net estimate in the sales email", async (t) => {
+  const { f, result } = await estimate(t, [{ id: 1, packageId: "pro", qty: 1 }]);
+  assert.equal(result.response.status, 201);
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  const sales = f.messages.find((m) => m.to === "sales@aihubworks.com");
+  assert.match(sales.text, /1 x AI Voice Assistant · Pro \(from 4000\.00 EUR\)/);
+  assert.match(sales.text, /Indicative estimate, net/);
+});
+
+test("rejects more than eight request lines", async (t) => {
+  const lines = catalog.products
+    .flatMap((p) => p.packages.map((pkg) => ({ id: p.id, packageId: pkg.id, qty: 1 })))
+    .slice(0, 9);
+  const { result } = await estimate(t, lines);
+  assert.equal(result.response.status, 400);
+  assert.equal(result.body.error.fields.items, "invalid");
+});
+
+test("marks an estimate with an open-ended package as a lower bound", async (t) => {
+  const { f } = await estimate(t, [{ id: 1, packageId: "pro", qty: 1 }]);
+  await new Promise((resolve) => setTimeout(resolve, 20));
+  for (const mail of f.messages)
+    assert.match(mail.text, /Indicative estimate, net: from €4,000\.00/);
+});
+
+test("replays a request without packageId under the same key", async (t) => {
+  const f = await fixture(t);
+  const body = payload({ items: [{ id: 1, qty: 1 }] });
+  const sameKey = key();
+  const first = await f.submit(body, sameKey);
+  const again = await f.submit(body, sameKey);
+  assert.equal(first.response.status, 201);
+  assert.equal(again.response.status, 200);
+  assert.equal(again.body.replayed, true);
+  assert.equal(again.body.request.id, first.body.request.id);
 });
 
 test("Nodemailer delivers both notifications to a local SMTP sink", async (t) => {

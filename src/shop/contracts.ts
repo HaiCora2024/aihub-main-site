@@ -1,6 +1,8 @@
 export type Language = "en" | "ru";
 export interface RequestItem {
   id: number;
+  // Absent only on requests saved before packages; the server uses the cheapest.
+  packageId?: string;
   qty: number;
 }
 export interface ShopCatalog {
@@ -8,9 +10,15 @@ export interface ShopCatalog {
   currency: "EUR";
   products: {
     id: number;
-    unitPriceMinor: number;
+    slug: string;
     unit: "setup" | "session";
     name: Record<Language, string>;
+    packages: {
+      id: string;
+      priceMinor: number;
+      openEnded: boolean;
+      name: Record<Language, string>;
+    }[];
   }[];
   legal: {
     termsVersion: string;

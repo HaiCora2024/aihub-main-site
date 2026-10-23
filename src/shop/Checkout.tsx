@@ -7,6 +7,13 @@ import countryData from "../../backend/contact-api/shared/countries.json";
 import documentVersions from "../../backend/contact-api/shared/legal.json";
 import seller from "../../backend/contact-api/shared/seller.json";
 import { CART_KEY, readCart } from "./cart";
+import {
+  cartTotalMinor,
+  hasOpenEnded,
+  itemPackage,
+  normalizeCart,
+  sameCart,
+} from "./pricing";
 import { productIcon, products } from "./data";
 import {
   loadCatalog,
@@ -49,6 +56,8 @@ export default function Checkout() {
   const [pending, setPending] = useState(readPending);
   const pendingRef = useRef(pending);
   const [cart, setCart] = useState(() => pending?.items || readCart());
+  const cartRef = useRef(cart);
+  cartRef.current = cart;
   const [catalog, setCatalog] = useState<ShopCatalog | null>(null);
   const [catalogLoading, setCatalogLoading] = useState(true);
   const [customer, setCustomer] = useState({ name: "", email: "", phone: "" });
@@ -91,16 +100,10 @@ export default function Checkout() {
       style: "currency",
       currency: "EUR",
     }).format(minor / 100);
-  const estimate = cart.reduce(
-    (sum, item) =>
-      sum +
-      item.qty *
-        (catalog?.products.find((p) => p.id === item.id)?.unitPriceMinor || 0),
-    0,
-  );
+  const estimate = catalog ? cartTotalMinor(cart, catalog.products) : 0;
+  // A product or package missing from the live catalog blocks sending.
   const missingProduct =
-    !!catalog &&
-    cart.some((item) => !catalog.products.some((p) => p.id === item.id));
+    !!catalog && cart.some((item) => !itemPackage(catalog.products, item));
   const locked = busy || (uncertain && !!frozen.current);
 
   function remember(value: PendingSubmission | null) {
@@ -187,7 +190,9 @@ export default function Checkout() {
         !actionLock.current &&
         !receipt
       ) {
-        setCart(readCart());
+        const next = readCart();
+        if (sameCart(next, normalizeCart(cartRef.current, products))) return;
+        setCart(next);
         setTermsAccepted(false);
         setNotice("cartChanged");
       }
@@ -749,8 +754,11 @@ export default function Checkout() {
                         const live = catalog?.products.find(
                           (product) => product.id === item.id,
                         );
+                        const pkg = catalog
+                          ? itemPackage(catalog.products, item)
+                          : undefined;
                         return (
-                          <li key={item.id}>
+                          <li key={`${item.id}:${pkg?.id ?? item.packageId}`}>
                             <img
                               src={productIcon(p)}
                               alt=""
@@ -760,10 +768,13 @@ export default function Checkout() {
                             <div>
                               <strong>
                                 {live?.name[lang] || p.name[lang]}
+                                {pkg && ` · ${pkg.name[lang]}`}
                               </strong>
                               <span>
                                 {item.qty} ×{" "}
-                                {live ? price(live.unitPriceMinor) : "…"}
+                                {pkg
+                                  ? `${pkg.openEnded ? `${t.from} ` : ""}${price(pkg.priceMinor)}`
+                                  : "…"}
                               </span>
                             </div>
                           </li>
@@ -772,7 +783,11 @@ export default function Checkout() {
                     </ul>
                     <div className="checkout-total">
                       <span>{t.estimate}</span>
-                      <strong>{catalog ? price(estimate) : "…"}</strong>
+                      <strong>
+                        {catalog
+                          ? `${hasOpenEnded(cart, catalog.products) ? `${t.from} ` : ""}${price(estimate)}`
+                          : "…"}
+                      </strong>
                     </div>
                     <p className="checkout-tax">{t.vat}</p>
                     <p>{t.finalPrice}</p>
