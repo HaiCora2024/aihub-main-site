@@ -71,8 +71,19 @@ export async function loadCatalog(): Promise<ShopCatalog> {
       (p) =>
         !p ||
         !Number.isSafeInteger(p.id) ||
-        !Number.isSafeInteger(p.unitPriceMinor) ||
-        p.unitPriceMinor < 0 ||
+        typeof p.slug !== "string" ||
+        !Array.isArray(p.packages) ||
+        !p.packages.length ||
+        p.packages.some(
+          (pkg) =>
+            !pkg ||
+            typeof pkg.id !== "string" ||
+            !Number.isSafeInteger(pkg.priceMinor) ||
+            pkg.priceMinor < 0 ||
+            typeof pkg.openEnded !== "boolean" ||
+            typeof pkg.name?.en !== "string" ||
+            typeof pkg.name?.ru !== "string",
+        ) ||
         !["setup", "session"].includes(p.unit) ||
         typeof p.name?.en !== "string" ||
         typeof p.name?.ru !== "string",

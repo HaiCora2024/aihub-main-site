@@ -58,7 +58,8 @@ export function findPackage(
     ?.packages.find((p) => p.id === packageId);
 }
 
-const resolvePackage = (products: PricedProduct[], item: RequestItem) => {
+// Lines saved before packages have no packageId and use the cheapest package.
+export const itemPackage = (products: PricedProduct[], item: RequestItem) => {
   const product = products.find((p) => p.id === item.id);
   if (!product) return undefined;
   return item.packageId === undefined
@@ -80,7 +81,7 @@ export function normalizeCart(
   const clean = new Map<string, CartItem>();
   for (const item of value) {
     if (!isItem(item) || item.qty <= 0) continue;
-    const pkg = resolvePackage(products, item);
+    const pkg = itemPackage(products, item);
     if (!pkg) continue;
     const key = `${item.id}:${pkg.id}`;
     const qty = Math.min(MAX_QUANTITY, (clean.get(key)?.qty ?? 0) + item.qty);
@@ -102,7 +103,7 @@ export function normalizePending(
         !isItem(item) ||
         item.qty < 1 ||
         item.qty > MAX_QUANTITY ||
-        !resolvePackage(products, item),
+        !itemPackage(products, item),
     )
   )
     return null;
@@ -148,7 +149,21 @@ export function cartTotalMinor(
 ): number {
   return cart.reduce(
     (total, item) =>
-      total + (resolvePackage(products, item)?.priceMinor ?? 0) * item.qty,
+      total + (itemPackage(products, item)?.priceMinor ?? 0) * item.qty,
     0,
+  );
+}
+
+// Storage events also fire when another tab only rewrites the same cart
+// (for example migrating the legacy format); those must not reset checkout.
+export function sameCart(a: CartItem[], b: CartItem[]): boolean {
+  return (
+    a.length === b.length &&
+    a.every((item) =>
+      b.some(
+        (other) =>
+          sameLine(other, item.id, item.packageId) && other.qty === item.qty,
+      ),
+    )
   );
 }

@@ -107,3 +107,23 @@ test("normalizePending keeps legacy items unchanged for idempotent replay", () =
     null,
   );
 });
+
+test("itemPackage resolves legacy and explicit lines against a catalog", async () => {
+  const { itemPackage } = await import("../src/shop/pricing.ts");
+  assert.equal(itemPackage(products, { id: 1, qty: 1 })?.id, "start");
+  assert.equal(itemPackage(products, { id: 7, packageId: "pro", qty: 1 })?.priceMinor, 750000);
+  assert.equal(itemPackage(products, { id: 4, packageId: "pro", qty: 1 }), undefined);
+  assert.equal(itemPackage(products, { id: 99, qty: 1 }), undefined);
+});
+
+test("sameCart ignores order and compares package lines", async () => {
+  const { sameCart } = await import("../src/shop/pricing.ts");
+  const a = [
+    { id: 1, packageId: "start", qty: 1 },
+    { id: 2, packageId: "standard", qty: 2 },
+  ];
+  assert.equal(sameCart(a, [...a].reverse()), true);
+  assert.equal(sameCart(a, [{ ...a[0], qty: 2 }, a[1]]), false);
+  assert.equal(sameCart(a, [a[0]]), false);
+  assert.equal(sameCart(a, [{ ...a[0], packageId: "pro" }, a[1]]), false);
+});
