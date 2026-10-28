@@ -1,5 +1,9 @@
 # AIHUB Contact API
 
+Form bot protection, proof headers, retry receipts and staged Turnstile setup:
+[Form security](../../docs/forms-antibot.md). Enabling production protection requires
+working Cloudflare keys; the implementation does not imply that it is already active.
+
 Minimal HTTP backend for the landing contact form. It accepts contact leads and sends them to `aihubworks@gmail.com` via SMTP.
 If Google Sheets integration is configured, it also appends each submitted lead to the CRM spreadsheet.
 By default it fills only `Имя лида`, `Контакты`, and `Дата контакта`.

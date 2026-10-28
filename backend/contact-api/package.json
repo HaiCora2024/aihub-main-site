@@ -6,11 +6,12 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --test test/*.test.js",
+    "forms:verify": "node forms/verify.js",
     "shop:admin": "node shop/admin.js"
   },
   "dependencies": {
     "googleapis": "^171.4.0",
-    "nodemailer": "^10.1.1"
+    "nodemailer": "10.1.4"
   },
   "engines": {
     "node": ">=22.16"

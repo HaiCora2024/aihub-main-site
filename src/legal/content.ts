@@ -54,6 +54,13 @@ export const legalContent: Record<
           ],
         },
         {
+          heading: "Form security",
+          body: [
+            "When a form is protected by Cloudflare Turnstile, the security check starts when you interact with that form. Cloudflare receives technical connection and browser signals, including IP address, browser information and the website origin, to detect bots. We do not send the contact or billing fields to the verification API. Cloudflare also processes security signals to improve its bot detection, as described in its Turnstile Privacy Addendum linked below.",
+            "To prevent duplicate contact messages, we keep technical submission-key hashes, keyed content fingerprints and separate delivery states for up to 24 hours, with expired records removed by periodic maintenance. This receipt database contains no form text or contact fields. A matching contact submission is deduplicated for 10 minutes. Form checks are used for security, not advertising.",
+          ],
+        },
+        {
           heading: "Your rights",
           body: [
             "Under the GDPR conditions, you can request access, correction, deletion, restriction and portability. You can object to legitimate-interest processing for reasons relating to your situation. Consent to any separate activity can be withdrawn without affecting prior lawful processing. Shop requests do not involve solely automated decisions with legal or similarly significant effects.",
@@ -161,6 +168,13 @@ export const legalContent: Record<
           body: [
             "Магазин сохраняет локально ID товаров и количество. При незавершённой отправке в sessionStorage записываются случайный закрытый ключ доступа и снимок позиций для проверки результата. Номера недавних подтверждений предотвращают повторное очищение корзины. Контакты и реквизиты формы туда не записываются. Не передавайте ключ другим. Поля остаются в памяти и могут потеряться при перезагрузке. Необходимое хранилище поддерживает запрошенную функцию; checkout не добавляет рекламные или аналитические трекеры.",
             "Магазин, checkout и юридические страницы используют локальные шрифты и не загружают чат автоматически. Другие страницы могут загружать чат с aihubworks.com и внешние шрифты. Эти сервисы получают сведения о соединении, а чат также получает отправленные ему сообщения. Продолжение просмотра не считается согласием на необязательную обработку.",
+          ],
+        },
+        {
+          heading: "Защита форм",
+          body: [
+            "Если форма защищена Cloudflare Turnstile, проверка запускается при взаимодействии с ней. Cloudflare получает технические сведения о соединении и браузере, включая IP-адрес, информацию о браузере и домен сайта, для обнаружения ботов. Контакты и реквизиты формы мы не передаём в API проверки. Cloudflare также обрабатывает сигналы безопасности для улучшения обнаружения ботов; подробнее в дополнении Turnstile к политике конфиденциальности по ссылке ниже.",
+            "Для предотвращения повторной отправки контактных обращений технические хеши ключей, защищённые ключом отпечатки содержимого и отдельные статусы доставки хранятся до 24 часов; истёкшие записи удаляются при периодическом обслуживании. В этой базе подтверждений нет текста формы и контактных полей. Совпадающие контактные обращения объединяются в течение 10 минут. Проверки используются для безопасности, а не для рекламы.",
           ],
         },
         {

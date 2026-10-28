@@ -1,4 +1,5 @@
 import type { Receipt, ShopCatalog, Submission } from "./contracts";
+import { newFormKey } from "../forms/submission-key";
 
 const configured = (import.meta.env.VITE_SHOP_API_URL || "").replace(
   /\/+$/,
@@ -119,11 +120,19 @@ function receipt(data: Record<string, unknown>): Receipt {
   };
 }
 
-export const submitRequest = async (body: Submission, key: string) =>
+export const submitRequest = async (
+  body: Submission,
+  key: string,
+  token?: string,
+) =>
   receipt(
     await request("requests", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "Idempotency-Key": key },
+      headers: {
+        "Content-Type": "application/json",
+        "Idempotency-Key": key,
+        ...(token ? { "X-Turnstile-Token": token } : {}),
+      },
       body: JSON.stringify(body),
     }),
   );
@@ -133,7 +142,4 @@ export const recoverRequest = async (key: string) =>
       headers: { Authorization: `Bearer ${key}` },
     }),
   );
-export const newSubmissionKey = () =>
-  [...crypto.getRandomValues(new Uint8Array(32))]
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
+export const newSubmissionKey = newFormKey;

@@ -28,8 +28,37 @@ function chatEmbedPlugin(): Plugin {
   };
 }
 
+function formConfigPlugin(): Plugin {
+  let apiOrigins: string[] = [];
+  return {
+    name: "aihub-form-config",
+    configResolved(config) {
+      apiOrigins = [
+        ...new Set(
+          [config.env.VITE_CONTACT_API_URL, config.env.VITE_SHOP_API_URL].filter(Boolean).flatMap((url) => {
+            try {
+              const parsed = new URL(url);
+              return ["http:", "https:"].includes(parsed.protocol) ? [parsed.origin] : [];
+            } catch {
+              return [];
+            }
+          }),
+        ),
+      ];
+      const key = config.env.VITE_TURNSTILE_SITE_KEY || "";
+      if (config.command === "build" && config.mode !== "test" && /^[123]x0{18,}/.test(key))
+        throw new Error("Turnstile test sitekeys are not allowed in production builds.");
+    },
+    transformIndexHtml(html) {
+      return apiOrigins.length
+        ? html.replace("connect-src 'self'", `connect-src 'self' ${apiOrigins.join(" ")}`)
+        : html;
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), chatEmbedPlugin()],
+  plugins: [react(), chatEmbedPlugin(), formConfigPlugin()],
   base: pagesBase,
   css: {
     postcss: {

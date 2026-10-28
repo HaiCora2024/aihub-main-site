@@ -76,24 +76,30 @@ export class ShopStore {
     };
   }
 
-  create(key, payload) {
+  replay(key, payload) {
     const keyHash = hash(key);
     const bodyHash = hash(JSON.stringify(payload));
+    if (
+      this.db.prepare("SELECT 1 FROM deletions WHERE key_hash = ?").get(keyHash)
+    )
+      throw new ShopError(410, "REQUEST_DELETED");
+    const existing = this.db
+      .prepare("SELECT * FROM requests WHERE key_hash = ?")
+      .get(keyHash);
+    if (existing) {
+      if (existing.body_hash !== bodyHash)
+        throw new ShopError(409, "IDEMPOTENCY_CONFLICT");
+      return { request: this.summary(existing), replayed: true };
+    }
+    return null;
+  }
+
+  create(key, payload) {
     return this.transaction(() => {
-      if (
-        this.db
-          .prepare("SELECT 1 FROM deletions WHERE key_hash = ?")
-          .get(keyHash)
-      )
-        throw new ShopError(410, "REQUEST_DELETED");
-      const existing = this.db
-        .prepare("SELECT * FROM requests WHERE key_hash = ?")
-        .get(keyHash);
-      if (existing) {
-        if (existing.body_hash !== bodyHash)
-          throw new ShopError(409, "IDEMPOTENCY_CONFLICT");
-        return { request: this.summary(existing), replayed: true };
-      }
+      const existing = this.replay(key, payload);
+      if (existing) return existing;
+      const keyHash = hash(key);
+      const bodyHash = hash(JSON.stringify(payload));
       checkVersions(payload);
       const now = this.now();
       const id = `REQ-${randomUUID().toUpperCase()}`;
@@ -150,7 +156,7 @@ export class ShopStore {
       const now = this.now();
       this.db
         .prepare(
-          "UPDATE outbox SET state='pending', lease_until=NULL WHERE state='sending' AND lease_until < ?",
+          "UPDATE outbox SET state='failed', last_error='DELIVERY_UNKNOWN', lease_until=NULL WHERE state='sending' AND lease_until < ?",
         )
         .run(now);
       const job = this.db
@@ -185,6 +191,14 @@ export class ShopStore {
         "UPDATE outbox SET state='sent', sent_at=?, lease_until=NULL, last_error=NULL WHERE id=?",
       )
       .run(this.now(), id);
+  }
+
+  holdMail(id, code) {
+    this.db
+      .prepare(
+        "UPDATE outbox SET state='failed', lease_until=NULL, last_error=? WHERE id=?",
+      )
+      .run(code, id);
   }
 
   failMail(id, attempts, code) {

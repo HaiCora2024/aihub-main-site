@@ -62,6 +62,8 @@ export const checkoutCopy = {
     recoverForm:
       "No saved request was found. For privacy, your contact details were not stored in the browser. Enter them again to continue with the same submission key.",
     rate: "Too many attempts. Please wait 15 minutes before trying again.",
+    botCheckFailed:
+      "The security check could not be completed. Your details are still here. Retry the check and send again. If this page was open before the update, you may need to reload it.",
     changed:
       "The catalog or documents have changed. Review the updated information and confirm the terms again.",
     policyMismatch:
@@ -146,6 +148,8 @@ export const checkoutCopy = {
     recoverForm:
       "Сохранённая заявка не найдена. Контакты не хранятся в браузере: заполните их заново, чтобы продолжить с тем же ключом отправки.",
     rate: "Слишком много попыток. Повторите через 15 минут.",
+    botCheckFailed:
+      "Не удалось выполнить проверку безопасности. Данные остались на странице: повторите проверку и отправку. Если страница была открыта до обновления сайта, может потребоваться её перезагрузка.",
     changed:
       "Каталог или документы изменились. Проверьте новые данные и снова подтвердите условия.",
     policyMismatch:

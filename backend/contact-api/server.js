@@ -6,6 +6,13 @@ import { pathToFileURL } from "node:url";
 import { google } from "googleapis";
 import nodemailer from "nodemailer";
 import { createShopService } from "./shop/service.js";
+import {
+  createFormSecurity,
+  formSecurityFromEnv,
+  FormError,
+} from "./forms/security.js";
+import { ContactReceipts } from "./forms/receipts.js";
+import { createContactService } from "./forms/contact.js";
 
 const PORT = Number(process.env.PORT || 8080);
 const CONTACT_TO = process.env.CONTACT_TO || "aihubworks@gmail.com";
@@ -30,7 +37,6 @@ const GOOGLE_SHEETS_DEFAULT_STATUS =
 const GOOGLE_SHEETS_DEFAULT_PRIORITY =
   process.env.GOOGLE_SHEETS_DEFAULT_PRIORITY || "";
 
-const rateLimitStore = new Map();
 let sheetsClientPromise;
 
 function getCorsOrigin(origin) {
@@ -50,13 +56,18 @@ function sendJson(res, statusCode, payload, corsOrigin = "*") {
     "Content-Type": "application/json; charset=utf-8",
     "Access-Control-Allow-Origin": corsOrigin || "null",
     "Access-Control-Allow-Methods": "POST, OPTIONS, GET, HEAD",
-    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Headers":
+      "Content-Type, Idempotency-Key, X-Turnstile-Token",
+    "Access-Control-Expose-Headers": "Retry-After",
+    Vary: "Origin",
     "Cache-Control": "no-store",
   });
   res.end(JSON.stringify(payload));
 }
 
 function readJsonBody(req) {
+  if (!/^application\/json(?:\s*;|$)/i.test(req.headers["content-type"] || ""))
+    throw new FormError(415, "UNSUPPORTED_MEDIA_TYPE");
   return new Promise((resolve, reject) => {
     let raw = "";
     let bytes = 0;
@@ -64,8 +75,8 @@ function readJsonBody(req) {
     req.on("data", (chunk) => {
       bytes += chunk.length;
       if (bytes > MAX_BODY_BYTES) {
+        raw = "";
         reject(new Error("BODY_TOO_LARGE"));
-        req.destroy();
         return;
       }
       raw += chunk;
@@ -83,30 +94,9 @@ function readJsonBody(req) {
   });
 }
 
-function isRateLimited(ip) {
-  const now = Date.now();
-  const record = rateLimitStore.get(ip);
-
-  if (!record || now > record.resetAt) {
-    rateLimitStore.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-
-  record.count += 1;
-  return record.count > RATE_LIMIT_MAX;
-}
-
-function getClientIp(req) {
-  const forwardedFor = req.headers["x-forwarded-for"];
-
-  if (typeof forwardedFor === "string" && forwardedFor.length > 0) {
-    return forwardedFor.split(",")[0].trim();
-  }
-
-  return req.socket.remoteAddress || "unknown";
-}
-
 function validateLead(body) {
+  if (!body || typeof body !== "object" || Array.isArray(body))
+    return { ok: false, error: "INVALID_REQUEST" };
   const name = typeof body.name === "string" ? body.name.trim() : "";
   const email =
     typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
@@ -264,7 +254,7 @@ async function appendLeadToSheet(lead) {
     submittedAt,
   ];
 
-  await sheets.spreadsheets.values.append({
+  return sheets.spreadsheets.values.append({
     spreadsheetId: GOOGLE_SHEETS_SPREADSHEET_ID,
     range: GOOGLE_SHEETS_RANGE,
     valueInputOption: "RAW",
@@ -297,7 +287,7 @@ async function sendLeadEmail(lead) {
     <p><b>Submitted at:</b> ${escapeHtml(submittedAt)}</p>
   `;
 
-  await transporter.sendMail({
+  return transporter.sendMail({
     from: CONTACT_FROM,
     to: CONTACT_TO,
     subject,
@@ -307,46 +297,45 @@ async function sendLeadEmail(lead) {
   });
 }
 
-async function handleContact(
-  req,
-  res,
-  corsOrigin,
-  contactEmail = sendLeadEmail,
-  contactSheet = appendLeadToSheet,
-) {
+async function handleContact(req, res, corsOrigin, contact) {
   if (!corsOrigin) {
+    contact.reject("ORIGIN_NOT_ALLOWED");
     sendJson(res, 403, { ok: false, error: "ORIGIN_NOT_ALLOWED" }, "null");
     return;
   }
 
-  const ip = getClientIp(req);
-  if (isRateLimited(ip)) {
-    sendJson(res, 429, { ok: false, error: "RATE_LIMITED" }, corsOrigin);
-    return;
-  }
-
   try {
+    contact.rate(req);
     const body = await readJsonBody(req);
     const validation = validateLead(body);
 
     if (!validation.ok) {
+      contact.reject(validation.error);
       sendJson(res, 400, { ok: false, error: validation.error }, corsOrigin);
       return;
     }
 
     if (validation.spam) {
+      contact.reject("HONEYPOT");
       sendJson(res, 200, { ok: true }, corsOrigin);
       return;
     }
 
-    await Promise.all([
-      contactEmail(validation.lead),
-      contactSheet(validation.lead),
-    ]);
-    sendJson(res, 200, { ok: true }, corsOrigin);
+    sendJson(res, 200, await contact.submit(req, validation.lead), corsOrigin);
   } catch (error) {
+    if (error instanceof FormError) {
+      if (error.retryAfter)
+        res.setHeader("Retry-After", String(error.retryAfter));
+      contact.reject(error.code);
+      sendJson(res, error.status, { ok: false, error: error.code }, corsOrigin);
+      return;
+    }
     const message = error instanceof Error ? error.message : "UNKNOWN_ERROR";
-    console.error("contact_submit_failed", message);
+    contact.reject(
+      ["BODY_TOO_LARGE", "INVALID_JSON"].includes(message)
+        ? message
+        : "CONTACT_UNAVAILABLE",
+    );
 
     if (message === "BODY_TOO_LARGE") {
       sendJson(res, 413, { ok: false, error: message }, corsOrigin);
@@ -358,12 +347,7 @@ async function handleContact(
       return;
     }
 
-    if (message === "SMTP_NOT_CONFIGURED") {
-      sendJson(res, 500, { ok: false, error: message }, corsOrigin);
-      return;
-    }
-
-    sendJson(res, 500, { ok: false, error: "SEND_FAILED" }, corsOrigin);
+    sendJson(res, 503, { ok: false, error: "CONTACT_UNAVAILABLE" }, corsOrigin);
   }
 }
 
@@ -371,7 +355,20 @@ export function createServer({
   shopService = null,
   contactEmail,
   contactSheet,
+  formSecurity = createFormSecurity({ rateWindowMs: RATE_LIMIT_WINDOW_MS }),
+  contactReceipts,
+  contactLog,
+  contactLimit = RATE_LIMIT_MAX,
 } = {}) {
+  const receipts = contactReceipts || new ContactReceipts();
+  const contact = createContactService({
+    security: formSecurity,
+    receipts,
+    sendEmail: contactEmail || sendLeadEmail,
+    appendSheet: contactSheet || appendLeadToSheet,
+    limit: contactLimit,
+    log: contactLog,
+  });
   const server = http.createServer(async (req, res) => {
     const origin =
       typeof req.headers.origin === "string" ? req.headers.origin : "";
@@ -396,8 +393,8 @@ export function createServer({
     ) {
       sendJson(
         res,
-        shopService?.ready() ? 200 : 503,
-        { ready: !!shopService?.ready() },
+        shopService?.ready() && contact.ready() ? 200 : 503,
+        { ready: !!shopService?.ready() && contact.ready() },
         corsOrigin,
       );
       return;
@@ -426,7 +423,7 @@ export function createServer({
     }
 
     if (req.method === "POST" && url.pathname === "/api/contact") {
-      await handleContact(req, res, corsOrigin, contactEmail, contactSheet);
+      await handleContact(req, res, corsOrigin, contact);
       return;
     }
 
@@ -434,6 +431,14 @@ export function createServer({
   });
   server.requestTimeout = 15000;
   server.headersTimeout = 10000;
+  let formShutdown;
+  server.stopForms = () => {
+    formShutdown ||= contact.close().finally(() => {
+      if (!contactReceipts) receipts.close();
+    });
+    return formShutdown;
+  };
+  server.once("close", () => void server.stopForms());
   return server;
 }
 
@@ -441,6 +446,14 @@ if (
   process.argv[1] &&
   import.meta.url === pathToFileURL(process.argv[1]).href
 ) {
+  const formSecurity = formSecurityFromEnv();
+  const contactReceipts = new ContactReceipts(
+    process.env.CONTACT_RECEIPTS_PATH ||
+      (process.env.NODE_ENV === "production"
+        ? "/data/forms/contact-receipts.sqlite"
+        : ".local/contact-receipts.sqlite"),
+    { secret: process.env.CONTACT_DEDUPE_KEY },
+  );
   let shopService;
   if (process.env.SHOP_ENABLED === "true") {
     try {
@@ -457,7 +470,7 @@ if (
         from: CONTACT_FROM,
         salesTo: process.env.SHOP_SALES_TO,
         siteUrl: process.env.SHOP_SITE_URL || "https://aihub.works/",
-        trustProxyHops: Number(process.env.SHOP_TRUST_PROXY_HOPS || 0),
+        formSecurity,
         backupKey: process.env.SHOP_BACKUP_KEY,
         backupDirectory: process.env.SHOP_BACKUP_DIR,
       });
@@ -468,12 +481,14 @@ if (
       console.error("shop_initialization_failed; shop endpoints disabled");
     }
   }
-  const server = createServer({ shopService });
+  const server = createServer({ shopService, formSecurity, contactReceipts });
   server.listen(PORT, "0.0.0.0", () =>
     console.log(`contact-api listening on 0.0.0.0:${PORT}`),
   );
   const shutdown = () =>
     server.close(async () => {
+      await server.stopForms();
+      contactReceipts.close();
       await shopService?.stop();
       process.exit(0);
     });

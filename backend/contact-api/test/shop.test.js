@@ -156,17 +156,24 @@ test("rejects duplicate product and package lines", async (t) => {
 });
 
 test("names the package and net estimate in the sales email", async (t) => {
-  const { f, result } = await estimate(t, [{ id: 1, packageId: "pro", qty: 1 }]);
+  const { f, result } = await estimate(t, [
+    { id: 1, packageId: "pro", qty: 1 },
+  ]);
   assert.equal(result.response.status, 201);
   await new Promise((resolve) => setTimeout(resolve, 20));
   const sales = f.messages.find((m) => m.to === "sales@aihubworks.com");
-  assert.match(sales.text, /1 x AI Voice Assistant · Pro \(from 4000\.00 EUR\)/);
+  assert.match(
+    sales.text,
+    /1 x AI Voice Assistant · Pro \(from 4000\.00 EUR\)/,
+  );
   assert.match(sales.text, /Indicative estimate, net/);
 });
 
 test("rejects more than eight request lines", async (t) => {
   const lines = catalog.products
-    .flatMap((p) => p.packages.map((pkg) => ({ id: p.id, packageId: pkg.id, qty: 1 })))
+    .flatMap((p) =>
+      p.packages.map((pkg) => ({ id: p.id, packageId: pkg.id, qty: 1 })),
+    )
     .slice(0, 9);
   const { result } = await estimate(t, lines);
   assert.equal(result.response.status, 400);
@@ -481,7 +488,9 @@ test("SMTP partial failure does not roll back acceptance or resend the successfu
       attempts.push(mail.to);
       if (fail && mail.to === "sales@aihubworks.com")
         throw Object.assign(new Error("private SMTP response"), {
-          code: "ETIMEDOUT",
+          code: "EMESSAGE",
+          responseCode: 450,
+          command: "DATA",
         });
       return { accepted: [mail.to] };
     },
@@ -510,13 +519,20 @@ test("database restart preserves requests, dedupe and expired worker leases", ()
   const clean = validateSubmission(payload());
   let store = new ShopStore(filename, { now: () => now });
   const first = store.create(token, clean);
-  store.claimMail();
+  const interrupted = store.claimMail();
   store.close();
   now += 120001;
   store = new ShopStore(filename, { now: () => now });
   assert.equal(store.create(token, clean).request.id, first.request.id);
   assert.equal(store.status(token).id, first.request.id);
-  assert.ok(store.claimMail());
+  const next = store.claimMail();
+  assert.ok(next);
+  assert.notEqual(next.id, interrupted.id);
+  const held = store.db
+    .prepare("SELECT state,last_error FROM outbox WHERE id=?")
+    .get(interrupted.id);
+  assert.equal(held.state, "failed");
+  assert.equal(held.last_error, "DELIVERY_UNKNOWN");
   store.close();
   fs.rmSync(directory, { recursive: true, force: true });
 });

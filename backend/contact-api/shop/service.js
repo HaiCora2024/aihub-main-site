@@ -1,15 +1,16 @@
-import { randomUUID, randomBytes } from "node:crypto";
+import { randomUUID } from "node:crypto";
 import path from "node:path";
 import { ShopStore } from "./store.js";
 import {
   KEY_PATTERN,
   ShopError,
-  hash,
   publicCatalog,
   validateSubmission,
 } from "./contract.js";
 import { shopMail } from "./mail.js";
 import { backupStore, rotateBackups } from "./maintenance.js";
+import { createFormSecurity, FormError } from "../forms/security.js";
+import { definitelyRejected } from "../forms/delivery.js";
 
 const MAX_BYTES = 20 * 1024;
 function readBody(req) {
@@ -51,10 +52,14 @@ export function createShopService({
   now = () => Date.now(),
   limit = 5,
   trustProxyHops = 0,
+  trustedProxyCidrs = [],
+  formSecurity = createFormSecurity({
+    now,
+    trustedProxyHops: trustProxyHops,
+    trustedProxyCidrs,
+  }),
 }) {
   const store = new ShopStore(filename, { now });
-  const rateSalt = randomBytes(32).toString("hex");
-  const rates = new Map();
   let busy = false;
   let stopping = false;
   let timer;
@@ -79,23 +84,7 @@ export function createShopService({
     }
   };
   const rate = (req, group, max) => {
-    const chain = String(req.headers["x-forwarded-for"] || "")
-      .split(",")
-      .map((x) => x.trim())
-      .filter(Boolean);
-    const ip =
-      trustProxyHops > 0 && chain.length >= trustProxyHops
-        ? chain[chain.length - trustProxyHops]
-        : req.socket.remoteAddress;
-    const key = hash(`${rateSalt}:${group}:${ip}`);
-    const time = now();
-    for (const [k, record] of rates) if (record.reset <= time) rates.delete(k);
-    if (rates.size >= 10000 && !rates.has(key))
-      throw new ShopError(429, "RATE_LIMITED");
-    const record = rates.get(key) || { count: 0, reset: time + 15 * 60000 };
-    record.count++;
-    rates.set(key, record);
-    if (record.count > max) throw new ShopError(429, "RATE_LIMITED");
+    formSecurity.limiter.hit(formSecurity.resolveIp(req), `shop_${group}`, max);
   };
 
   const drain = async () => {
@@ -111,21 +100,27 @@ export function createShopService({
           );
           if (result?.rejected?.length)
             throw Object.assign(new Error("RECIPIENT_REJECTED"), {
-              code: "RECIPIENT_REJECTED",
+              code: result.accepted?.length
+                ? "PARTIAL_SMTP_DELIVERY"
+                : "RECIPIENT_REJECTED",
             });
           store.completeMail(job.id);
         } catch (e) {
-          const code = [
-            "EAUTH",
-            "ECONNECTION",
-            "ETIMEDOUT",
-            "ESOCKET",
-            "EENVELOPE",
-            "RECIPIENT_REJECTED",
-          ].includes(e.code)
-            ? e.code
-            : "SMTP_FAILED";
-          store.failMail(job.id, job.attempts, code);
+          const rejected = definitelyRejected(e, "mail");
+          const code = !rejected
+            ? "DELIVERY_UNKNOWN"
+            : [
+                  "EAUTH",
+                  "ECONNECTION",
+                  "ETIMEDOUT",
+                  "ESOCKET",
+                  "EENVELOPE",
+                  "RECIPIENT_REJECTED",
+                ].includes(e?.code)
+              ? e.code
+              : "SMTP_FAILED";
+          if (rejected) store.failMail(job.id, job.attempts, code);
+          else store.holdMail(job.id, code);
           log({
             event: "shop_mail_failed",
             requestId: job.request_id,
@@ -181,14 +176,14 @@ export function createShopService({
         "X-Request-ID": requestId,
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         "Access-Control-Allow-Headers":
-          "Content-Type, Idempotency-Key, Authorization",
+          "Content-Type, Idempotency-Key, Authorization, X-Turnstile-Token",
         "Access-Control-Expose-Headers": "X-Request-ID, Retry-After",
         ...(origin && allowed ? { "Access-Control-Allow-Origin": origin } : {}),
       };
-      const reply = (status, body) => {
+      const reply = (status, body, retryAfter = 900) => {
         res.writeHead(status, {
           ...headers,
-          ...(status === 429 ? { "Retry-After": "900" } : {}),
+          ...(status === 429 ? { "Retry-After": String(retryAfter) } : {}),
         });
         res.end(
           status === 204 ? undefined : JSON.stringify({ ...body, requestId }),
@@ -228,6 +223,15 @@ export function createShopService({
           if (typeof key !== "string" || !KEY_PATTERN.test(key))
             throw new ShopError(400, "INVALID_IDEMPOTENCY_KEY");
           const payload = validateSubmission(await readBody(req));
+          const replay = store.replay(key, payload);
+          if (replay) {
+            reply(200, replay);
+            return;
+          }
+          await formSecurity.bot.verify(
+            req.headers["x-turnstile-token"],
+            "shop_submit",
+          );
           const result = store.create(key, payload);
           reply(result.replayed ? 200 : 201, result);
           void drain();
@@ -235,19 +239,25 @@ export function createShopService({
         }
         throw new ShopError(405, "METHOD_NOT_ALLOWED");
       } catch (error) {
-        const known = error instanceof ShopError;
+        const known = error instanceof ShopError || error instanceof FormError;
         if (!known)
           log({
             event: "shop_request_failed",
             requestId,
             code: "STORE_UNAVAILABLE",
           });
-        reply(known ? error.status : 503, {
-          error: {
-            code: known ? error.code : "SHOP_UNAVAILABLE",
-            fields: known ? error.fields : {},
+        if (known && [403, 429].includes(error.status))
+          log({ event: "shop_submit_rejected", requestId, code: error.code });
+        reply(
+          known ? error.status : 503,
+          {
+            error: {
+              code: known ? error.code : "SHOP_UNAVAILABLE",
+              fields: known ? error.fields : {},
+            },
           },
-        });
+          error.retryAfter,
+        );
       }
     },
   };

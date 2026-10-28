@@ -84,6 +84,19 @@ export function LegalPage({ kind }: { kind: "privacy" | "terms" }) {
           {kind === "privacy" && (
             <p>
               <a
+                href="https://www.cloudflare.com/turnstile-privacy-policy/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {lang === "en"
+                  ? "Cloudflare Turnstile Privacy Addendum"
+                  : "Дополнение Cloudflare Turnstile о конфиденциальности"}
+              </a>
+            </p>
+          )}
+          {kind === "privacy" && (
+            <p>
+              <a
                 href="https://uodo.gov.pl/en"
                 target="_blank"
                 rel="noopener noreferrer"

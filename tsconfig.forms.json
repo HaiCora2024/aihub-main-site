@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.forms.tsbuildinfo"
+  },
+  "include": [
+    "src/forms",
+    "src/shop",
+    "08_contact_form/src/screens/Home/Home.tsx",
+    "src/vite-env.d.ts"
+  ]
+}

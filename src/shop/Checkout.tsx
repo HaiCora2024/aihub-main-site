@@ -32,6 +32,8 @@ import type {
   Submission,
 } from "./contracts";
 import { checkoutCopy } from "./checkout-copy";
+import { BotCheckError, Turnstile } from "../forms/Turnstile";
+import type { TurnstileHandle } from "../forms/Turnstile";
 
 const base = import.meta.env.BASE_URL;
 const initialBilling: Billing = {
@@ -77,6 +79,7 @@ export default function Checkout() {
   const successHeading = useRef<HTMLHeadingElement>(null);
   const actionLock = useRef(false);
   const generation = useRef(0);
+  const botCheck = useRef<TurnstileHandle>(null);
   const policyMismatch =
     !!catalog &&
     (catalog.legal.termsVersion !== documentVersions.termsVersion ||
@@ -275,8 +278,6 @@ export default function Checkout() {
       privacyVersion: catalog.legal.privacyVersion,
       termsAccepted,
     };
-    frozen.current = structuredClone(body);
-    remember(snapshot);
     actionLock.current = true;
     setBusy(true);
     setNotice("");
@@ -295,13 +296,22 @@ export default function Checkout() {
             throw error;
         }
       }
-      await accepted(await submitRequest(body, snapshot.key), snapshot);
+      const token = await botCheck.current?.getToken();
+      frozen.current = structuredClone(body);
+      remember(snapshot);
+      await accepted(await submitRequest(body, snapshot.key, token), snapshot);
     } catch (error) {
       const e =
-        error instanceof ShopApiError
-          ? error
-          : new ShopApiError("NETWORK_UNKNOWN");
-      if (e.code === "REQUEST_DELETED") {
+        error instanceof BotCheckError
+          ? new ShopApiError(error.code, 403)
+          : error instanceof ShopApiError
+            ? error
+            : new ShopApiError("NETWORK_UNKNOWN");
+      if (["BOT_CHECK_FAILED", "BOT_CHECK_UNAVAILABLE"].includes(e.code)) {
+        frozen.current = null;
+        setUncertain(false);
+        setNotice("botCheckFailed");
+      } else if (e.code === "REQUEST_DELETED") {
         remember(null);
         frozen.current = null;
         setUncertain(false);
@@ -339,6 +349,7 @@ export default function Checkout() {
         setNotice(e.status === 429 ? "rate" : "unknown");
       }
     } finally {
+      botCheck.current?.reset();
       actionLock.current = false;
       setBusy(false);
     }
@@ -434,6 +445,8 @@ export default function Checkout() {
               ) : (
                 <div className="checkout-grid">
                   <form
+                    onFocusCapture={() => botCheck.current?.activate()}
+                    onPointerDownCapture={() => botCheck.current?.activate()}
                     ref={form}
                     onSubmit={submit}
                     noValidate
@@ -726,6 +739,11 @@ export default function Checkout() {
                         </button>
                       </div>
                     ) : null}
+                    <Turnstile
+                      ref={botCheck}
+                      action="shop_submit"
+                      lang={lang}
+                    />
                     <Button
                       type="submit"
                       disabled={
