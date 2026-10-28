@@ -2,8 +2,61 @@
 
 Подготовлено 28.10.2026 в ветке `feat/forms-antibot` от актуального
 `HaiCora2024/aihub-main-site/main` (`8219c14`, включая уровни продуктов).
-Этот документ описывает реализацию и порядок включения, а не подтверждает
-работающую защиту production. Аккаунт и рабочие ключи Cloudflare ещё не подключены.
+28.10.2026 защита опубликована на `aihub.works`, рабочие ключи подключены,
+`TURNSTILE_ENFORCE=true`. Подтверждённые результаты выпуска и оставшееся
+ограничение IP-лимита приведены ниже; доставка реальных заявок не проверялась.
+
+## Выпуск на основной домен 28.10.2026
+
+- Код frontend/backend: `d931fb3db8c0f07b0bd553dffd9c8e9b55b2b332`.
+  Опубликован только основной репозиторий `HaiCora2024/aihub-main-site`;
+  тестовая копия `getcher123/aihub-site` не обновлялась.
+  [Pages workflow 40692714340](https://github.com/HaiCora2024/aihub-main-site/actions/runs/40692714340)
+  завершился success. Ранее опубликованные уровни продуктов сохранены.
+- Amvera `waw0`, `aihub-form`: `master` содержит тот же SHA. После сборки
+  проверены readiness и совместимый режим, затем после проверки ключей
+  включён `TURNSTILE_ENFORCE=true` и выполнен restart. Итог: RUNNING, 1/1,
+  `/health` и `/health/ready` 200. Тариф и требуемое число экземпляров не менялись.
+- Публичный sitekey передан через GitHub Repository Variable, secret key через
+  секрет Amvera. Значения секретов и токенов не включались в команды браузера,
+  отчёт, Git или bundle. Опубликованный bundle содержит ожидаемый sitekey,
+  CSP главной разрешает Cloudflare. Hostnames: `aihub.works,www.aihub.works`.
+- Свежие рабочие токены обоих actions получены в обычном Chrome через
+  Browser MCP 2.1.0 на origin `https://aihub.works` и успешно проверены прямым
+  Siteverify с рабочим secret key, hostname и action. Для `contact_submit`
+  использован виджет опубликованной формы; для `shop_submit` отдельный
+  проверочный виджет на том же origin, без изменения корзины. Токены
+  обрабатывались в памяти, не выводились и не сохранялись.
+- После включения обязательности оба endpoint отклонили синтетические
+  запросы без токена: 403 `BOT_CHECK_FAILED`. Запросы не приняты;
+  реальных заявок, писем и строк Sheets для smoke не создавали.
+- Локально: backend 49/49, production browser smoke 65/65, формы/shop/UI-kit/
+  Vite TypeScript checks и production build успешны, итоговый аудит dist 325/325.
+  Общий `tsconfig.app` всё ещё сообщает ровно шесть прежних ошибок Cases.
+  `scripts/check-agent-paths.test.mjs` отсутствует в этой release-ветке;
+  несвязанный незакоммиченный файл из исходной рабочей копии не переносился.
+- Read-only smoke опубликованного сайта: 40/40, RU/EN, 390/768/1199/1200/
+  1440/1920 px, реальная загрузка Cloudflare, каталог checkout и обновлённая
+  Privacy Policy. Нет JS-ошибок, отсутствующих assets или попыток отправки форм.
+  Этот smoke не выдаётся за проверку доставки или автоматическое прохождение CAPTCHA.
+- Артефакты оператора: `/tmp/aihub-forms-antibot-release-qa/report.json`,
+  `/tmp/aihub-forms-live-qa/report.json` и PNG рядом с ними. Локальная копия
+  сохранена в `tmp/forms-release-20261028/` release-worktree (вне Git).
+
+Незакрытое ограничение: ingress Amvera и два независимых клиентских IP
+не подтверждены. `FORMS_TRUST_PROXY_HOPS=0`, доверенные CIDR не заданы:
+`X-Forwarded-For` игнорируется. Лимит 5/15 минут считается по адресу сокета
+и может быть общим для нескольких посетителей за одним ingress. Не объявлять
+его проверенным персональным IP-лимитом и не расширять доверенные сети по догадке.
+Обязательная серверная проверка Turnstile работает независимо от этого ограничения.
+
+Read-only smoke можно повторить без отправки заявок:
+
+```bash
+PLAYWRIGHT_MODULE=/path/to/playwright/index.mjs \
+CHROME_PATH=/path/to/chrome \
+node scripts/forms-live-smoke.mjs
+```
 
 ## Как работает проверка
 
@@ -215,6 +268,6 @@ node scripts/forms-antibot-smoke.mjs
   [GHSA-8c8m-p3m8-cjg8](https://github.com/nodemailer/nodemailer/security/advisories/GHSA-8c8m-p3m8-cjg8).
   `npm audit --omit=dev` backend после обновления: 0 уязвимостей.
 - Артефакты оператора: `/tmp/aihub-forms-antibot-qa/report.json`,
-  `/tmp/aihub-forms-real-widget-qa/report.json`. Production и исходная грязная
-  рабочая копия не изменялись. Для активации остаются рабочие ключи Cloudflare
-  и подтверждённая настройка ingress Amvera.
+  `/tmp/aihub-forms-real-widget-qa/report.json`. На этапе подготовки production
+  и исходная грязная рабочая копия не изменялись. Последующий выпуск описан
+  в начале документа; подтверждение цепочки ingress по-прежнему не выполнено.
