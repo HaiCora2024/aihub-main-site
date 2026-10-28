@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useLanguage } from "../../../../src/i18n/LanguageContext";
+import { scrollToSection } from "../../../../src/utils/scrollToSection";
 
 /* ── Animated value hook ── */
 function useAnimatedValue(target: number, duration = 1200, delay = 0, active = true) {
@@ -241,7 +242,7 @@ const AnimCard = ({
 };
 
 export const Home = (): JSX.Element => {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const texts = t.cases.cardTexts;
 
   interface CardDef {
@@ -257,7 +258,7 @@ export const Home = (): JSX.Element => {
   const cards: CardDef[] = [
     {
       area: "cases-c1", glow: "card-glow-purple", border: "purple", delay: 0, gaugeDelay: 300,
-      href: `${import.meta.env.BASE_URL}cases/real-estate.html`,
+      href: `${import.meta.env.BASE_URL}cases/real-estate.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={82} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
@@ -267,7 +268,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c4", glow: "card-glow-red", border: "red", delay: 120, gaugeDelay: 420,
-      href: `${import.meta.env.BASE_URL}cases/order-processing-1c.html`,
+      href: `${import.meta.env.BASE_URL}cases/order-processing-1c.html?lang=${lang}`,
       content: () => (
         <>
           <img className="h-[65px] w-[69px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005.svg" />
@@ -277,7 +278,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c10", glow: "card-glow-green", border: "green", delay: 200, gaugeDelay: 500,
-      href: `${import.meta.env.BASE_URL}cases/partner-kpi.html`,
+      href: `${import.meta.env.BASE_URL}cases/partner-kpi.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={61} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
@@ -287,7 +288,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c11", glow: "card-glow-orange", border: "orange", delay: 320, gaugeDelay: 620,
-      href: `${import.meta.env.BASE_URL}cases/kyb-screening.html`,
+      href: `${import.meta.env.BASE_URL}cases/kyb-screening.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={60} max={75} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
@@ -297,7 +298,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c9", glow: "card-glow-orange", border: "orange", delay: 180, gaugeDelay: 480,
-      href: `${import.meta.env.BASE_URL}cases/robotics-fleet.html`,
+      href: `${import.meta.env.BASE_URL}cases/robotics-fleet.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={80} color="rgba(254,138,4,1)" animDelay={gd} active={active} />
@@ -307,7 +308,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c7", glow: "card-glow-teal", border: "teal", delay: 400, gaugeDelay: 700,
-      href: `${import.meta.env.BASE_URL}cases/telegram-sentiment.html`,
+      href: `${import.meta.env.BASE_URL}cases/telegram-sentiment.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={7} max={10} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
@@ -317,7 +318,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c8", glow: "card-glow-yellow", border: "yellow", delay: 500, gaugeDelay: 800,
-      href: `${import.meta.env.BASE_URL}cases/clinic-voice-ai.html`,
+      href: `${import.meta.env.BASE_URL}cases/clinic-voice-ai.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={80} color="rgba(255,212,9,1)" animDelay={gd} active={active} />
@@ -327,7 +328,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c6", glow: "card-glow-teal", border: "teal", delay: 350, gaugeDelay: 650,
-      href: `${import.meta.env.BASE_URL}cases/claude-code-landing.html`,
+      href: `${import.meta.env.BASE_URL}cases/claude-code-landing.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={80} max={100} color="rgba(99,230,225,1)" animDelay={gd} active={active} />
@@ -337,7 +338,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c5", glow: "card-glow-purple", border: "purple", delay: 280, gaugeDelay: 580,
-      href: `${import.meta.env.BASE_URL}cases/ad-moderation.html`,
+      href: `${import.meta.env.BASE_URL}cases/ad-moderation.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={10} max={12} color="rgba(191,91,243,1)" animDelay={gd} active={active} />
@@ -347,7 +348,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c3", glow: "card-glow-green", border: "green", delay: 450, gaugeDelay: 750,
-      href: `${import.meta.env.BASE_URL}cases/multilang-digest.html`,
+      href: `${import.meta.env.BASE_URL}cases/multilang-digest.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <SpeedometerGauge value={20} max={25} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
@@ -357,7 +358,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c2", glow: "card-glow-red", border: "red", delay: 550, gaugeDelay: 850,
-      href: `${import.meta.env.BASE_URL}cases/hotel-concierge.html`,
+      href: `${import.meta.env.BASE_URL}cases/hotel-concierge.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={82} color="rgba(255,70,58,1)" animDelay={gd} active={active} />
@@ -367,7 +368,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c12", glow: "card-glow-orange", border: "orange", delay: 600, gaugeDelay: 900,
-      href: `${import.meta.env.BASE_URL}cases/bank-360-review.html`,
+      href: `${import.meta.env.BASE_URL}cases/bank-360-review.html?lang=${lang}`,
       content: () => (
         <>
           <img className="h-[65px] w-[65px] shrink-0" alt="Frame" src="https://c.animaapp.com/Raa0F4h8/img/frame-1948760005-2.svg" />
@@ -377,7 +378,7 @@ export const Home = (): JSX.Element => {
     },
     {
       area: "cases-c13", glow: "card-glow-green", border: "green", delay: 680, gaugeDelay: 980,
-      href: `${import.meta.env.BASE_URL}cases/rental-platform.html`,
+      href: `${import.meta.env.BASE_URL}cases/rental-platform.html?lang=${lang}`,
       content: (gd, active) => (
         <>
           <CircleGauge percent={90} color="rgba(8,208,112,1)" animDelay={gd} active={active} />
@@ -413,7 +414,7 @@ export const Home = (): JSX.Element => {
 
         {/* Own solution banner */}
         <a
-          href={`${import.meta.env.BASE_URL}cases/omni-crm.html`}
+          href={`${import.meta.env.BASE_URL}cases/omni-crm.html?lang=${lang}`}
           className="group relative flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 sm:mt-10 rounded-[24px] px-7 py-6 sm:px-10 sm:py-7 overflow-hidden transition-all duration-300 hover:-translate-y-0.5"
           style={{
             background: "linear-gradient(120deg, rgba(191,91,243,0.12) 0%, rgba(6,12,36,0.7) 100%)",
@@ -427,30 +428,30 @@ export const Home = (): JSX.Element => {
           />
           <div className="relative z-10 text-center sm:text-left">
             <p className="[font-family:'Geologica',Helvetica] font-light text-xs uppercase tracking-widest mb-1.5" style={{ color: "rgba(191,91,243,0.7)" }}>
-              Our own solution
+              {t.cases.ownSolution}
             </p>
             <p className="[font-family:'Geologica',Helvetica] font-bold text-white text-xl sm:text-2xl leading-tight">
               OMNI-Agentic CRM
             </p>
             <p className="[font-family:'Geologica',Helvetica] font-light text-white/50 text-sm mt-1.5 max-w-[480px]">
-              We built it for 10+ companies — from social media and ads chaos to a managed sales pipeline with AI qualification.
+              {t.cases.ownSolutionText}
             </p>
           </div>
           <div className="relative z-10 flex items-center gap-2.5 shrink-0 rounded-[12px] px-6 py-3 font-semibold text-sm transition-all duration-200 [font-family:'Geologica',Helvetica]"
             style={{ background: "rgba(191,91,243,1)", color: "#fff", boxShadow: "0 0 30px rgba(191,91,243,0.3)" }}
           >
-            See how it works
+            {t.cases.ownSolutionCta}
             <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
               <path d="M19 12H5M12 5l7 7-7 7" />
             </svg>
           </div>
         </a>
 
-        {/* Download button */}
+        {/* Project consultation */}
         <div className="flex justify-center mt-6 sm:mt-8">
           <div className="cta-frame">
-            <button type="button" className="glow-button glow-button--orange absolute left-5 right-5 top-5 z-10 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-j-0jl3o px-10 py-5 shadow-[0px_2px_20px_#fe8a0466,inset_0px_8px_12px_#ffffff4c] cursor-pointer transition-all duration-300 active:scale-[0.98] font-semibold text-black-100 text-base text-center leading-[17.6px] whitespace-nowrap [font-family:'Geologica',Helvetica]">
-              {t.cases.downloadBtn}
+            <button type="button" onClick={() => scrollToSection("contact")} className="glow-button glow-button--orange absolute left-5 right-5 top-5 z-10 flex h-20 items-center justify-center gap-2.5 rounded-[600px] bg-j-0jl3o px-10 py-5 shadow-[0px_2px_20px_#fe8a0466,inset_0px_8px_12px_#ffffff4c] cursor-pointer transition-all duration-300 active:scale-[0.98] font-semibold text-black-100 text-base text-center leading-[17.6px] whitespace-nowrap [font-family:'Geologica',Helvetica]">
+              {t.cases.discussProject}
             </button>
             <img className="absolute left-0 top-0 h-full w-full pointer-events-none hidden min-[1200px]:block" alt="Rectangle" src="https://c.animaapp.com/Raa0F4h8/img/rectangle-12.svg" />
           </div>

@@ -59,7 +59,10 @@ export const translations = {
     },
     cases: {
       title: "CASES",
-      downloadBtn: "Download all cases",
+      discussProject: "Discuss your project",
+      ownSolution: "Our own solution",
+      ownSolutionText: "We built it for 10+ companies - from social media and ads chaos to a managed sales pipeline with AI qualification.",
+      ownSolutionCta: "See how it works",
       cardTexts: [
         "82% of routine tasks automated in a real estate agency",
         "Automated order processing from purchase order in Email into 1C",
@@ -252,7 +255,10 @@ export const translations = {
     },
     cases: {
       title: "КЕЙСЫ",
-      downloadBtn: "Скачать все кейсы",
+      discussProject: "Обсудить проект",
+      ownSolution: "Наше собственное решение",
+      ownSolutionText: "Внедрили в 10+ компаниях: от хаоса в соцсетях и рекламе к управляемой воронке продаж с AI-квалификацией.",
+      ownSolutionCta: "Как это работает",
       cardTexts: [
         "На 82% рутинных задач автоматизировали в агентстве недвижимости",
         "Автоматизировали формирование ответов на FAQ в компании, где большинство задач решалось через WhatsApp",

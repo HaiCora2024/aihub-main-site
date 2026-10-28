@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { caseListHref, useCaseLanguage } from "../i18n/useCaseLanguage";
 
 const GREEN = "rgba(8, 208, 112, 0.95)";
 const GREEN_80 = "rgba(8, 208, 112, 0.8)";
@@ -123,7 +124,6 @@ const content = {
   },
 } as const;
 
-type Locale = keyof typeof content;
 
 /* ── Scroll-reveal hook ── */
 function useReveal(threshold = 0.15) {
@@ -274,11 +274,11 @@ function Tag({ children }: { children: React.ReactNode }) {
 /* ── Main page ── */
 export function HotelConciergePage() {
   const base = import.meta.env.BASE_URL;
-  const backHref = `${base}#cases`;
+  const backHref = caseListHref(base);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroVisible, setHeroVisible] = useState(false);
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = useCaseLanguage();
   const t = content[locale];
   useEffect(() => {
     const t = setTimeout(() => setHeroVisible(true), 80);
@@ -286,7 +286,6 @@ export function HotelConciergePage() {
   }, []);
   useEffect(() => {
     document.title = t.pageTitle;
-    document.documentElement.lang = locale;
   }, [locale, t.pageTitle]);
 
   return (

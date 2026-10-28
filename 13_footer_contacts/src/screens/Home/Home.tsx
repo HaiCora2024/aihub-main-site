@@ -14,13 +14,13 @@ export const Home = (): JSX.Element => {
         />
 
         <div className="flex w-full max-w-[400px] flex-col items-start gap-5">
-          <div className="[font-family:'Geologica',Helvetica] font-bold text-white text-2xl tracking-[0] leading-tight sm:text-3xl min-[1200px]:text-5xl">
+          <a href="tel:+4915774490172" className="[font-family:'Geologica',Helvetica] font-bold text-white text-2xl tracking-[0] leading-tight sm:text-3xl min-[1200px]:text-5xl hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#63e6e1] focus-visible:outline-offset-4">
             +4915774490172
-          </div>
+          </a>
 
-          <div className="[font-family:'Geologica',Helvetica] font-normal text-white text-sm tracking-[0] leading-relaxed sm:text-base min-[1200px]:text-lg">
+          <a href="mailto:techcrew@aihub.works" className="[font-family:'Geologica',Helvetica] font-normal text-white text-sm tracking-[0] leading-relaxed sm:text-base min-[1200px]:text-lg hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#63e6e1] focus-visible:outline-offset-4">
             techcrew@aihub.works
-          </div>
+          </a>
 
           <a
             href="https://www.linkedin.com/company/aihubworks"

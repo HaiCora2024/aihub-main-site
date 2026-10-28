@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { caseListHref } from "../i18n/useCaseLanguage";
 
 const GREEN = "rgba(8, 208, 112, 0.95)";
 const GREEN_80 = "rgba(8, 208, 112, 0.8)";
@@ -130,7 +131,7 @@ function Tag({ children }: { children: React.ReactNode }) {
 /* ── Main page ── */
 export function RealEstatePage() {
   const base = import.meta.env.BASE_URL;
-  const backHref = `${base}#cases`;
+  const backHref = caseListHref(base);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroVisible, setHeroVisible] = useState(false);

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { caseListHref } from "../i18n/useCaseLanguage";
 
 const GREEN = "rgba(8, 208, 112, 0.95)";
 const GREEN_80 = "rgba(8, 208, 112, 0.8)";
@@ -139,7 +140,7 @@ export function ClinicVoiceAiPage() {
       <nav className="sticky top-0 z-50 bg-[#060c24cc] backdrop-blur-[12px] border-b border-white/5">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 h-14 flex items-center gap-4">
           <a
-            href={`${base}#cases`}
+            href={caseListHref(base)}
             className="flex items-center gap-2 [font-family:'Geologica',Helvetica] font-light text-white/60 hover:text-white text-sm transition-colors duration-200"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

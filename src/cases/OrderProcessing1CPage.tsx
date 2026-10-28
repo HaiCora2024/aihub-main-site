@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { caseListHref, useCaseLanguage } from "../i18n/useCaseLanguage";
 
 const GREEN = "rgba(8, 208, 112, 0.95)";
 const GREEN_80 = "rgba(8, 208, 112, 0.8)";
@@ -210,7 +211,6 @@ const content = {
   },
 } as const;
 
-type Locale = keyof typeof content;
 
 function useReveal(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -752,7 +752,7 @@ export function OrderProcessing1CPage() {
   const base = import.meta.env.BASE_URL;
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroVisible, setHeroVisible] = useState(false);
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = useCaseLanguage();
   const t = content[locale];
 
   useEffect(() => {
@@ -762,7 +762,6 @@ export function OrderProcessing1CPage() {
 
   useEffect(() => {
     document.title = t.pageTitle;
-    document.documentElement.lang = locale;
   }, [locale, t.pageTitle]);
 
   return (
@@ -772,7 +771,7 @@ export function OrderProcessing1CPage() {
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 min-h-14 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-4 min-w-0">
             <a
-              href={`${base}#cases`}
+              href={caseListHref(base)}
               className="flex items-center gap-2 [font-family:'Geologica',Helvetica] font-light text-white/60 hover:text-white text-sm transition-colors duration-200"
             >
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

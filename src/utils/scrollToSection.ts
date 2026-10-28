@@ -5,5 +5,10 @@ export function scrollToSection(sectionId: string) {
     return;
   }
 
-  target.scrollIntoView({ behavior: "smooth", block: "start" });
+  target.scrollIntoView({
+    behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "instant"
+      : "smooth",
+    block: "start",
+  });
 }

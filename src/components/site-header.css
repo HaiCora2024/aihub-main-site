@@ -330,6 +330,53 @@ html:has(.site-header) {
   to { opacity: 1; transform: translateY(0); }
 }
 
+@media (max-width: 767px) {
+  .site-header[data-compact="true"] .site-header__inner {
+    flex-wrap: wrap;
+    column-gap: 12px;
+    row-gap: 0;
+  }
+  .site-header[data-compact="true"] .site-header__brand {
+    display: grid;
+  }
+  .site-header[data-compact="true"] .site-logo {
+    width: 104px;
+  }
+  .site-header[data-compact="true"] .site-header__company {
+    display: none;
+  }
+  .site-header[data-compact="true"] .site-header__quick-shop {
+    display: inline-flex;
+    align-items: center;
+    margin-left: auto;
+  }
+  .site-header[data-compact="true"] .site-header__actions {
+    min-height: 56px;
+  }
+  .site-header[data-compact="true"] .site-header__menu-button {
+    display: flex;
+  }
+  .site-header[data-compact="true"] .site-header__navigation {
+    display: none;
+    order: 4;
+    flex: 0 0 100%;
+    width: 100%;
+    max-height: calc(100svh - 56px - env(safe-area-inset-top));
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .site-header[data-compact="true"][data-menu-open="true"] .site-header__navigation {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 16px;
+    padding: 8px 0 16px;
+    border-top: 1px solid #ffffff24;
+  }
+  .site-header[data-compact="true"] .site-header__navigation > a {
+    white-space: normal;
+  }
+}
+
 @media (min-width: 768px) {
   .site-header[data-compact="true"] .site-header__inner {
     padding-inline: max(24px, calc((100% - 1140px) / 2));

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { caseListHref, useCaseLanguage } from "../i18n/useCaseLanguage";
+import "./rental-platform.css";
 
 const GREEN = "rgba(8, 208, 112, 0.95)";
 const GREEN_80 = "rgba(8, 208, 112, 0.8)";
@@ -196,7 +198,6 @@ const content = {
   },
 } as const;
 
-type Locale = keyof typeof content;
 
 /* ── Scroll-reveal hook ── */
 function useReveal(threshold = 0.12) {
@@ -391,11 +392,11 @@ function BarChart({ label, data }: BarChartProps) {
 /* ── Main page ── */
 export function RentalPlatformPage() {
   const base = import.meta.env.BASE_URL;
-  const backHref = `${base}#cases`;
+  const backHref = caseListHref(base);
 
   const heroRef = useRef<HTMLDivElement>(null);
   const [heroVisible, setHeroVisible] = useState(false);
-  const [locale, setLocale] = useState<Locale>("en");
+  const [locale, setLocale] = useCaseLanguage();
   const t = content[locale];
 
   useEffect(() => {
@@ -405,11 +406,10 @@ export function RentalPlatformPage() {
 
   useEffect(() => {
     document.title = t.pageTitle;
-    document.documentElement.lang = locale;
   }, [locale, t.pageTitle]);
 
   return (
-    <div className="min-h-screen text-white" style={{ background: "#060c24" }}>
+    <div className="rental-page min-h-screen text-white" style={{ background: "#060c24" }}>
 
       {/* Nav */}
       <nav style={{ position: "sticky", top: 0, zIndex: 50, background: "rgba(6,12,36,0.85)", backdropFilter: "blur(12px)", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
@@ -426,8 +426,8 @@ export function RentalPlatformPage() {
               </svg>
               {t.backToCases}
             </a>
-            <span style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
-            <span style={{ fontFamily: "'Geologica', Helvetica", fontWeight: 300, color: "rgba(255,255,255,0.35)", fontSize: 14 }}>
+            <span className="rental-nav__brand" style={{ color: "rgba(255,255,255,0.2)" }}>·</span>
+            <span className="rental-nav__brand" style={{ fontFamily: "'Geologica', Helvetica", fontWeight: 300, color: "rgba(255,255,255,0.35)", fontSize: 14 }}>
               {t.brand}
             </span>
           </div>
@@ -467,23 +467,23 @@ export function RentalPlatformPage() {
         </div>
       </nav>
 
-      <main style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 24px 72px", display: "flex", flexDirection: "column", gap: 16 }}>
+      <main style={{ maxWidth: 1200, margin: "0 auto", display: "flex", flexDirection: "column", gap: 16 }}>
 
         {/* ── HERO ── */}
         <div
+          className="rental-hero"
           ref={heroRef}
           style={{
             opacity: heroVisible ? 1 : 0,
             transform: heroVisible ? "translateY(0)" : "translateY(20px)",
             transition: "opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1)",
             borderRadius: 28,
-            padding: "36px 36px 40px",
             background: "linear-gradient(135deg, rgba(8,208,112,0.10) 0%, rgba(6,12,36,0.95) 55%, rgba(4,8,20,1) 100%)",
             border: `1px solid ${GREEN_20}`,
             boxShadow: `0 18px 60px rgba(8,208,112,0.08)`,
           }}
         >
-          <div style={{ display: "grid", gridTemplateColumns: "1.35fr 0.95fr", gap: 24, alignItems: "end" }}>
+          <div className="rental-grid rental-grid--hero" style={{ gap: 24, alignItems: "end" }}>
             {/* Left */}
             <div>
               <div style={{ display: "inline-block", padding: "6px 12px", borderRadius: 999, background: GREEN_08, border: `1px solid ${GREEN_13}`, fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", color: "rgba(255,255,255,0.6)", marginBottom: 18, fontFamily: "'Geologica', Helvetica", fontWeight: 400 }}>
@@ -550,7 +550,7 @@ export function RentalPlatformPage() {
                 <br />
                 <span style={{ color: GREEN }}>{t.impactTitle3}</span>{t.impactTitle4}
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 18 }}>
+              <div className="rental-grid rental-grid--mini" style={{ gap: 10, marginTop: 18 }}>
                 {t.mini.map((m) => (
                   <div key={m.value} style={{ background: "rgba(255,255,255,0.05)", border: `1px solid rgba(255,255,255,0.08)`, borderRadius: 16, padding: 14 }}>
                     <div style={{ fontSize: 26, fontWeight: 750, color: GREEN, fontFamily: "'Geologica', Helvetica", letterSpacing: "-0.03em" }}>{m.value}</div>
@@ -563,7 +563,7 @@ export function RentalPlatformPage() {
         </div>
 
         {/* ── STATS ROW ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 14 }}>
+        <div className="rental-grid rental-grid--four" style={{ gap: 14 }}>
           {t.stats.map((s, i) => (
             <StatCard key={s.kicker} kicker={s.kicker} value={s.value} label={s.label} delay={i * 80} />
           ))}
@@ -572,7 +572,7 @@ export function RentalPlatformPage() {
         {/* ── CHALLENGE ── */}
         <SectionWrap delay={0}>
           <SectionHead kicker={t.challengeKicker} title={t.challengeTitle} sub={t.challengeSub} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+          <div className="rental-grid rental-grid--three" style={{ gap: 14 }}>
             {t.challengeCards.map((c) => (
               <div key={c.kicker} style={cardBase}>
                 <CardKicker>{c.kicker}</CardKicker>
@@ -586,7 +586,7 @@ export function RentalPlatformPage() {
         {/* ── FACTS ── */}
         <SectionWrap delay={60}>
           <SectionHead kicker={t.factsKicker} title={t.factsTitle} sub={t.factsSub} />
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 0.8fr", gap: 14 }}>
+          <div className="rental-grid rental-grid--facts" style={{ gap: 14 }}>
             {/* Bar chart card */}
             <div style={cardBase}>
               <BarChart label={t.missedCallsLabel} data={t.missedCallsData} />
@@ -610,7 +610,7 @@ export function RentalPlatformPage() {
         {/* ── SOLUTION ── */}
         <SectionWrap delay={80}>
           <SectionHead kicker={t.solutionKicker} title={t.solutionTitle} sub={t.solutionSub} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14, marginBottom: 16 }}>
+          <div className="rental-grid rental-grid--three" style={{ gap: 14, marginBottom: 16 }}>
             {t.solutionCards.map((c) => (
               <div key={c.kicker} style={cardBase}>
                 <CardKicker>{c.kicker}</CardKicker>
@@ -631,7 +631,7 @@ export function RentalPlatformPage() {
         {/* ── PROCESS ── */}
         <SectionWrap delay={100}>
           <SectionHead kicker={t.processKicker} title={t.processTitle} sub={t.processSub} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 12 }}>
+          <div className="rental-grid rental-grid--four" style={{ gap: 12 }}>
             {t.steps.map((s) => (
               <div key={s.num} style={{ ...cardBase, padding: "18px 20px" }}>
                 <div style={{ width: 30, height: 30, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", background: GREEN_08, border: `1px solid ${GREEN_20}`, color: GREEN, fontSize: 12, fontWeight: 700, fontFamily: "'Geologica', Helvetica", marginBottom: 12 }}>
@@ -651,7 +651,7 @@ export function RentalPlatformPage() {
         {/* ── RESULTS ── */}
         <SectionWrap delay={120}>
           <SectionHead kicker={t.resultsKicker} title={t.resultsTitle} sub={t.resultsSub} />
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 14 }}>
+          <div className="rental-grid rental-grid--three" style={{ gap: 14 }}>
             {t.resultCards.map((c) => (
               <div key={c.kicker} style={cardDark}>
                 <CardKicker>{c.kicker}</CardKicker>
@@ -665,7 +665,7 @@ export function RentalPlatformPage() {
         {/* ── ECONOMICS ── */}
         <SectionWrap delay={140}>
           <SectionHead kicker={t.econKicker} title={t.econTitle} sub={t.econSub} />
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 0.95fr", gap: 14 }}>
+          <div className="rental-grid rental-grid--economics" style={{ gap: 14 }}>
             {/* Formula card */}
             <div style={cardBase}>
               <CardKicker>{t.econCalcKicker}</CardKicker>

@@ -98,7 +98,8 @@ export function SiteHeader({
   useEffect(() => {
     if (compact) {
       setOpen(false);
-    } else if (
+    }
+    if (
       matchMedia("(max-width: 767px)").matches &&
       root.current?.querySelector("nav")?.contains(document.activeElement)
     ) {
@@ -164,7 +165,7 @@ export function SiteHeader({
       onKeyDown={(event) => {
         if (event.key === "Escape" && open) {
           setOpen(false);
-          menuButton.current?.focus();
+          menuButton.current?.focus({ preventScroll: true });
         }
       }}
     >

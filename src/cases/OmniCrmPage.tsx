@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { caseListHref } from "../i18n/useCaseLanguage";
 
 const PURPLE = "rgba(191,91,243,1)";
 const PURPLE_80 = "rgba(191,91,243,0.8)";
@@ -810,7 +811,7 @@ export function OmniCrmPage() {
       <nav className="sticky top-0 z-50 bg-[#060c24cc] backdrop-blur-[12px] border-b border-white/5">
         <div className="mx-auto max-w-[1200px] px-4 sm:px-6 h-14 flex items-center gap-3">
           <a
-            href={`${base}#cases`}
+            href={caseListHref(base)}
             className="flex items-center gap-2 [font-family:'Geologica',Helvetica] font-light text-white/60 hover:text-white text-sm transition-colors duration-200"
           >
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">

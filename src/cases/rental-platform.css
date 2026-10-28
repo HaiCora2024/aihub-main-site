@@ -1,0 +1,52 @@
+.rental-page main {
+  padding: 40px 24px 72px;
+  overflow-wrap: break-word;
+}
+.rental-hero {
+  padding: 36px 36px 40px;
+}
+.rental-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+.rental-grid > * {
+  min-width: 0;
+}
+@media (max-width: 767px) {
+  .rental-page main {
+    padding-inline: 16px;
+  }
+  .rental-hero {
+    padding: 24px 20px;
+  }
+  .rental-nav__brand {
+    display: none;
+  }
+}
+@media (min-width: 480px) {
+  .rental-grid--mini {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .rental-grid--hero {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.95fr);
+  }
+  .rental-grid--facts {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  }
+  .rental-grid--economics {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+  }
+  .rental-grid--three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .rental-grid--four {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1200px) {
+  .rental-grid--four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

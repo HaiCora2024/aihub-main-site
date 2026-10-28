@@ -97,7 +97,7 @@ export const Home = (): JSX.Element => {
               src="https://c.animaapp.com/fHEJ88Tu/img/group-1.png"
             />
 
-            <div className="md:hidden mt-2">
+            <div className="mt-2">
               <button
                 type="button"
                 onClick={handleContactScroll}

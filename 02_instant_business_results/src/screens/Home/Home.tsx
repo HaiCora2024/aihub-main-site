@@ -38,7 +38,7 @@ export const Home = (): JSX.Element => {
           </div>
         </div>
 
-        <div className="cta-frame absolute top-[650px] left-[1199px]">
+        <div className="cta-frame results-cta absolute top-[650px] left-[1199px]">
           <button
             type="button"
             onClick={handleContactScroll}
@@ -52,9 +52,9 @@ export const Home = (): JSX.Element => {
           </button>
 
           <img
-            className="absolute top-0 left-0 h-full w-full pointer-events-none"
-            alt="Rectangle"
-            src="https://c.animaapp.com/98I8TU6Y/img/rectangle-12.svg"
+            className="results-cta__frame absolute top-0 left-0 h-full w-full pointer-events-none"
+            alt=""
+            src={`${import.meta.env.BASE_URL}brand/cta-frame-yellow.svg`}
           />
         </div>
 
@@ -110,7 +110,7 @@ export const Home = (): JSX.Element => {
             </p>
           </div>
 
-          <div className="relative h-[7.3rem] w-full max-w-[22.5rem]">
+          <div className="results-cta relative h-[117px] w-full max-w-[330px]">
             <button
               type="button"
               onClick={handleContactScroll}
@@ -123,9 +123,9 @@ export const Home = (): JSX.Element => {
               </span>
             </button>
             <img
-              className="pointer-events-none absolute left-0 top-0 h-full w-full"
-              alt="Rectangle"
-              src="https://c.animaapp.com/98I8TU6Y/img/rectangle-12.svg"
+              className="results-cta__frame pointer-events-none absolute left-0 top-0 h-full w-full"
+              alt=""
+              src={`${import.meta.env.BASE_URL}brand/cta-frame-yellow.svg`}
             />
           </div>
 

@@ -45,6 +45,11 @@ a {
   transform: scale(0.98);
 }
 
+.glow-button:focus-visible {
+  outline: 2px solid #63e6e1;
+  outline-offset: 4px;
+}
+
 .glow-button--green {
   --glow-rgb: 8, 208, 112;
 }
@@ -213,6 +218,21 @@ a {
   height: 117px;
 }
 
+@media (max-width: 767px) {
+  .results-cta {
+    height: 80px;
+    margin-inline: auto;
+  }
+  .results-cta > .glow-button--yellow {
+    position: relative;
+    inset: auto;
+    width: 100%;
+  }
+  .results-cta__frame {
+    display: none;
+  }
+}
+
 /* === Responsive CTA button (mobile / tablet / laptop) === */
 .cta-btn-responsive {
   position: relative;
@@ -357,6 +377,17 @@ a {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .glow-button {
+    transition: none;
+  }
+  .glow-button:is(:hover, :focus-visible, :active),
+  .cta-btn-wrapper:hover .glow-button,
+  .cta-frame:hover .glow-button {
+    transform: none;
+  }
   .reveal-sequence-item,
   .reveal-sequence-item--visible {
     opacity: 1;
