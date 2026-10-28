@@ -6,6 +6,7 @@ const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || "playwright")
 const base = new URL(process.env.QA_URL || "http://127.0.0.1:4186/");
 const output = process.env.QA_OUTPUT || "tmp/site-interactions";
 const api = "https://aihub-form-getcher.waw0.amvera.tech";
+const preview = ["localhost", "127.0.0.1"].includes(base.hostname);
 const liveCatalog = await (await fetch(`${api}/api/shop/catalog`)).text();
 const report = { checks: [], errors: [], attemptedWrites: [] };
 const browser = await chromium.launch({ headless: true,
@@ -28,7 +29,7 @@ try {
         await context.route("**/*", (route) => {
           const request = route.request();
           // Local previews use a read-only snapshot to avoid production CORS and writes.
-          if (request.url() === `${api}/api/shop/catalog` && request.method() === "GET")
+          if (preview && request.url() === `${api}/api/shop/catalog` && request.method() === "GET")
             return route.fulfill({ contentType: "application/json", body: liveCatalog,
               headers: { "Access-Control-Allow-Origin": "*" } });
           if (["GET", "HEAD", "OPTIONS"].includes(request.method())) return route.continue();
